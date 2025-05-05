@@ -157,7 +157,8 @@ VITE_APP_NAME="${APP_NAME}"
 </details>
 <details>
   <summary><h2>English</h2></summary>
-    ## 📜 Description
+    
+## 📜 Description
 
 **MañoCines** is a web application built with **Laravel** and **React** to efficiently manage movie ticket sales and bar products. The app is designed to run locally using **XAMPP** or **MAMP**, and uses **MySQL** (managed via PhpMyAdmin) as its database system.
 

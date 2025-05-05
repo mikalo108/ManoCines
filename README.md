@@ -99,14 +99,14 @@ Esto eliminará cualquier dato previo y poblará la base de datos con datos de p
 
 ## 🔌 Ejecución
 
-Para ejecutar la aplicación, debes usar:
+Para ejecutar la aplicación, debes usar ejecutar los siguientes comandos y acceder a la siguiente URL en el navegador:
 
-- Laravel
+- Comando para Laravel
 ```bash
 php artisan serve
 ```
 
-- Vite en desarrollo
+- Comando para Vite en desarrollo
 ```bash
 npm run dev
 ```
@@ -257,14 +257,14 @@ This will drop existing tables and populate the database with test data using th
 
 ## 🔌 Execution
 
-To run the application, type in the console the following command
+To run the application, type in the console the following commands and go to following URL on your browser:
 
--  Laravel
+-  Command for Laravel
 ```bash
 php artisan serve
 ```
 
-- Vite in  developing
+- Command for Vite in developing
 ```bash
 npm run dev
 ```

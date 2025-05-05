@@ -155,7 +155,6 @@ VITE_APP_NAME="${APP_NAME}"
 ---
 
 </details>
-<br>
 <details>
   <summary><h2>English manual</h2></summary>
     ## 📜 Description

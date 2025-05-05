@@ -1,4 +1,8 @@
 # 🎬 MañoCines
+<details>
+  <summary>Guía en Español</summary>
+    
+# 📜 Descripción
 
 **MañoCines** es una aplicación web desarrollada con **Laravel** y **React** que permite gestionar la venta de entradas de cine y productos de bar de forma eficiente y moderna. La aplicación está pensada para ser ejecutada localmente con **XAMPP** o **MAMP**, y utiliza **MySQL** como sistema de base de datos (gestionado mediante PhpMyAdmin).
 
@@ -154,3 +158,5 @@ Si deseas colaborar con el proyecto, ¡eres bienvenido! Abre un issue o envía u
 ## 📄 Licencia
 
 Este proyecto está licenciado bajo MIT. Consulta el archivo `LICENSE` para más detalles.
+
+</details>

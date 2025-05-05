@@ -1,6 +1,6 @@
 # 🎬 MañoCines
 <details>
-  <summary>**Guía en Español**</summary>
+  <summary><h3>Guía en Español</h3></summary>
     
 # 📜 Descripción
 
@@ -162,7 +162,7 @@ Este proyecto está licenciado bajo MIT. Consulta el archivo `LICENSE` para más
 </details>
 <br>
 <details>
-  <summary>**English manual**</summary>
+  <summary><h3>English manual</h3></summary>
     # 📜 Description
 
 **MañoCines** is a web application built with **Laravel** and **React** to efficiently manage movie ticket sales and bar products. The app is designed to run locally using **XAMPP** or **MAMP**, and uses **MySQL** (managed via PhpMyAdmin) as its database system.

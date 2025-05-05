@@ -53,7 +53,7 @@ Copia el contenido proporcionado del archivo `.env` (como el que aparece más ab
 
 - `DB_DATABASE=manocines`
 - `DB_USERNAME=root`
-- `DB_PASSWORD=` (en blanco para XAMPP/MAMP)
+- `DB_PASSWORD=` (en blanco para XAMPP)
 
 ⚠️ **Importante:** Crea una base de datos vacía llamada `manocines` desde PhpMyAdmin.
 
@@ -81,7 +81,7 @@ Esto eliminará cualquier dato previo y poblará la base de datos con datos de p
 
 ---
 
-## 🖥️ Uso con XAMPP o MAMP
+## 🖥️ Configuración de XAMPP o MAMP
 
 ### Si usas **XAMPP**:
 
@@ -91,21 +91,26 @@ Esto eliminará cualquier dato previo y poblará la base de datos con datos de p
 
 ### Si usas **MAMP**:
 
-- Asegúrate de colocar el proyecto en `/Applications/MAMP/htdocs/`.
-- Accede a PhpMyAdmin en [http://localhost/phpmyadmin](http://localhost/phpmyadmin) para crear la base de datos.
+- Asegúrate de colocar el proyecto en `/[disco del SO]:/MAMP/htdocs/`.
 - Inicia Apache y MySQL desde MAMP.
-- Accede desde el navegador a: [http://localhost:8888/manocines/public](http://localhost:8888/manocines/public)
-
-💡 Puedes configurar un **VirtualHost** si deseas acceder con un dominio personalizado.
+- Accede a PhpMyAdmin en [http://localhost/phpmyadmin] para crear la base de datos.
 
 ---
 
-## 🧪 Pruebas
+## 🔌 Ejecución
 
-Para ejecutar las pruebas, puedes usar:
+Para ejecutar la aplicación, debes usar:
 
-```bash
-php artisan test
+```bash 1 (Laravel)
+php artisan serve
+```
+
+```bash 2 (Vite en desarrollo)
+npm run dev
+```
+
+```web URL
+http://localhost:8000/
 ```
 
 ---
@@ -148,16 +153,6 @@ VITE_APP_NAME="${APP_NAME}"
 ```
 
 ---
-
-## 🤝 Contribuciones
-
-Si deseas colaborar con el proyecto, ¡eres bienvenido! Abre un issue o envía un pull request.
-
----
-
-## 📄 Licencia
-
-Este proyecto está licenciado bajo MIT. Consulta el archivo `LICENSE` para más detalles.
 
 </details>
 <br>
@@ -214,7 +209,7 @@ Copy the provided `.env` content (see below) into the project root. Make sure to
 
 - `DB_DATABASE=manocines`
 - `DB_USERNAME=root`
-- `DB_PASSWORD=` (empty for XAMPP/MAMP)
+- `DB_PASSWORD=` (empty for XAMPP)
 
 ⚠️ **Important:** Create an empty database named `manocines` in PhpMyAdmin.
 
@@ -248,25 +243,29 @@ This will drop existing tables and populate the database with test data using th
 
 - Ensure Apache and MySQL are running.
 - Place the project in the `htdocs` folder.
-- Access the app at: [http://localhost/manocines/public](http://localhost/manocines/public)
 
 ### With **MAMP**:
 
-- Place the project inside `/Applications/MAMP/htdocs/`.
-- Use [http://localhost/phpmyadmin](http://localhost/phpmyadmin) to create the database.
+- Place the project inside `/[OS disk]:/MAMP/htdocs/`.
 - Start Apache and MySQL from MAMP.
-- Access the app at: [http://localhost:8888/manocines/public](http://localhost:8888/manocines/public)
-
-💡 You can configure a **VirtualHost** to use a custom domain.
+- Use [http://localhost/phpmyadmin] to create the database.
 
 ---
 
-## 🧪 Testing
+## 🔌 Execution
 
-Run tests using:
+To run the application, type in the console the following command
 
-```bash
-php artisan test
+```bash 1 (Laravel)
+php artisan serve
+```
+
+```bash 2 (Vite in  developing)
+npm run dev
+```
+
+```web URL
+http://localhost:8000/
 ```
 
 ---
@@ -307,17 +306,5 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 VITE_APP_NAME="${APP_NAME}"
 ```
-
----
-
-## 🤝 Contributions
-
-Feel free to contribute! Open an issue or submit a pull request.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 </details>

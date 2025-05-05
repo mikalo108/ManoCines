@@ -101,15 +101,18 @@ Esto eliminará cualquier dato previo y poblará la base de datos con datos de p
 
 Para ejecutar la aplicación, debes usar:
 
-```bash 1 (Laravel)
+- Laravel
+```bash
 php artisan serve
 ```
 
-```bash 2 (Vite en desarrollo)
+- Vite en desarrollo
+```bash
 npm run dev
 ```
 
-```web URL
+- Web URL
+```
 http://localhost:8000/
 ```
 
@@ -256,15 +259,18 @@ This will drop existing tables and populate the database with test data using th
 
 To run the application, type in the console the following command
 
-```bash 1 (Laravel)
+-  Laravel
+```bash
 php artisan serve
 ```
 
-```bash 2 (Vite in  developing)
+- Vite in  developing
+```bash
 npm run dev
 ```
 
-```web URL
+- Web URL
+```
 http://localhost:8000/
 ```
 

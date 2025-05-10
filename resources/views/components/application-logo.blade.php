@@ -1,3 +1,1 @@
-@props(['logoPath' => 'storage/general/manocines.webp'])
-
-<img src="{{ asset($logoPath) }}" />
+<img src="{{ asset('storage/general/logo.webp') }}" alt="Logo"/> 

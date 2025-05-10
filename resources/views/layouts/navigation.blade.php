@@ -5,8 +5,8 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-<x-application-logo logoPath="storage/general/logo-dashboard.webp" />
+                    <a href="{{ route('home') }}">
+                        <img src="{{ asset('storage/general/manocines.webp') }}" alt="Logo"/> 
                     </a>
                 </div>
 

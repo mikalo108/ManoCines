@@ -11,8 +11,8 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-    ]);
-});
+]);
+})->name(name: 'home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

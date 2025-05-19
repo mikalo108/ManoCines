@@ -37,4 +37,9 @@ class Cinema extends Model
     {
         return $this->belongsToMany(Product::class, 'products_cinema');
     }
+
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, 'city_cinema');
+    }
 }

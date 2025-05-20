@@ -16,7 +16,7 @@
         <div style="background-color: rgb(251, 245, 221);" class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img class=" h-20 fill-current text-gray-500" src="{{ asset('storage/general/manocines.webp') }}"/>
+                    <img class=" h-20 fill-current text-gray-500" src="{{ asset('storage/general/logo.webp') }}"/>
                 </a>
             </div>
 
@@ -25,7 +25,7 @@
                     <img style="height: 25px;" src="{{ asset('storage/general/circle-xmark-solid.svg') }}" alt="Cerrar">
                 </a>
                 <br>
-                {{ $slot }}
+                
             </div>
         </div>
     </body>

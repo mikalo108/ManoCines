@@ -7,4 +7,7 @@ return [
     'bestsellers' => 'Taquillazos',
     'register' => 'Registrarse',
     'login' => 'Iniciar sesión',
+    'logout' => 'Cerrar sesión',
+    'films' => 'Películas',
+    'cinemas' => 'Cines',
 ];

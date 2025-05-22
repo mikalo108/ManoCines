@@ -23,15 +23,11 @@ class CityController extends Controller
     // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
-            'name' => 'required|string|max:255',  
-            'state' => 'nullable|string|max:255',  
-            'country' => 'nullable|string|max:255',  
+            'name' => 'required|string|max:255', 
         ]);
 
         $c = new City();
         $c->name = $r->name;
-        $c->state = $r->state;
-        $c->country = $r->country;
         $c->save();
         return redirect()->route('city.index');
     }
@@ -46,14 +42,10 @@ class CityController extends Controller
     public function update($id, Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
-            'state' => 'nullable|string|max:255',  
-            'country' => 'nullable|string|max:255',  
         ]);
         
         $c = City::find($id);
         $c->name = $r->name;
-        $c->state = $r->state;
-        $c->country = $r->country;
         $c->save();
         return redirect()->route('city.index');
     }

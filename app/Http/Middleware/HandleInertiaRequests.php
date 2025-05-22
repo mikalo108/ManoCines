@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'locale' => app()->getLocale(),
+            'locale' => $request->session()->get('locale', app()->getLocale()),
         ];
     }
 }

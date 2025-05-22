@@ -24,13 +24,13 @@ export default function Welcome(props) {
     };
 
     return (
-        <GuestLayout auth={props.auth}>
+        <GuestLayout auth={props.auth} copyright={props.copyright}>
             <Head title="Welcome" />
                 <div className="relative flex min-h-screen flex-col items-center  selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                         <main className="mt-6">
-                            <h1 className='text-center'>Best sellers</h1>
-                            <div className="grid gap-6 lg:grid-cols-1 lg:gap-8" style={{ marginInline: '20vw' }}>
+                            <h1 className='text-center text-3xl mb-10'>{props.bestsellers}</h1>
+                            <div className="grid gap-6 lg:grid-cols-1 lg:gap-8 flex flex-col items-center justify-center">
                                 <a
                                     id="carrousel-card"
                                     className="relative flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
@@ -49,14 +49,14 @@ export default function Welcome(props) {
                                             type="button"
                                             onClick={prevSlide}
                                             aria-label="Previous Slide"
-                                            className="absolute top-0 left-0 h-full w-12 bg-transparent p-2 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-600 transition"
+                                            className="absolute top-0 left-0 h-full w-28 sm:w-32 md:w-36 bg-transparent p-2 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-600 transition"
                                         >
                                             <svg
-                                                className="size-6 shrink-0 stroke-[#ff7970]"
+                                                className="size-20 shrink-0 stroke-[#4a4242] dark:stroke-white"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
-                                                strokeWidth="1.5"
+                                                strokeWidth="3"
                                                 style={{ transform: 'rotate(180deg)' }}
                                             >
                                                 <path
@@ -70,14 +70,14 @@ export default function Welcome(props) {
                                             type="button"
                                             onClick={nextSlide}
                                             aria-label="Next Slide"
-                                            className="absolute top-0 right-0 h-full w-12 bg-transparent p-2 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-600 transition"
+                                            className="absolute top-0 right-0 h-full w-28 sm:w-32 md:w-36 bg-transparent p-2 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-zinc-600 transition"
                                         >
                                             <svg
-                                                className="size-6 shrink-0 stroke-[#ff7970]"
+                                                className="size-20 shrink-0 stroke-[#4a4242] dark:stroke-white"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
-                                                strokeWidth="1.5"
+                                                strokeWidth="3"
                                             >
                                                 <path
                                                     strokeLinecap="round"
@@ -94,11 +94,6 @@ export default function Welcome(props) {
                         
                     </div>
                 </div>
-            <footer className="py-16 text-center text-sm text-black dark:text-white/70">
-                <p>
-                    MañoCines© 2025. All rights reserved.
-                </p>
-            </footer>
         </GuestLayout>
     );
 }

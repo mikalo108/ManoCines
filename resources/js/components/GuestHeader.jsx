@@ -1,8 +1,9 @@
 import { Link } from '@inertiajs/react';
+import LanguageSwitcher from './LanguageSwitcher';
 
-export default function GuestHeader({ auth }) {
+export default function GuestHeader({ auth, locale }) {
     return (
-        <header className="grid items-center gap-2 py-10 grid-cols-3 grid-rows-1 max-md:grid-cols-1 max-md:grid-rows-3 max-md:justify-items-center" style={{ zIndex: 100, marginInline:'50px', width: '80%' }}>
+        <header className="grid items-center gap-2 py-10 grid-cols-3 grid-rows-1 max-md:grid-cols-1 max-md:grid-rows-3 max-md:justify-items-center" style={{ zIndex: 100, marginInline:'50px'}}>
             <div className='flex lg:justify-space-evently flex items-center gap-7'>
                 <Link
                     href={route('home')}
@@ -53,7 +54,9 @@ export default function GuestHeader({ auth }) {
                         </Link>
                     </>
                 )}
+                <LanguageSwitcher currentLocale={locale} />
             </nav>
+            
         </header>
     );
 }

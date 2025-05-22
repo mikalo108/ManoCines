@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+
+class UserController extends Controller
+{
+    private const PAGINATE_SIZE = 10;
+
+    // Display a listing of users
+    public function index()
+    {
+        $users = User::paginate(self::PAGINATE_SIZE);
+        return view('user.index', compact('users'));
+    }
+
+    // Show the form for creating a new user
+    public function create()
+    {
+        return view('user.form');
+    }
+
+    // Store a newly created user in storage
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|string|max:255',
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->role = $request->role;
+        $user->save();
+
+        return redirect()->route('user.index');
+    }
+
+    // Display the specified user
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.show', compact('user'));
+    }
+
+    // Show the form for editing the specified user
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.form', compact('user'));
+    }
+
+    // Update the specified user in storage
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+        $user->save();
+
+        return redirect()->route('user.index');
+    }
+
+    // Remove the specified user from storage
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index');
+    }
+}

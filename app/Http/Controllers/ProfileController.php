@@ -2,62 +2,95 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Inertia\Response;
+use App\Models\Profile;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): Response
+    private const PAGINATE_SIZE = 10;
+
+    // Display a listing of profiles
+    public function index()
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
-        ]);
+        $profiles = Profile::paginate(self::PAGINATE_SIZE);
+        return view('profile.index', compact('profiles'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    // Show the form for creating a new profile
+    public function create()
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+        return view('profile.form');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    // Store a newly created profile in storage
+    public function store(Request $request)
     {
         $request->validate([
-            'password' => ['required', 'current_password'],
+            'user_id' => 'required|integer|exists:users,id',
+            'name' => 'nullable|string|max:100',
+            'surname' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
         ]);
 
-        $user = $request->user();
+        $profile = new Profile();
+        $profile->user_id = $request->user_id;
+        $profile->name = $request->name;
+        $profile->surname = $request->surname;
+        $profile->country = $request->country;
+        $profile->city = $request->city;
+        $profile->phone = $request->phone;
+        $profile->save();
 
-        Auth::logout();
+        return redirect()->route('profile.index');
+    }
 
-        $user->delete();
+    // Display the specified profile
+    public function show($id)
+    {
+        $profile = Profile::findOrFail($id);
+        return view('profile.show', compact('profile'));
+    }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    // Show the form for editing the specified profile
+    public function edit($id)
+    {
+        $profile = Profile::findOrFail($id);
+        return view('profile.form', compact('profile'));
+    }
 
-        return Redirect::to('/');
+    // Update the specified profile in storage
+    public function update(Request $request, $id)
+    {
+        $profile = Profile::findOrFail($id);
+
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'name' => 'nullable|string|max:100',
+            'surname' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $profile->user_id = $request->user_id;
+        $profile->name = $request->name;
+        $profile->surname = $request->surname;
+        $profile->country = $request->country;
+        $profile->city = $request->city;
+        $profile->phone = $request->phone;
+        $profile->save();
+
+        return redirect()->route('profile.index');
+    }
+
+    // Remove the specified profile from storage
+    public function destroy($id)
+    {
+        $profile = Profile::findOrFail($id);
+        $profile->delete();
+
+        return redirect()->route('profile.index');
     }
 }

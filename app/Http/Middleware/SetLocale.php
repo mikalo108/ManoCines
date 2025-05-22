@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Lang;
 
 class SetLocale
 {
@@ -18,10 +18,8 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
-        Log::info('SetLocale middleware ejecutado');
-        if ($request->session()->has('locale')) {
-            $locale = $request->session()->get('locale');
-            Log::info('SetLocale middleware: ' . $locale);
+       $locale = $request->session()->get('locale') ?? $request->cookie('locale');
+        if ($locale && in_array($locale, ['en', 'es'])) {
             App::setLocale($locale);
         }
 

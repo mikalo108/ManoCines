@@ -9,25 +9,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Laravel\Pail\ValueObjects\Origin\Console;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
 
 Route::get('/locale/{locale}', function ($locale, Request $request) {
     $availableLocales = ['en', 'es'];
-    Log::info('Entrando a la ruta localeSwitch con: ' . $locale);
+
     if (in_array($locale, $availableLocales)) {
-        $request->session()->put('locale', $locale);
+        App::setLocale($locale);
+        Session::put('locale', $locale);
+        cookie()->queue(cookie()->forever('locale', $locale));
+        Lang::setLocale($locale);
+        return redirect()->back()->with('success', 'Locale switched to: ' . $locale);
+    } else {
+        return redirect()->back();
     }
-    return redirect()->back();
-})->name('localeSwitch');
+})->name('locale.switch');
 
 Route::get('/', function () {
+    App::setLocale(session('locale', config('app.locale')));
     return Inertia::render('Welcome', [
         'auth' => [
             'user' => Auth::user(),
         ],
-        'locale' => app()->getLocale(),
+        'locale' => App::getLocale(),
         'locale_session' => session('locale'),
         'copyright' => Lang::get('general.copyright'),
         'bestsellers' => Lang::get('general.bestsellers'),
+        'register' => Lang::get('general.register'),
+        'login' => Lang::get('general.login'),
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -35,9 +46,12 @@ Route::get('/', function () {
     ]);
 })->name(name: 'home');
 
+
+
 Route::get('/dashboard', function () {
+    App::setLocale(session('locale', config('app.locale')));
     return Inertia::render('Dashboard', [
-        'locale' => app()->getLocale(),
+        'locale' => App::getLocale(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

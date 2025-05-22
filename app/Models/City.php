@@ -14,6 +14,7 @@ class City extends Model
         'name',
     ];
 
+    // Relación 1:N con la tabla cinemas
     public function cinemas()
     {
         return $this->belongsToMany(Cinema::class, 'city_cinema');

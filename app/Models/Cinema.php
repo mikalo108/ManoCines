@@ -29,7 +29,7 @@ class Cinema extends Model
     }
 
     /**
-     * Relación 1:N con el modelo Product
+     * Relación N:N con el modelo Product
      *  - Un cine puede tener muchos productos.
      *  - Un producto pertenece a un cine.
      */
@@ -38,6 +38,11 @@ class Cinema extends Model
         return $this->belongsToMany(Product::class, 'products_cinema');
     }
 
+    /**
+     * Relación N:1 con el modelo City
+     *  - Un cine puede estar en muchas ciudades.
+     *  - Una ciudad puede tener muchos cines.
+     */
     public function cities()
     {
         return $this->belongsToMany(City::class, 'city_cinema');

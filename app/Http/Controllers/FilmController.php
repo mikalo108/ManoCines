@@ -23,17 +23,17 @@ class FilmController extends Controller
     // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
-            'title' => 'required|string|max:255',  
-            'director' => 'nullable|string|max:255',  
-            'release_year' => 'nullable|integer|min:1800|max:' . date('Y'),  
-            'description' => 'nullable|string|max:1000',  
+            'name' => 'required|string|max:255',  
+            'image' => 'nullable|string|max:255',  
+            'overview' => 'nullable|string',  
+            'trailer' => 'nullable|string|max:255',  
         ]);
 
         $f = new Film();
-        $f->title = $r->title;
-        $f->director = $r->director;
-        $f->release_year = $r->release_year;
-        $f->description = $r->description;
+        $f->name = $r->name;
+        $f->image = $r->image;
+        $f->overview = $r->overview;
+        $f->trailer = $r->trailer;
         $f->save();
         return redirect()->route('film.index');
     }
@@ -47,17 +47,17 @@ class FilmController extends Controller
     // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
-            'title' => 'required|string|max:255',  
-            'director' => 'nullable|string|max:255',  
-            'release_year' => 'nullable|integer|min:1800|max:' . date('Y'),  
-            'description' => 'nullable|string|max:1000',  
+            'name' => 'required|string|max:255',  
+            'image' => 'nullable|string|max:255',  
+            'overview' => 'nullable|string',  
+            'trailer' => 'nullable|string|max:255',  
         ]);
         
         $f = Film::find($id);
-        $f->title = $r->title;
-        $f->director = $r->director;
-        $f->release_year = $r->release_year;
-        $f->description = $r->description;
+        $f->name = $r->name;
+        $f->image = $r->image;
+        $f->overview = $r->overview;
+        $f->trailer = $r->trailer;
         $f->save();
         return redirect()->route('film.index');
     }

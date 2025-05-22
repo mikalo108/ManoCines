@@ -37,6 +37,8 @@ Route::get('/', function () {
         'locale_session' => session('locale'),
         'copyright' => Lang::get('general.copyright'),
         'bestsellers' => Lang::get('general.bestsellers'),
+        'films' => Lang::get('general.films'),
+        'cinemas' => Lang::get('general.cinemas'),
         'register' => Lang::get('general.register'),
         'login' => Lang::get('general.login'),
         'canLogin' => Route::has('login'),

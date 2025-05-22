@@ -7,4 +7,7 @@ return [
     'bestsellers' => 'Best Sellers',
     'register' => 'Register',
     'login' => 'Log in',
+    'logout' => 'Log out',
+    'films' => 'Films',
+    'cinemas' => 'Cinemas',
 ];

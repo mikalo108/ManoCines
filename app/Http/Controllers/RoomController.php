@@ -17,44 +17,58 @@ class RoomController extends Controller
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('room.form');  
+        $cinemas = \App\Models\Cinema::all();
+        $chairs = \App\Models\Chair::all();
+        return view('room.form', compact('cinemas', 'chairs'));  
     }
 
     // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
-            'cinema_id' => 'required|integer|exists:cinemas,id',
             'name' => 'required|string|max:255',  
             'capacity' => 'required|integer|min:1',  
+            'chairs' => 'array',
+            'chairs.*' => 'integer|exists:chairs,id',
         ]);
 
         $rModel = new Room();
-        $rModel->cinema_id = $r->cinema_id;
         $rModel->name = $r->name;
         $rModel->capacity = $r->capacity;
         $rModel->save();
+
+        if ($r->has('chairs')) {
+            $rModel->chairs()->attach($r->chairs);
+        }
+
         return redirect()->route('room.index');
     }
 
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
-        $rModel = Room::find($id);
-        return view('room.form', ['room' => $rModel]);
+        $rModel = Room::with('chairs')->find($id);
+        $cinemas = \App\Models\Cinema::all();
+        $chairs = \App\Models\Chair::all();
+        return view('room.form', ['room' => $rModel, 'cinemas' => $cinemas, 'chairs' => $chairs]);
     }
 
     // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
-            'cinema_id' => 'required|integer|exists:cinemas,id',
             'name' => 'required|string|max:255',  
             'capacity' => 'required|integer|min:1',  
+            'chairs' => 'array',
+            'chairs.*' => 'integer|exists:chairs,id',
         ]);
         
         $rModel = Room::find($id);
-        $rModel->cinema_id = $r->cinema_id;
         $rModel->name = $r->name;
         $rModel->capacity = $r->capacity;
         $rModel->save();
+
+        if ($r->has('chairs')) {
+            $rModel->chairs()->sync($r->chairs);
+        }
+
         return redirect()->route('room.index');
     }
 

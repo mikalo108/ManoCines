@@ -5,11 +5,11 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CityCinemaTableSeeder extends Seeder
+class CinemaCityTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('city_cinema')->insert([
+        DB::table('cinema_city')->insert([
             [
                 'city_id' => 1, // Madrid
                 'cinema_id' => 1, // Cine Central

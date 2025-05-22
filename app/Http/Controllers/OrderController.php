@@ -29,6 +29,8 @@ class OrderController extends Controller
             'user_id' => 'required|integer|exists:users,id',
             'subtotal' => 'required|numeric',
             'total' => 'required|numeric',
+            'products' => 'array',
+            'products.*' => 'integer|exists:products,id',
         ]);
 
         $order = new Order();
@@ -36,6 +38,10 @@ class OrderController extends Controller
         $order->subtotal = $request->subtotal;
         $order->total = $request->total;
         $order->save();
+
+        if ($request->has('products')) {
+            $order->products()->attach($request->products);
+        }
 
         return redirect()->route('order.index');
     }
@@ -63,12 +69,16 @@ class OrderController extends Controller
             'user_id' => 'required|integer|exists:users,id',
             'subtotal' => 'required|numeric',
             'total' => 'required|numeric',
+            'products' => 'array',
+            'products.*' => 'integer|exists:products,id',
         ]);
 
         $order->user_id = $request->user_id;
         $order->subtotal = $request->subtotal;
         $order->total = $request->total;
         $order->save();
+
+        $order->products()->sync($request->products ?? []);
 
         return redirect()->route('order.index');
     }

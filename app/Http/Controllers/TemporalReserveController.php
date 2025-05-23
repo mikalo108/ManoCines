@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TemporalReserve;
+use Inertia\Inertia;
 
 class TemporalReserveController extends Controller
 {
@@ -12,12 +13,12 @@ class TemporalReserveController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $temporalReserve = TemporalReserve::findOrFail($id);
-        return view('temporalReserve.show', compact('temporalReserve'));
+        return Inertia::render('TemporalReserve/Show', ['temporalReserve' => $temporalReserve]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('temporalReserve.form');  
+        return Inertia::render('TemporalReserve/Form');  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -36,7 +37,7 @@ class TemporalReserveController extends Controller
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $tr = TemporalReserve::find($id);
-        return view('temporalReserve.form', ['temporalReserve' => $tr]);
+        return Inertia::render('TemporalReserve/Form', ['temporalReserve' => $tr]);
     }
 
     // Función para actualizar el elemento en la base de datos

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Time;
 use App\Models\Room;
 use App\Models\Film;
+use Inertia\Inertia;
 
 class TimeController extends Controller
 {
@@ -15,7 +16,7 @@ class TimeController extends Controller
     public function index()
     {
         $times = Time::paginate(self::PAGINATE_SIZE);
-        return view('time.index', compact('times'));
+        return Inertia::render('Time/Index', ['times' => $times]);
     }
 
     // Show the form for creating a new time
@@ -23,7 +24,7 @@ class TimeController extends Controller
     {
         $rooms = Room::all();
         $films = Film::all();
-        return view('time.form', compact('rooms', 'films'));
+        return Inertia::render('Time/Form', ['rooms' => $rooms, 'films' => $films]);
     }
 
     // Store a newly created time in storage
@@ -48,7 +49,7 @@ class TimeController extends Controller
     public function show($id)
     {
         $time = Time::findOrFail($id);
-        return view('time.show', compact('time'));
+        return Inertia::render('Time/Show', ['time' => $time]);
     }
 
     // Show the form for editing the specified time
@@ -57,7 +58,7 @@ class TimeController extends Controller
         $time = Time::findOrFail($id);
         $rooms = Room::all();
         $films = Film::all();
-        return view('time.form', compact('time', 'rooms', 'films'));
+        return Inertia::render('Time/Form', ['time' => $time, 'rooms' => $rooms, 'films' => $films]);
     }
 
     // Update the specified time in storage

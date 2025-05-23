@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -13,13 +14,13 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::paginate(self::PAGINATE_SIZE);
-        return view('product.index', compact('products'));
+        return Inertia::render('Product/Index', ['products' => $products]);
     }
 
     // Show the form for creating a new product
     public function create()
     {
-        return view('product.form');
+        return Inertia::render('Product/Form');
     }
 
     // Store a newly created product in storage
@@ -48,14 +49,14 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('product.show', compact('product'));
+        return Inertia::render('Product/Show', ['product' => $product]);
     }
 
     // Show the form for editing the specified product
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('product.form', compact('product'));
+        return Inertia::render('Product/Form', ['product' => $product]);
     }
 
     // Update the specified product in storage

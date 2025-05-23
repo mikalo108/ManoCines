@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\City;
+use Inertia\Inertia;
 
 class CityController extends Controller
 {
@@ -12,12 +13,12 @@ class CityController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $city = City::findOrFail($id);
-        return view('city.show', compact('city'));
+        return Inertia::render('City/Show', ['city' => $city]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('city.form');  
+        return Inertia::render('City/Form');  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -41,7 +42,7 @@ class CityController extends Controller
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $c = City::find($id);
-        return view('city.form', ['city' => $c]);
+        return Inertia::render('City/Form', ['city' => $c]);
     }
 
     // Función para actualizar el elemento en la base de datos

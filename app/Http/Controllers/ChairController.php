@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Chair;
+use Inertia\Inertia;
 
 class ChairController extends Controller
 {
@@ -12,12 +13,12 @@ class ChairController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $chair = Chair::findOrFail($id);
-        return view('chair.show', compact('chair'));
+        return Inertia::render('Chair/Show', ['chair' => $chair]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('chair.form');  
+        return Inertia::render('Chair/Form');  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -43,7 +44,7 @@ class ChairController extends Controller
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $ch = Chair::find($id);
-        return view('chair.form', ['chair' => $ch]);
+        return Inertia::render('Chair/Form', ['chair' => $ch]);
     }
 
     // Función para actualizar el elemento en la base de datos

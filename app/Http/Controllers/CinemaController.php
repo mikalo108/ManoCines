@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cinema;
+use Inertia\Inertia;
 
 class CinemaController extends Controller
 {
@@ -12,7 +13,7 @@ class CinemaController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $cinema = Cinema::with(['products', 'rooms'])->findOrFail($id);
-        return view('cinema.show', compact('cinema'));
+        return Inertia::render('Cinema/show', ['cinema' => $cinema]);
     }
 
     // Función para devolver a la página de creación del elemento
@@ -20,40 +21,7 @@ class CinemaController extends Controller
         $cities = \App\Models\City::all();
         $products = \App\Models\Product::all();
         $chairs = \App\Models\Chair::all();
-        return view('cinema.form', compact('cities', 'products', 'chairs'));  
-    }
-
-    // Función para guardar el elemento en la base de datos
-    public function store(Request $r) { 
-        $r->validate([
-            'name' => 'required|string|max:255',  
-            'location' => 'required|string|max:255',  
-            'description' => 'nullable|string|max:1000',  
-            'city_id' => 'required|integer|exists:cities,id',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
-        ]);
-
-        $c = new Cinema();
-        $c->name = $r->name;
-        $c->location = $r->location;
-        $c->description = $r->description;
-        $c->save();
-
-        // Attach city to cinema
-        $c->cities()->attach($r->city_id);
-
-        // Attach products and chairs
-        if ($r->has('products')) {
-            $c->products()->attach($r->products);
-        }
-        if ($r->has('chairs')) {
-            $c->chairs()->attach($r->chairs);
-        }
-
-        return redirect()->route('cinema.index');
+        return Inertia::render('Cinema/form', ['cities' => $cities, 'products' => $products, 'chairs' => $chairs]);
     }
 
     // Función para guardar el elemento en la base de datos
@@ -95,36 +63,7 @@ class CinemaController extends Controller
         $cities = \App\Models\City::all();
         $products = \App\Models\Product::all();
         $chairs = \App\Models\Chair::all();
-        return view('cinema.form', ['cinema' => $c, 'cities' => $cities, 'products' => $products, 'chairs' => $chairs]);
-    }
-
-    // Función para actualizar el elemento en la base de datos
-    public function update($id, Request $r) { 
-        $r->validate([
-            'name' => 'required|string|max:255',  
-            'location' => 'required|string|max:255',  
-            'description' => 'nullable|string|max:1000',  
-            'city_id' => 'required|integer|exists:cities,id',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
-        ]);
-        
-        $c = Cinema::find($id);
-        $c->name = $r->name;
-        $c->location = $r->location;
-        $c->description = $r->description;
-        $c->save();
-
-        // Sync city to cinema
-        $c->cities()->sync([$r->city_id]);
-
-        // Sync products and chairs
-        $c->products()->sync($r->products ?? []);
-        $c->chairs()->sync($r->chairs ?? []);
-
-        return redirect()->route('cinema.index');
+        return Inertia::render('Cinema/form', ['cinema' => $c, 'cities' => $cities, 'products' => $products, 'chairs' => $chairs]);
     }
 
     // Función para actualizar el elemento en la base de datos

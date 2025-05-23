@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
+use Inertia\Inertia;
 
 class ProductCategoryController extends Controller
 {
@@ -13,13 +14,13 @@ class ProductCategoryController extends Controller
     public function index()
     {
         $categories = ProductCategory::paginate(self::PAGINATE_SIZE);
-        return view('productcategory.index', compact('categories'));
+        return Inertia::render('ProductCategory/Index', ['categories' => $categories]);
     }
 
     // Show the form for creating a new product category
     public function create()
     {
-        return view('productcategory.form');
+        return Inertia::render('ProductCategory/Form');
     }
 
     // Store a newly created product category in storage
@@ -40,14 +41,14 @@ class ProductCategoryController extends Controller
     public function show($id)
     {
         $category = ProductCategory::findOrFail($id);
-        return view('productcategory.show', compact('category'));
+        return Inertia::render('ProductCategory/Show', ['category' => $category]);
     }
 
     // Show the form for editing the specified product category
     public function edit($id)
     {
         $category = ProductCategory::findOrFail($id);
-        return view('productcategory.form', compact('category'));
+        return Inertia::render('ProductCategory/Form', ['category' => $category]);
     }
 
     // Update the specified product category in storage

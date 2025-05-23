@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -13,13 +14,13 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(self::PAGINATE_SIZE);
-        return view('user.index', compact('users'));
+        return Inertia::render('User/Index', ['users' => $users]);
     }
 
     // Show the form for creating a new user
     public function create()
     {
-        return view('user.form');
+        return Inertia::render('User/Form');
     }
 
     // Store a newly created user in storage
@@ -46,14 +47,14 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('user.show', compact('user'));
+        return Inertia::render('User/Show', ['user' => $user]);
     }
 
     // Show the form for editing the specified user
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('user.form', compact('user'));
+        return Inertia::render('User/Form', ['user' => $user]);
     }
 
     // Update the specified user in storage

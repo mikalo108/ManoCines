@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
@@ -13,13 +14,13 @@ class ProfileController extends Controller
     public function index()
     {
         $profiles = Profile::paginate(self::PAGINATE_SIZE);
-        return view('profile.index', compact('profiles'));
+        return Inertia::render('Profile/Index', ['profiles' => $profiles]);
     }
 
     // Show the form for creating a new profile
     public function create()
     {
-        return view('profile.form');
+        return Inertia::render('Profile/Form');
     }
 
     // Store a newly created profile in storage
@@ -50,14 +51,14 @@ class ProfileController extends Controller
     public function show($id)
     {
         $profile = Profile::findOrFail($id);
-        return view('profile.show', compact('profile'));
+        return Inertia::render('Profile/Show', ['profile' => $profile]);
     }
 
     // Show the form for editing the specified profile
     public function edit($id)
     {
         $profile = Profile::findOrFail($id);
-        return view('profile.form', compact('profile'));
+        return Inertia::render('Profile/Form', ['profile' => $profile]);
     }
 
     // Update the specified profile in storage

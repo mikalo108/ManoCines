@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
@@ -13,13 +14,13 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::paginate(self::PAGINATE_SIZE);
-        return view('order.index', compact('orders'));
+        return Inertia::render('Order/Index', ['orders' => $orders]);
     }
 
     // Show the form for creating a new order
     public function create()
     {
-        return view('order.form');
+        return Inertia::render('Order/Form');
     }
 
     // Store a newly created order in storage
@@ -50,14 +51,14 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        return view('order.show', compact('order'));
+        return Inertia::render('Order/Show', ['order' => $order]);
     }
 
     // Show the form for editing the specified order
     public function edit($id)
     {
         $order = Order::findOrFail($id);
-        return view('order.form', compact('order'));
+        return Inertia::render('Order/Form', ['order' => $order]);
     }
 
     // Update the specified order in storage

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\OrderTicket;
+use Inertia\Inertia;
 
 class OrderTicketController extends Controller
 {
@@ -12,12 +13,12 @@ class OrderTicketController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $orderTicket = OrderTicket::findOrFail($id);
-        return view('orderTicket.show', compact('orderTicket'));
+        return Inertia::render('OrderTicket/Show', ['orderTicket' => $orderTicket]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('orderTicket.form');  
+        return Inertia::render('OrderTicket/Form');  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -39,7 +40,7 @@ class OrderTicketController extends Controller
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $ot = OrderTicket::find($id);
-        return view('orderTicket.form', ['orderTicket' => $ot]);
+        return Inertia::render('OrderTicket/Form', ['orderTicket' => $ot]);
     }
 
     // Función para actualizar el elemento en la base de datos

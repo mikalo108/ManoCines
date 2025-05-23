@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Film;
+use Inertia\Inertia;
 
 class FilmController extends Controller
 {
@@ -12,12 +13,12 @@ class FilmController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $film = Film::findOrFail($id);
-        return view('film.show', compact('film'));
+        return Inertia::render('Film/Show', ['film' => $film]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
-        return view('film.form');  
+        return Inertia::render('Film/Form');  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -41,7 +42,7 @@ class FilmController extends Controller
     // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $f = Film::find($id);
-        return view('film.form', ['film' => $f]);
+        return Inertia::render('Film/Form', ['film' => $f]);
     }
 
     // Función para actualizar el elemento en la base de datos

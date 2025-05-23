@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Room;
+use Inertia\Inertia;
 
 class RoomController extends Controller
 {
@@ -12,14 +13,14 @@ class RoomController extends Controller
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $room = Room::findOrFail($id);
-        return view('room.show', compact('room'));
+        return Inertia::render('Room/Show', ['room' => $room]);
     }
 
     // Función para devolver a la página de creación del elemento
     public function create() {
         $cinemas = \App\Models\Cinema::all();
         $chairs = \App\Models\Chair::all();
-        return view('room.form', compact('cinemas', 'chairs'));  
+        return Inertia::render('Room/Form', ['cinemas' => $cinemas, 'chairs' => $chairs]);  
     }
 
     // Función para guardar el elemento en la base de datos
@@ -49,7 +50,7 @@ class RoomController extends Controller
         $rModel = Room::with('chairs')->find($id);
         $cinemas = \App\Models\Cinema::all();
         $chairs = \App\Models\Chair::all();
-        return view('room.form', ['room' => $rModel, 'cinemas' => $cinemas, 'chairs' => $chairs]);
+        return Inertia::render('Room/Form', ['room' => $rModel, 'cinemas' => $cinemas, 'chairs' => $chairs]);
     }
 
     // Función para actualizar el elemento en la base de datos

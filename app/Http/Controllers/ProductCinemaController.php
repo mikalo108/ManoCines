@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProductCinema;
+use Inertia\Inertia;
 
 class ProductCinemaController extends Controller
 {
@@ -12,12 +13,12 @@ class ProductCinemaController extends Controller
     public function index()
     {
         $productCinemas = ProductCinema::paginate($this->paginateSize);
-        return view('productcinema.index', compact('productCinemas'));
+        return Inertia::render('ProductCinema/Index', ['productCinemas' => $productCinemas]);
     }
 
     public function create()
     {
-        return view('productcinema.form');
+        return Inertia::render('ProductCinema/Form');
     }
 
     public function store(Request $request)
@@ -38,13 +39,13 @@ class ProductCinemaController extends Controller
     public function show($id)
     {
         $productCinema = ProductCinema::findOrFail($id);
-        return view('productcinema.show', compact('productCinema'));
+        return Inertia::render('ProductCinema/Show', ['productCinema' => $productCinema]);
     }
 
     public function edit($id)
     {
         $productCinema = ProductCinema::findOrFail($id);
-        return view('productcinema.form', compact('productCinema'));
+        return Inertia::render('ProductCinema/Form', ['productCinema' => $productCinema]);
     }
 
     public function update(Request $request, $id)

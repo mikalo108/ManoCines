@@ -5,11 +5,11 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ProductCinemaTableSeeder extends Seeder
+class CinemaProductTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('products_cinema')->insert([
+        DB::table('cinemas_products')->insert([
             [
                 'product_id' => 1,
                 'cinema_id' => 1,

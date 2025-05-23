@@ -12,14 +12,4 @@ class ProductCinema extends Model
         'cinema_id',
         'product_id',
     ];
-
-    public function cinema()
-    {
-        return $this->belongsTo(Cinema::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 }

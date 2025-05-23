@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderTicket;
 use App\Models\OrderProduct;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',

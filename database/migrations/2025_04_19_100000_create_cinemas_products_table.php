@@ -16,9 +16,6 @@ class CreateCinemasProductsTable extends Migration
             $table->unsignedBigInteger('cinema_id');
             $table->unsignedBigInteger('product_id');
             $table->timestamps();
-
-            $table->foreign('cinema_id')->references('id')->on('cinemas')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

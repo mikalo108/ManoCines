@@ -25,6 +25,7 @@ class RoomController extends Controller
     // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
+            'cinema_id' => 'required|integer|exists:cinemas,id',
             'name' => 'required|string|max:255',  
             'capacity' => 'required|integer|min:1',  
             'chairs' => 'array',
@@ -54,6 +55,7 @@ class RoomController extends Controller
     // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
+            'cinema_id' => 'required|integer|exists:cinemas,id',
             'name' => 'required|string|max:255',  
             'capacity' => 'required|integer|min:1',  
             'chairs' => 'array',

@@ -9,7 +9,7 @@ class CinemaCityTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('cinema_city')->insert([
+        DB::table('cinemas_cities')->insert([
             [
                 'city_id' => 1, // Madrid
                 'cinema_id' => 1, // Cine Central

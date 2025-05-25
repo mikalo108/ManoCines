@@ -33,7 +33,7 @@ class ProductCinemaController extends Controller
         $productCinema->product_id = $request->product_id;
         $productCinema->save();
 
-        return redirect()->route('productcinema.index');
+        return redirect()->route('product-cinemas.index');
     }
 
     public function show($id)
@@ -61,7 +61,7 @@ class ProductCinemaController extends Controller
         $productCinema->product_id = $request->product_id;
         $productCinema->save();
 
-        return redirect()->route('productcinema.index');
+        return redirect()->route('product-cinemas.index');
     }
 
     public function destroy($id)
@@ -69,6 +69,6 @@ class ProductCinemaController extends Controller
         $productCinema = ProductCinema::findOrFail($id);
         $productCinema->delete();
 
-        return redirect()->route('productcinema.index');
+        return redirect()->route('product-cinemas.index');
     }
 }

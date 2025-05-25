@@ -42,7 +42,7 @@ class ProductController extends Controller
         $product->category = $request->category;
         $product->save();
 
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 
     // Display the specified product
@@ -79,7 +79,7 @@ class ProductController extends Controller
         $product->category = $request->category;
         $product->save();
 
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 
     // Remove the specified product from storage
@@ -88,6 +88,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('product.index');
+        return redirect()->route('products.index');
     }
 }

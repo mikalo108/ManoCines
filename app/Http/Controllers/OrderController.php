@@ -44,7 +44,7 @@ class OrderController extends Controller
             $order->products()->attach($request->products);
         }
 
-        return redirect()->route('order.index');
+        return redirect()->route('orders.index');
     }
 
     // Display the specified order
@@ -81,7 +81,7 @@ class OrderController extends Controller
 
         $order->products()->sync($request->products ?? []);
 
-        return redirect()->route('order.index');
+        return redirect()->route('orders.index');
     }
 
     // Remove the specified order from storage
@@ -90,6 +90,6 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $order->delete();
 
-        return redirect()->route('order.index');
+        return redirect()->route('orders.index');
     }
 }

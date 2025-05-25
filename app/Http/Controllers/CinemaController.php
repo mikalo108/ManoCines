@@ -54,7 +54,7 @@ class CinemaController extends Controller
             $c->chairs()->attach($r->chairs);
         }
 
-        return redirect()->route('cinema.index');
+        return redirect()->route('cinemas.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -92,13 +92,13 @@ class CinemaController extends Controller
         $c->products()->sync($r->products ?? []);
         $c->chairs()->sync($r->chairs ?? []);
 
-        return redirect()->route('cinema.index');
+        return redirect()->route('cinemas.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $c = Cinema::find($id);
         $c->delete();
-        return redirect()->route('cinema.index');
+        return redirect()->route('cinemas.index');
     }
 }

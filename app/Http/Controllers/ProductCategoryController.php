@@ -34,7 +34,7 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->save();
 
-        return redirect()->route('productcategory.index');
+        return redirect()->route('product-categories.index');
     }
 
     // Display the specified product category
@@ -63,7 +63,7 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->save();
 
-        return redirect()->route('productcategory.index');
+        return redirect()->route('product-categories.index');
     }
 
     // Remove the specified product category from storage
@@ -72,6 +72,6 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::findOrFail($id);
         $category->delete();
 
-        return redirect()->route('productcategory.index');
+        return redirect()->route('product-categories.index');
     }
 }

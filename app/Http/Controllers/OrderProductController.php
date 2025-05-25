@@ -40,7 +40,7 @@ class OrderProductController extends Controller
         $orderProduct->note = $request->note;
         $orderProduct->save();
 
-        return redirect()->route('orderproduct.index');
+        return redirect()->route('order-products.index');
     }
 
     // Display the specified order product
@@ -75,7 +75,7 @@ class OrderProductController extends Controller
         $orderProduct->note = $request->note;
         $orderProduct->save();
 
-        return redirect()->route('orderproduct.index');
+        return redirect()->route('order-products.index');
     }
 
     // Remove the specified order product from storage
@@ -84,6 +84,6 @@ class OrderProductController extends Controller
         $orderProduct = OrderProduct::findOrFail($id);
         $orderProduct->delete();
 
-        return redirect()->route('orderproduct.index');
+        return redirect()->route('order-products.index');
     }
 }

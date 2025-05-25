@@ -34,7 +34,7 @@ class OrderTicketController extends Controller
         $ot->chair_id = $r->chair_id;
         $ot->time_id = $r->time_id;
         $ot->save();
-        return redirect()->route('orderTicket.index');
+        return redirect()->route('order-tickets.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -56,13 +56,13 @@ class OrderTicketController extends Controller
         $ot->chair_id = $r->chair_id;
         $ot->time_id = $r->time_id;
         $ot->save();
-        return redirect()->route('orderTicket.index');
+        return redirect()->route('order-tickets.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $ot = OrderTicket::find($id);
         $ot->delete();
-        return redirect()->route('orderTicket.index');
+        return redirect()->route('order-tickets.index');
     }
 }

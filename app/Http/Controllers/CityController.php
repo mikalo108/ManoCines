@@ -36,7 +36,7 @@ class CityController extends Controller
         $c->country = $r->country;
         $c->cinema_id = $r->cinema_id;
         $c->save();
-        return redirect()->route('city.index');
+        return redirect()->route('cities.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -60,13 +60,13 @@ class CityController extends Controller
         $c->country = $r->country;
         $c->cinema_id = $r->cinema_id;
         $c->save();
-        return redirect()->route('city.index');
+        return redirect()->route('cities.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $c = City::find($id);
         $c->delete();
-        return redirect()->route('city.index');
+        return redirect()->route('cities.index');
     }
 }

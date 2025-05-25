@@ -31,6 +31,10 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|max:255',
+            'surname' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
         ]);
 
         $user = new User();
@@ -39,6 +43,14 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->role = $request->role;
         $user->save();
+
+        $user->profile()->create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'country' => $request->country,
+            'city' => $request->city,
+            'phone' => $request->phone,
+        ]);
 
         return redirect()->route('user.index');
     }

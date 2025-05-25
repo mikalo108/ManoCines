@@ -38,7 +38,7 @@ class ChairController extends Controller
         $ch->state = $r->state;
         $ch->price = $r->price;
         $ch->save();
-        return redirect()->route('chair.index');
+        return redirect()->route('chairs.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -64,13 +64,13 @@ class ChairController extends Controller
         $ch->state = $r->state;
         $ch->price = $r->price;
         $ch->save();
-        return redirect()->route('chair.index');
+        return redirect()->route('chairs.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $ch = Chair::find($id);
         $ch->delete();
-        return redirect()->route('chair.index');
+        return redirect()->route('chairs.index');
     }
 }

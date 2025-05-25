@@ -42,7 +42,7 @@ class FilmController extends Controller
         $f->overview = $r->overview;
         $f->trailer = $r->trailer;
         $f->save();
-        return redirect()->route('film.index');
+        return redirect()->route('films.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -66,13 +66,13 @@ class FilmController extends Controller
         $f->overview = $r->overview;
         $f->trailer = $r->trailer;
         $f->save();
-        return redirect()->route('film.index');
+        return redirect()->route('films.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $f = Film::find($id);
         $f->delete();
-        return redirect()->route('film.index');
+        return redirect()->route('films.index');
     }
 }

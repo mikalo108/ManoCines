@@ -10,6 +10,12 @@ class FilmController extends Controller
 {
     private const PAGINATE_SIZE = 10;
 
+    // Función para devolver a la página principal del elemento
+    public function index() {
+        $films = Film::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Film/Index', ['films' => $films]);
+    }
+
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $film = Film::findOrFail($id);

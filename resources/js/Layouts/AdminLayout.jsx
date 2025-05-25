@@ -135,7 +135,6 @@ export default function AdminLayout({ header, children }) {
                         >
                             Admin Dashboard
                         </ResponsiveNavLink>
-                        {/* Add more admin-specific links here */}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">

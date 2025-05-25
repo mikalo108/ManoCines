@@ -42,7 +42,7 @@ class TimeController extends Controller
         $time->time = $request->time;
         $time->save();
 
-        return redirect()->route('time.index');
+        return redirect()->route('times.index');
     }
 
     // Display the specified time
@@ -77,7 +77,7 @@ class TimeController extends Controller
         $time->time = $request->time;
         $time->save();
 
-        return redirect()->route('time.index');
+        return redirect()->route('times.index');
     }
 
     // Remove the specified time from storage
@@ -86,6 +86,6 @@ class TimeController extends Controller
         $time = Time::findOrFail($id);
         $time->delete();
 
-        return redirect()->route('time.index');
+        return redirect()->route('times.index');
     }
 }

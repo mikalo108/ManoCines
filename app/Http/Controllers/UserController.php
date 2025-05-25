@@ -52,7 +52,7 @@ class UserController extends Controller
             'phone' => $request->phone,
         ]);
 
-        return redirect()->route('user.index');
+        return redirect()->route('users.index');
     }
 
     // Display the specified user
@@ -87,7 +87,7 @@ class UserController extends Controller
         }
         $user->save();
 
-        return redirect()->route('user.index');
+        return redirect()->route('users.index');
     }
 
     // Remove the specified user from storage
@@ -96,6 +96,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('user.index');
+        return redirect()->route('users.index');
     }
 }

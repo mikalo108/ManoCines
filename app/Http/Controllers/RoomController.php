@@ -42,7 +42,7 @@ class RoomController extends Controller
             $rModel->chairs()->attach($r->chairs);
         }
 
-        return redirect()->route('room.index');
+        return redirect()->route('rooms.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -72,13 +72,13 @@ class RoomController extends Controller
             $rModel->chairs()->sync($r->chairs);
         }
 
-        return redirect()->route('room.index');
+        return redirect()->route('rooms.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $rModel = Room::find($id);
         $rModel->delete();
-        return redirect()->route('room.index');
+        return redirect()->route('rooms.index');
     }
 }

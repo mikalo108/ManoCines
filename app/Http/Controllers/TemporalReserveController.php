@@ -31,7 +31,7 @@ class TemporalReserveController extends Controller
         $tr = new TemporalReserve();
         $tr->chair_id = $r->chair_id;
         $tr->save();
-        return redirect()->route('temporalReserve.index');
+        return redirect()->route('temporal-reserves.index');
     }
 
     // Función para devolver a la página de edición del elemento
@@ -50,13 +50,13 @@ class TemporalReserveController extends Controller
         $tr = TemporalReserve::find($id);
         $tr->chair_id = $r->chair_id;
         $tr->save();
-        return redirect()->route('temporalReserve.index');
+        return redirect()->route('temporal-reserves.index');
     }
 
     // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $tr = TemporalReserve::find($id);
         $tr->delete();
-        return redirect()->route('temporalReserve.index');
+        return redirect()->route('temporal-reserves.index');
     }
 }

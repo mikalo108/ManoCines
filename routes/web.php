@@ -154,6 +154,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+    // Profiles
+    Route::get('profiles', [ProfileController::class, 'index'])->name('profiles.index');
+    Route::get('profiles/create', [ProfileController::class, 'create'])->name('profiles.create');
+    Route::post('profiles', [ProfileController::class, 'store'])->name('profiles.store');
+    Route::get('profiles/edit/{profile}', [ProfileController::class, 'edit'])->name('profiles.edit');
+    Route::put('profiles/{profile}', [ProfileController::class, 'update'])->name('profiles.update');
+    Route::delete('profiles/{profile}', [ProfileController::class, 'destroy'])->name('profiles.destroy');
+    Route::get('profiles/{profile}', [ProfileController::class, 'show'])->name('profiles.show');
+    
     // Rooms
     Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::get('rooms/create', [RoomController::class, 'create'])->name('rooms.create');

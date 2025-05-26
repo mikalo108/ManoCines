@@ -34,18 +34,16 @@ class AppServiceProvider extends ServiceProvider
         // Load all films ordered by number of associated orders descending and share with all views globally
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);
-
-        // Share language strings globally with Inertia
+        
+        // Share the same data with Inertia views
         Inertia::share([
             'lang' => function () {
-                return [
-                    'register' => Lang::get('general.register'),
-                    'login' => Lang::get('general.login'),
-                    'films' => Lang::get('general.films'),
-                    'cinemas' => Lang::get('general.cinemas'),
-                    'copyright' => Lang::get('general.copyright'),
-                ];
+                return Lang::get('general');
             },
+            'allFilms' => $films,
+            'appName' => config('app.name'),
+            'locale' => session('locale', app()->getLocale()),
+
         ]);
     }
 }

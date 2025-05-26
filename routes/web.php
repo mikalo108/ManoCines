@@ -52,8 +52,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/dashboard', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Dashboard', [
-        'locale' => app()->getLocale(),
+        'locale' => session('locale', app()->getLocale()),
         'auth' => [
             'user' => Auth::user(),
         ],
@@ -61,16 +62,26 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/login', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
     return Inertia::render('Auth/Login', [
-        'locale' => app()->getLocale(),
+        'locale' => session('locale', app()->getLocale()),
         'canResetPassword' => Route::has('password.request'),
         'canRegister' => Route::has('register'),
+        'login' => Lang::get('general.login'),
     ]);
 })->middleware('guest')->name('login');
 Route::get('/register', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
     return Inertia::render('Auth/Register', [
-        'locale' => app()->getLocale(),
+        'locale' => session('locale', app()->getLocale()),
         'canLogin' => Route::has('login'),
+        'register' => Lang::get('general.register'),
     ]);
 })->middleware('guest')->name('register');
 

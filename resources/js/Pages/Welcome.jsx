@@ -4,6 +4,7 @@ import GuestLayout from '../Layouts/GuestLayout';
 
 export default function Welcome(props) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const allfilms = props.allfilms;
 
     const images = [
         "https://picsum.photos/200/300",
@@ -53,7 +54,7 @@ export default function Welcome(props) {
                                     className="relative flex w-full flex-1 items-stretch justify-center"
                                 >
                                     <img
-                                        src={images[currentIndex]}
+                                        src={allfilms[currentIndex]?.image}
                                         alt={`Slide ${currentIndex + 1}`}
                                         className="block w-full max-w-md rounded-lg object-cover object-center"
                                     />

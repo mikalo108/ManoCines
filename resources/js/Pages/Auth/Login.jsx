@@ -5,8 +5,10 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login(props) {
+    const { status, canResetPassword, lang, locale, auth, copyright, dashboard, login, register } = props;
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -21,8 +23,20 @@ export default function Login({ status, canResetPassword }) {
         });
     };
 
+    useEffect(() => {
+        document.documentElement.lang = locale || 'en';
+    }, [locale]);
+
     return (
-        <GuestLayout>
+        <GuestLayout 
+            locale={locale} 
+            auth={auth} 
+            copyright={copyright} 
+            lang={lang} 
+            login={login} 
+            register={register} 
+            dashboard={dashboard}
+        >
             <Head title="Log in" />
 
             {status && (
@@ -31,7 +45,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} style={{ marginInline: '35%' }}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -91,7 +105,7 @@ export default function Login({ status, canResetPassword }) {
                     )}
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                        {props.lang.login}
                     </PrimaryButton>
                 </div>
             </form>

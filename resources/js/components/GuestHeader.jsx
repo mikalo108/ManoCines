@@ -2,9 +2,12 @@ import { Link } from '@inertiajs/react';
 import LanguageSwitcher from './LanguageSwitcher';
 import Register from '@/Pages/Auth/Register';
 
-export default function GuestHeader({ auth, locale, register, login, dashboard, films, cinemas }) {
+export default function GuestHeader({ auth, locale, lang }) {
     return (
-        <header className="grid items-center gap-2 py-10 grid-cols-3 grid-rows-1 max-md:grid-cols-1 max-md:grid-rows-3 max-md:justify-items-center" style={{ zIndex: 100, marginInline:'50px'}}>
+        <header 
+            style={{ zIndex: 100, marginInline:'50px', borderBottom:'1px solid #ccc', marginBottom:'40px'}} 
+            className="grid grid-rows-[minmax(0,_1fr)] grid-cols-[1fr_1.5fr_1fr_120px] md:grid-cols-[1fr_1fr_1fr_120px] items-center gap-2 py-10 max-md:grid-cols-1 max-md:grid-rows-4 max-md:justify-items-center"
+        >
             <div className='flex lg:justify-space-evently flex items-center gap-7'>
                 <Link
                     href={route('home')}
@@ -18,28 +21,30 @@ export default function GuestHeader({ auth, locale, register, login, dashboard, 
                 </Link>
                 
             </div>
-            <nav className="max-md:hidden lg:grid lg:gap-2 lg:justify-items-center lg:grid-cols-3 lg:grid-rows-1">
+            <nav className="lg:grid lg:gap-2 lg:justify-items-center lg:grid-cols-3 lg:grid-rows-1">
                 
                     <Link
-                        href={route('film.index')}
+                        href={route('films.index')}
                         className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
-                        {films}
+                        {lang.films}
                     </Link>
                     <Link
-                        href={route('cinema.index')}
+                        href={route('cinemas.index')}
                         className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
-                        {cinemas}
+                        {lang.cinemas}
                     </Link>
             </nav>
-            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end">
+            
+            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2" style={{ alignItems: 'center', textAlign: 'center' }}>
+                
                 {auth?.user ? (
                     <Link
                         href={route('dashboard')}
                         className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
-                        {dashboard}
+                        {lang.dashboard}
                     </Link>
                 ) : (
                     <>
@@ -47,19 +52,21 @@ export default function GuestHeader({ auth, locale, register, login, dashboard, 
                             href={route('login')}
                             className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
-                            {login}
+                            {lang.login}
                         </Link>
                         <Link
                             href={route('register')}
                             className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                         >
-                            {register}
+                            {lang.register}
                         </Link>
                     </>
                 )}
+                
+            </nav>
+            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 max-md:w-full">
                 <LanguageSwitcher currentLocale={locale} />
             </nav>
-            
         </header>
     );
 }

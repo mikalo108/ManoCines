@@ -8,9 +8,8 @@ export default function LanguageSwitcher({ currentLocale }) {
             preserveScroll: true,
             preserveState: false,
             onSuccess: () => {
-                router.reload();
-
-            }
+                //router.reload();
+            },
         });
     };
 

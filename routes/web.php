@@ -15,36 +15,34 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TemporalReserveController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 Route::get('/locale/{locale}', function ($locale, Request $request) {
     $availableLocales = ['en', 'es'];
 
-    if (in_array($locale, $availableLocales)) {
-        app()->setLocale($locale);
-        $request->session()->put('locale', $locale);
-        cookie()->queue(cookie()->forever('locale', $locale));
-    } else {
+    if (!in_array($locale, $availableLocales)) {
         Log::warning('Attempted to set an unavailable locale: ' . $locale);
+        abort(404);
     }
 
-    return response()->noContent();
-})->name('locale.switch');
+    app()->setLocale($locale);
+    $request->session()->put('locale', $locale);
+    cookie()->queue(cookie()->forever('locale', $locale));
+})->middleware('web')->where('locale', '[a-zA-Z]{2}')->name('locale.switch');
 
 Route::get('/', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Welcome', [
         'auth' => [
             'user' => Auth::user(),
         ],
         'locale' => session('locale', app()->getLocale()),
-        'locale_session' => session('locale'),
-        'copyright' => Lang::get('general.copyright'),
         'bestsellers' => Lang::get('general.bestsellers'),
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -56,8 +54,25 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         'locale' => app()->getLocale(),
+        'auth' => [
+            'user' => Auth::user(),
+        ],
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login', [
+        'locale' => app()->getLocale(),
+        'canResetPassword' => Route::has('password.request'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->middleware('guest')->name('login');
+Route::get('/register', function () {
+    return Inertia::render('Auth/Register', [
+        'locale' => app()->getLocale(),
+        'canLogin' => Route::has('login'),
+    ]);
+})->middleware('guest')->name('register');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -162,7 +177,7 @@ Route::middleware('auth')->group(function () {
     Route::put('profiles/{profile}', [ProfileController::class, 'update'])->name('profiles.update');
     Route::delete('profiles/{profile}', [ProfileController::class, 'destroy'])->name('profiles.destroy');
     Route::get('profiles/{profile}', [ProfileController::class, 'show'])->name('profiles.show');
-    
+
     // Rooms
     Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::get('rooms/create', [RoomController::class, 'create'])->name('rooms.create');

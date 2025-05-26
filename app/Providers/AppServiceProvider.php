@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Models\Film;
 use Illuminate\Support\Facades\View;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +34,18 @@ class AppServiceProvider extends ServiceProvider
         // Load all films ordered by number of associated orders descending and share with all views globally
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);
+
+        // Share language strings globally with Inertia
+        Inertia::share([
+            'lang' => function () {
+                return [
+                    'register' => Lang::get('general.register'),
+                    'login' => Lang::get('general.login'),
+                    'films' => Lang::get('general.films'),
+                    'cinemas' => Lang::get('general.cinemas'),
+                    'copyright' => Lang::get('general.copyright'),
+                ];
+            },
+        ]);
     }
 }

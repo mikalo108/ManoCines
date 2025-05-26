@@ -24,11 +24,19 @@ export default function Welcome(props) {
     };
 
     useEffect(() => {
-        // This effect will run when props.locale changes, forcing a re-render
+        document.documentElement.lang = props.locale || 'en';
     }, [props.locale]);
 
     return (
-        <GuestLayout locale={props.locale} auth={props.auth} copyright={props.copyright} login={props.login} register={props.register} dashboard={props.dashboard}>
+        <GuestLayout 
+            locale={props.locale} 
+            auth={props.auth} 
+            copyright={props.copyright} 
+            lang={props.lang} 
+            login={props.lang.login} 
+            register={props.lang.register} 
+            dashboard={props.lang.dashboard}
+        >
             <Head title="Welcome" />
             <div className="relative flex min-h-screen flex-col items-center  selection:bg-[#FF2D20] selection:text-white">
                 <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">

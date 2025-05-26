@@ -1,11 +1,11 @@
 import GuestHeader from '../Components/GuestHeader';
 import { Link } from '@inertiajs/react';
 
-export default function GuestLayout({ children, auth, copyright, locale, login, register, dashboard }) {
+export default function GuestLayout({ children, auth, locale, login, register, dashboard, lang }) {
     
     return (
         <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
-            <GuestHeader auth={auth} locale={locale} login={login} register={register} dashboard={dashboard} />
+            <GuestHeader auth={auth} locale={locale} login={login} register={register} dashboard={dashboard} lang={lang} />
 
             <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
                 {children}
@@ -13,7 +13,7 @@ export default function GuestLayout({ children, auth, copyright, locale, login, 
             <footer className="py-12 text-center text-sm text-black dark:text-white/70">
                 <hr className='py-6' style={{opacity:'50%'}} />
                 <p>
-                    MañoCines 2025. {copyright}
+                    MañoCines 2025. {lang.copyright}
                 </p>
             </footer>
         </div>

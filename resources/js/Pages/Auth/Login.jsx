@@ -8,7 +8,6 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 export default function Login(props) {
-    const { status, canResetPassword, lang, locale, auth, copyright, dashboard, login, register } = props;
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -24,24 +23,20 @@ export default function Login(props) {
     };
 
     useEffect(() => {
-        document.documentElement.lang = locale || 'en';
-    }, [locale]);
+        document.documentElement.lang = props.locale || 'en';
+    }, [props.locale]);
 
     return (
         <GuestLayout 
-            locale={locale} 
-            auth={auth} 
-            copyright={copyright} 
-            lang={lang} 
-            login={login} 
-            register={register} 
-            dashboard={dashboard}
+            locale={props.locale} 
+            auth={props.auth}
+            lang={props.lang} 
         >
             <Head title="Log in" />
 
-            {status && (
+            {props.status && (
                 <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
+                    {props.status}
                 </div>
             )}
 
@@ -95,12 +90,12 @@ export default function Login(props) {
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
+                    {props.canResetPassword && (
                         <Link
                             href={route('password.request')}
                             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                            Forgot your password?
+                            {props.lang.forgot_password}
                         </Link>
                     )}
 

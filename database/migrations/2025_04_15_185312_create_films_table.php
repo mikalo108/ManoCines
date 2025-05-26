@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('films', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('image')->nullable();
-            $table->text('overview')->nullable();
-            $table->string('trailer')->nullable();
+            $table->string('image');
+            $table->text('overview');
+            $table->string('trailer');
             $table->timestamps();
             $table->softDeletes();
         });

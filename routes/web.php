@@ -39,25 +39,36 @@ Route::get('/locale/{locale}', function ($locale, Request $request) {
 Route::get('/', function () {
     app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Welcome', [
-        'auth' => [
-            'user' => Auth::user(),
-        ],
-        'locale' => session('locale', app()->getLocale()),
-        'bestsellers' => Lang::get('general.bestsellers'),
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+            'lang' => function () {
+                return Lang::get('general');
+            },
+            'auth' => [
+                'user' => Auth::user(),
+            ],
+            'appName' => config('app.name'),
+            'locale' => session('locale', app()->getLocale()),
+            'canLogin' => Route::has('login'), 
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
 })->name('home');
 
 Route::get('/dashboard', function () {
     app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Dashboard', [
-        'locale' => session('locale', app()->getLocale()),
+        'lang' => function () {
+            return Lang::get('general');
+        },
         'auth' => [
             'user' => Auth::user(),
         ],
+        'appName' => config('app.name'),
+        'locale' => session('locale', app()->getLocale()),
+        'canLogin' => Route::has('login'), 
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -67,10 +78,17 @@ Route::get('/login', function () {
         return redirect()->route('dashboard');
     }
     return Inertia::render('Auth/Login', [
+        'lang' => function () {
+            return Lang::get('general');
+        },
+        'appName' => config('app.name'),
         'locale' => session('locale', app()->getLocale()),
-        'canResetPassword' => Route::has('password.request'),
+        'canLogin' => Route::has('login'), 
         'canRegister' => Route::has('register'),
-        'login' => Lang::get('general.login'),
+        'canResetPassword' => Route::has('password.request'),
+        'status' => session('status', ''),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION, 
     ]);
 })->middleware('guest')->name('login');
 Route::get('/register', function () {
@@ -79,9 +97,20 @@ Route::get('/register', function () {
         return redirect()->route('dashboard');
     }
     return Inertia::render('Auth/Register', [
+        'lang' => function () {
+            return Lang::get('general');
+        },
+        'auth' => [
+            'user' => Auth::user(),
+        ],
+        'appName' => config('app.name'),
         'locale' => session('locale', app()->getLocale()),
-        'canLogin' => Route::has('login'),
-        'register' => Lang::get('general.register'),
+        'canLogin' => Route::has('login'), 
+        'canRegister' => Route::has('register'),
+        'canResetPassword' => Route::has('password.request'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION, 
+        'status' => session('status', ''),
     ]);
 })->middleware('guest')->name('register');
 

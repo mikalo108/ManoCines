@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $schedule->command('temporalreserves:update')->everyMinute();
 
         // Load all films ordered by number of associated orders descending and share with all views globally
+        
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);
         
@@ -45,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
             'locale' => session('locale', app()->getLocale()),
 
         ]);
+        
     }
 }

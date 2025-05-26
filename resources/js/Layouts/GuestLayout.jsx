@@ -1,11 +1,11 @@
 import GuestHeader from '../Components/GuestHeader';
 import { Link } from '@inertiajs/react';
 
-export default function GuestLayout({ children, auth, locale, login, register, dashboard, lang }) {
+export default function GuestLayout({ children, auth, locale, lang }) {
     
     return (
         <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
-            <GuestHeader auth={auth} locale={locale} login={login} register={register} dashboard={dashboard} lang={lang} />
+            <GuestHeader auth={auth} locale={locale} lang={lang} />
 
             <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
                 {children}

@@ -7,7 +7,6 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 export default function Register(props) {
-    const { lang, locale, auth, copyright, dashboard, login, register } = props;
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -24,18 +23,14 @@ export default function Register(props) {
     };
 
     useEffect(() => {
-        document.documentElement.lang = locale || 'en';
-    }, [locale]);
+        document.documentElement.lang = props.locale || 'en';
+    }, [props.locale]);
 
     return (
         <GuestLayout
-            locale={locale}
-            auth={auth}
-            copyright={copyright}
-            lang={lang}
-            login={login}
-            register={register}
-            dashboard={dashboard}
+            locale={props.locale} 
+            auth={props.auth}
+            lang={props.lang} 
         >
             <Head title="Register" />
 
@@ -121,11 +116,11 @@ export default function Register(props) {
                         href={route('login')}
                         className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        Already registered?
+                        {props.lang.already_registered}
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        {register}
+                        {props.lang.register}
                     </PrimaryButton>
                 </div>
             </form>

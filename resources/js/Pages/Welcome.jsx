@@ -4,23 +4,18 @@ import GuestLayout from '../Layouts/GuestLayout';
 
 export default function Welcome(props) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const allfilms = props.allfilms;
 
-    const images = [
-        "https://picsum.photos/200/300",
-        "https://picsum.photos/201/300",
-        "https://picsum.photos/202/300",
-    ];
+    const films = props['allFilms'] || [];
 
     const prevSlide = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? images.length - 1 : prevIndex - 1
+            prevIndex === 0 ? films.length - 1 : prevIndex - 1
         );
     };
 
     const nextSlide = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === images.length - 1 ? 0 : prevIndex + 1
+            prevIndex === films.length - 1 ? 0 : prevIndex + 1
         );
     };
 
@@ -32,17 +27,13 @@ export default function Welcome(props) {
         <GuestLayout 
             locale={props.locale} 
             auth={props.auth} 
-            copyright={props.copyright} 
             lang={props.lang} 
-            login={props.lang.login} 
-            register={props.lang.register} 
-            dashboard={props.lang.dashboard}
         >
             <Head title="Welcome" />
             <div className="relative flex min-h-screen flex-col items-center  selection:bg-[#FF2D20] selection:text-white">
                 <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     <main className="mt-6">
-                        <h1 className='text-center text-3xl mb-10'>{props.bestsellers}</h1>
+                        <h1 className='text-center text-3xl mb-10'>{props.lang.bestsellers}</h1>
                         <div className="grid gap-6 grid-cols-1 lg:gap-8 flex flex-col items-center justify-center">
                             <a
                                 id="carrousel-card"
@@ -54,7 +45,7 @@ export default function Welcome(props) {
                                     className="relative flex w-full flex-1 items-stretch justify-center"
                                 >
                                     <img
-                                        src={allfilms[currentIndex]?.image}
+                                        src={'storage/films/' + films[currentIndex]?.image}
                                         alt={`Slide ${currentIndex + 1}`}
                                         className="block w-full max-w-md rounded-lg object-cover object-center"
                                     />

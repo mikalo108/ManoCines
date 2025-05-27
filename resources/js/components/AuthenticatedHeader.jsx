@@ -3,7 +3,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { useState } from 'react';
 import UserDropdown from '@/components/UserDropdown';
 
-export default function AdminHeader({ auth, locale, lang }) {
+export default function AuthenticatedHeader({ auth, locale, lang }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -24,8 +24,19 @@ export default function AdminHeader({ auth, locale, lang }) {
                 </Link>
                 
             </div>
-            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 max-md:w-full md:col-start-3 md:col-end-4">
-                <LanguageSwitcher currentLocale={locale} />
+            <nav className="lg:grid lg:gap-2 lg:justify-items-center lg:grid-cols-3 lg:grid-rows-1">
+                    <Link
+                        href={route('films.index')}
+                        className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                    >
+                        {lang.films}
+                    </Link>
+                    <Link
+                        href={route('cinemas.index')}
+                        className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                    >
+                        {lang.cinemas}
+                    </Link>
             </nav>
             <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 md:col-start-4 md:col-end-5" style={{ alignItems: 'center', textAlign: 'center'}}>
                 <UserDropdown lang={lang} auth={auth} />

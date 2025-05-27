@@ -1,7 +1,12 @@
 import GuestHeader from '../Components/GuestHeader';
-import { Link } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
+import { useState } from 'react';
 
-export default function GuestLayout({ children, auth, locale, lang }) {
+export default function GuestLayout({ children }) {
+    const { auth, locale, lang } = usePage().props;
+
+    const [showingNavigationDropdown, setShowingNavigationDropdown] =
+            useState(false);
     
     return (
         <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">

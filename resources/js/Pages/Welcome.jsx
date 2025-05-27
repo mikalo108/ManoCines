@@ -1,10 +1,12 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import GuestLayout from '../Layouts/GuestLayout';
+import GuestLayout from '@/Layouts/GuestLayout.jsx';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.jsx';
+import AdminLayout from '@/Layouts/AdminLayout.jsx';
 
 export default function Welcome(props) {
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const user = usePage().props.auth.user;
     const films = props['allFilms'] || [];
 
     const prevSlide = () => {
@@ -23,8 +25,19 @@ export default function Welcome(props) {
         document.documentElement.lang = props.locale || 'en';
     }, [props.locale]);
 
+    const Layout = (() => {
+        // Determine which layout to use based on user role
+        if (user && user.role === 'admin') {
+            return AdminLayout;
+        } else if (user) {
+            return AuthenticatedLayout;
+        } else {
+            return GuestLayout;
+        }
+    })();
+
     return (
-        <GuestLayout 
+        <Layout 
             locale={props.locale} 
             auth={props.auth} 
             lang={props.lang} 
@@ -98,6 +111,6 @@ export default function Welcome(props) {
                     </main>
                 </div>
             </div>
-        </GuestLayout>
+        </Layout>
     );
 }

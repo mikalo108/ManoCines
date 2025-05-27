@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import LanguageSwitcher from './LanguageSwitcher';
-import Register from '@/Pages/Auth/Register';
+import UserDropdown from '@/components/UserDropdown';
 
 export default function GuestHeader({ auth, locale, lang }) {
     return (
@@ -19,53 +19,28 @@ export default function GuestHeader({ auth, locale, lang }) {
                         MañoCines
                     </h2>                
                 </Link>
-                
+                <LanguageSwitcher currentLocale={locale} lang={lang} />
             </div>
-            <nav className="lg:grid lg:gap-2 lg:justify-items-center lg:grid-cols-3 lg:grid-rows-1">
-                
-                    <Link
-                        href={route('films.index')}
-                        className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        {lang.films}
-                    </Link>
-                    <Link
-                        href={route('cinemas.index')}
-                        className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        {lang.cinemas}
-                    </Link>
+            <nav className="flex justify-end items-center gap-4 max-md:justify-center max-md:gap-2 md:col-start-2 md:col-end-3">
+                <Link
+                    href={route('login')}
+                    className="text-black dark:text-white hover:text-[#FF2D20] dark:hover:text-[#FF2D20] transition-colors"
+                    title={lang.home}
+                >
+                    <p className='color-red'>{lang.guestMessage}</p>
+                </Link>
             </nav>
-            
-            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2" style={{ alignItems: 'center', textAlign: 'center' }}>
-                
-                {auth?.user ? (
-                    <Link
-                        href={route('dashboard')}
-                        className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        {lang.dashboard}
-                    </Link>
-                ) : (
-                    <>
-                        <Link
-                            href={route('login')}
-                            className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            {lang.login}
-                        </Link>
-                        <Link
-                            href={route('register')}
-                            className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            {lang.register}
-                        </Link>
-                    </>
-                )}
-                
+            <nav className="flex justify-end items-center ml-16 gap-4 max-md:justify-center max-md:ml-0 max-md:gap-2 md:col-start-3 md:col-end-4">
+                <Link
+                    href={route('register')}
+                    className="text-black dark:text-white hover:text-[#FF2D20] dark:hover:text-[#FF2D20] transition-colors"
+                    title={lang.home}
+                >
+                    <p className='color-red'>{lang.guestMessage_2}</p>
+                </Link>
             </nav>
-            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 max-md:w-full">
-                <LanguageSwitcher currentLocale={locale} />
+            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 md:col-start-4 md:col-end-5" style={{ alignItems: 'center', textAlign: 'center'}}>                
+                <UserDropdown lang={lang} auth={auth} />
             </nav>
         </header>
     );

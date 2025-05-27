@@ -41,7 +41,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->role = $request->role;
+        $user->role = $request->role ?? 'client'; // Default role is 'client'
         $user->save();
 
         $user->profile()->create([
@@ -78,6 +78,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'nullable|string|max:255',
         ]);
 
         $user->name = $request->name;
@@ -85,6 +86,7 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
+        $user->role = $request->role ?? $user->role;
         $user->save();
 
         return redirect()->route('users.index');

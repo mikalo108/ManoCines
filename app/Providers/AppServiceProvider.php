@@ -8,6 +8,7 @@ use App\Models\Film;
 use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,13 +39,11 @@ class AppServiceProvider extends ServiceProvider
         
         // Share the same data with Inertia views
         Inertia::share([
-            'lang' => function () {
-                return Lang::get('general');
-            },
             'allFilms' => $films,
             'appName' => config('app.name'),
-            'locale' => session('locale', app()->getLocale()),
-
+            'auth' => fn () => ['user' => Auth::user()],
+            'lang' => fn () => Lang::get('general'),
+            'locale' => fn () => session('locale', config('app.locale')),
         ]);
         
     }

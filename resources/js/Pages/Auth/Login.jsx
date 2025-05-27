@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 export default function Login(props) {
@@ -13,6 +13,8 @@ export default function Login(props) {
         password: '',
         remember: false,
     });
+    
+    const user = usePage().props.auth.user;
 
     const submit = (e) => {
         e.preventDefault();
@@ -25,6 +27,10 @@ export default function Login(props) {
     useEffect(() => {
         document.documentElement.lang = props.locale || 'en';
     }, [props.locale]);
+
+    if(user) {
+        redirect(route('dashboard'));
+    }
 
     return (
         <GuestLayout 

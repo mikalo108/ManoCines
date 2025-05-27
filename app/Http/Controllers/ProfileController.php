@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 class ProfileController extends Controller
 {
@@ -93,5 +95,46 @@ class ProfileController extends Controller
         $profile->delete();
 
         return redirect()->route('profiles.index');
+    }
+
+    public function myProfileShow()
+    {
+        app()->setLocale(session('locale', app()->getLocale()));
+
+        $user = Auth::user();
+        if (!$user) {
+            abort(403, 'Unauthorized');
+        }
+        $profile = $user->profile ?? Profile::where('user_id', $user->id)->firstOrFail();
+        return Inertia::render('MyProfile/Show', [
+            'lang' => function () {
+                return Lang::get('general');
+            },
+            'auth' => [
+                'user' => Auth::user(),
+            ],
+            'appName' => config('app.name'),
+            'locale' => session('locale', app()->getLocale()),
+            'profile' => $profile
+        ]);
+    }
+    public function myProfileEdit()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            abort(403, 'Unauthorized');
+        }
+        $profile = $user->profile ?? Profile::where('user_id', $user->id)->firstOrFail();
+        return Inertia::render('MyProfile/Form', [
+            'lang' => function () {
+                return Lang::get('general');
+            },
+            'auth' => [
+                'user' => Auth::user(),
+            ],
+            'appName' => config('app.name'),
+            'locale' => session('locale', app()->getLocale()),
+            'profile' => $profile
+        ]);
     }
 }

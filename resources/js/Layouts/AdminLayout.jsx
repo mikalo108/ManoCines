@@ -1,9 +1,9 @@
 import AdminHeader from '@/Components/AdminHeader';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AdminLayout({ children, auth, locale, lang }) {
-    const user = usePage().props.auth.user;
+export default function AdminLayout({ children }) {
+    const { auth, locale, lang } = usePage().props;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);

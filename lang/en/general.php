@@ -16,5 +16,10 @@ return [
     'cinemas' => 'Cinemas',
     'welcome' => 'Welcome',
     'dashboard' => 'Dashboard',
-    'profile' => 'My Profile',
+    'myProfile' => 'My Profile',
+    'dashboard_description' => 'Here you can adjust your session interface options.',
+    'languageSwitcher_desc' => 'Change the application language:',
+    'darkmode_desc' => 'Enable or disable dark mode:',
+    'guestMessage' => 'Login to do something',
+    'guestMessage_2' => 'If you are not registered, you can do it right now',
 ];

@@ -39,14 +39,6 @@ Route::get('/locale/{locale}', function ($locale, Request $request) {
 Route::get('/', function () {
     app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Welcome', [
-            'lang' => function () {
-                return Lang::get('general');
-            },
-            'auth' => [
-                'user' => Auth::user(),
-            ],
-            'appName' => config('app.name'),
-            'locale' => session('locale', app()->getLocale()),
             'canLogin' => Route::has('login'), 
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
@@ -57,14 +49,6 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Dashboard', [
-        'lang' => function () {
-            return Lang::get('general');
-        },
-        'auth' => [
-            'user' => Auth::user(),
-        ],
-        'appName' => config('app.name'),
-        'locale' => session('locale', app()->getLocale()),
         'canLogin' => Route::has('login'), 
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -78,11 +62,6 @@ Route::get('/login', function () {
         return redirect()->route('dashboard');
     }
     return Inertia::render('Auth/Login', [
-        'lang' => function () {
-            return Lang::get('general');
-        },
-        'appName' => config('app.name'),
-        'locale' => session('locale', app()->getLocale()),
         'canLogin' => Route::has('login'), 
         'canRegister' => Route::has('register'),
         'canResetPassword' => Route::has('password.request'),
@@ -97,14 +76,6 @@ Route::get('/register', function () {
         return redirect()->route('dashboard');
     }
     return Inertia::render('Auth/Register', [
-        'lang' => function () {
-            return Lang::get('general');
-        },
-        'auth' => [
-            'user' => Auth::user(),
-        ],
-        'appName' => config('app.name'),
-        'locale' => session('locale', app()->getLocale()),
         'canLogin' => Route::has('login'), 
         'canRegister' => Route::has('register'),
         'canResetPassword' => Route::has('password.request'),
@@ -115,9 +86,13 @@ Route::get('/register', function () {
 })->middleware('guest')->name('register');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/logout', function () {
+        Auth::logout();
+        return redirect()->route('home');
+    })->name('logout');
+    Route::get('/myProfile', [ProfileController::class, 'myProfileShow'])->name('myProfile.show');
+    Route::get('/myProfile', [ProfileController::class, 'myProfileEdit'])->name('myProfile.edit');
+    Route::put('/myProfile', [ProfileController::class, 'update'])->name('myProfile.update');
 
     // Chairs
     Route::get('chairs', [ChairController::class, 'index'])->name('chairs.index');

@@ -15,7 +15,7 @@ class FilmController extends Controller
     public function index() {
         
         app()->setLocale(session('locale', app()->getLocale()));  
-        $films = Film::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
+        $films = Film::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
         return Inertia::render('Film/Index', ['films' => $films, 'langTable' => fn () => Lang::get('tableFilms'),]);
     }
 

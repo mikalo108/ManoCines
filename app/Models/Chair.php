@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Chair extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'row',
@@ -18,7 +18,7 @@ class Chair extends Model
     ];
 
     /**
-     * Relación 1:N con el modelo TemporalReserve
+     * Relación 1:1 con el modelo TemporalReserve
      *  - Una silla puede tener una reserva temporal.
      *  - Una reserva temporal pertenece a una silla específica.
      */
@@ -28,13 +28,13 @@ class Chair extends Model
     }
 
     /**
-     * Relación 1:N con el modelo OrderTicket
+     * Relación N:1 con el modelo Room
      *  - Una silla pertenece a una sala.
      *  - Una sala tiene muchas sillas.
      */
     public function room()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasOne(Room::class);
     }
 
     /**

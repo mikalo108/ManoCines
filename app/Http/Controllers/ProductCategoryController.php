@@ -15,8 +15,8 @@ class ProductCategoryController extends Controller
     public function index()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $categories = ProductCategory::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('ProductCategory/Index', ['categories' => $categories, 'langTable' => fn () => Lang::get('tableProductCategories'),]);
+        $productCategories = ProductCategory::paginate(self::PAGINATE_SIZE);
+        return Inertia::render('ProductCategory/Index', ['productCategories' => $productCategories, 'langTable' => fn () => Lang::get('tableProductCategories'),]);
     }
 
     // Show the form for creating a new product category

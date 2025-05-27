@@ -11,6 +11,7 @@ return [
         'column' => 'Columna',
         'state' => 'Estado',
         'price' => 'Precio',
+        'room_id' => 'ID de la sala',
         'created_at' => 'Creado en',
         'updated_at' => 'Actualizado en',
         'actions' => 'Acciones',

@@ -1,8 +1,7 @@
 import React from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import TableIndex from '@/Components/TableIndex';
-import { Link } from '@inertiajs/react';
 
 export default function Index(props) {
     const keyCities="cities";

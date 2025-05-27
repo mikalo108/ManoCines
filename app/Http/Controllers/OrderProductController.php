@@ -15,8 +15,8 @@ class OrderProductController extends Controller
     public function index()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $orderProducts = OrderProduct::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('OrderProduct/Index', ['orderProducts' => $orderProducts, 'langTable' => fn () => Lang::get('tableOrderProducts'),]);
+        $orderProducts = OrderProduct::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('OrderProduct/Index', ['orderProducts' => $orderProducts, 'langTable' => fn () => Lang::get('tableOrderProducts')]);
     }
 
     // Show the form for creating a new order product

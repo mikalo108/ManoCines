@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Schedule $schedule)
     {
-        $schedule->command('temporalreserves:update')->everyMinute();
         
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);

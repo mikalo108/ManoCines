@@ -24,7 +24,7 @@ class Room extends Model
      */
     public function cinemas()
     {
-        return $this->belongsToMany(Cinema::class, 'cinemas_rooms');
+        return $this->hasMany(Cinema::class, 'cinemas_rooms');
     }
 
     /**
@@ -35,5 +35,12 @@ class Room extends Model
     public function times()
     {
         return $this->hasMany(Time::class);
+    }
+
+    /**
+     * Relación 1:N con el modelo Chair
+     */
+    public function chairs(){
+        return $this->hasMany(Chair::class);
     }
 }

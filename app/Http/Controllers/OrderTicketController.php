@@ -15,8 +15,8 @@ class OrderTicketController extends Controller
     public function index()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $orderTickets = OrderTicket::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('OrderTicket/Index', ['orderTickets' => $orderTickets, 'langTable' => fn () => Lang::get('tableOrderTickets'),]);
+        $orderTickets = OrderTicket::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('OrderTicket/Index', ['orderTickets' => $orderTickets, 'langTable' => fn () => Lang::get('tableOrderTickets')]);
     }
 
     // Función para devolver a la página de detalles del elemento que se pide

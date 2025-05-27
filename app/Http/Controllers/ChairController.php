@@ -15,12 +15,17 @@ class ChairController extends Controller
     public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $chairs = Chair::with('room')
-            ->orderBy('id', 'desc')
-            ->paginate(self::PAGINATE_SIZE);
+        $query = Chair::query();
+        // Filtrar por nombre de la butaca si se proporciona
+        if ($request->filled('chairName')) {
+            $query->where('name', 'like', '%' . $request->chairName . '%');
+        }
+
+        // Obtener las ciudades paginadas y ordenadas por ID ascendente
+         $chairList = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
 
         return Inertia::render('Chair/Index', [
-            'chairs' => $chairs,
+            'chairs' => $chairList,
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableChairs'),
         ]);

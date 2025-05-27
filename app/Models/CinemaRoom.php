@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Cinema;
 use App\Models\Room;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CinemaRoom extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'cinemas_rooms';
 

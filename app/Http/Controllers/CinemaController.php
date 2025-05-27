@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cinema;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class CinemaController extends Controller
 {
     private const PAGINATE_SIZE = 10;
+
+    // Función para devolver a la página principal del elemento
+    public function index(Request $request){
+        $cinemas = Cinema::paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Cinema/Index', ['cinemas' => $cinemas, 'langTable' => fn () => Lang::get('tableCinemas'),]);
+    }
 
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){

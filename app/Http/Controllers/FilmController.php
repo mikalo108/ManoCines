@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Film;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class FilmController extends Controller
 {
@@ -12,8 +13,10 @@ class FilmController extends Controller
 
     // Función para devolver a la página principal del elemento
     public function index() {
+        
+        app()->setLocale(session('locale', app()->getLocale()));  
         $films = Film::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Film/Index', ['films' => $films]);
+        return Inertia::render('Film/Index', ['films' => $films, 'langTable' => fn () => Lang::get('tableFilms'),]);
     }
 
     // Función para devolver a la página de detalles del elemento que se pide

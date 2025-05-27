@@ -19,7 +19,6 @@ export default function GuestHeader({ auth, locale, lang }) {
                         MañoCines
                     </h2>                
                 </Link>
-                <LanguageSwitcher currentLocale={locale} lang={lang} />
             </div>
             <nav className="flex justify-end items-center gap-4 max-md:justify-center max-md:gap-2 md:col-start-2 md:col-end-3">
                 <Link

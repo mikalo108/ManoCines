@@ -15,6 +15,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TemporalReserveController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
+use App\Models\City;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -67,9 +68,10 @@ Route::get('/login', function () {
         'canResetPassword' => Route::has('password.request'),
         'status' => session('status', ''),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION, 
+        'phpVersion' => PHP_VERSION,
     ]);
 })->middleware('guest')->name('login');
+
 Route::get('/register', function () {
     app()->setLocale(session('locale', app()->getLocale()));
     if (Auth::check()) {
@@ -80,7 +82,7 @@ Route::get('/register', function () {
         'canRegister' => Route::has('register'),
         'canResetPassword' => Route::has('password.request'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION, 
+        'phpVersion' => PHP_VERSION,
         'status' => session('status', ''),
     ]);
 })->middleware('guest')->name('register');

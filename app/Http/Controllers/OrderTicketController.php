@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OrderTicket;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class OrderTicketController extends Controller
 {
     private const PAGINATE_SIZE = 10;
+
+    // Función para devolver a la página principal del elemento
+    public function index()
+    {
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $orderTickets = OrderTicket::paginate(self::PAGINATE_SIZE);
+        return Inertia::render('OrderTicket/Index', ['orderTickets' => $orderTickets, 'langTable' => fn () => Lang::get('tableOrderTickets'),]);
+    }
 
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){

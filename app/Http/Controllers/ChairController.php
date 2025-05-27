@@ -5,10 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Chair;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class ChairController extends Controller
 {
     private const PAGINATE_SIZE = 10;
+
+    // Función para devolver a la página principal del elemento
+    public function index(Request $request)
+    {
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $chairs = Chair::with('room')
+            ->orderBy('id', 'desc')
+            ->paginate(self::PAGINATE_SIZE);
+
+        return Inertia::render('Chair/Index', [
+            'chairs' => $chairs,
+            'filters' => $request->all('search', 'trashed'),
+            'langTable' => fn () => Lang::get('tableChairs'),
+        ]);
+    }
 
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('row');
             $table->string('column');
             $table->string('state');
+            $table->string('room_id');
             $table->decimal('price', 8, 2);
             $table->timestamps();
             $table->softDeletes();

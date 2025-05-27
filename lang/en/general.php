@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'copyright' => 'All rights reserved.',
-    'bestsellers' => 'Best Sellers',
+    'last10Movies' => 'Last Movies Showcase',
     'register' => 'Register',
     'forgot_password' => 'Forgot your password?',
     'already_registered' => 'Already registered?',
@@ -22,4 +22,5 @@ return [
     'darkmode_desc' => 'Enable or disable dark mode:',
     'guestMessage' => 'Login to do something',
     'guestMessage_2' => 'If you are not registered, you can do it right now',
+    'goto' => 'Go',
 ];

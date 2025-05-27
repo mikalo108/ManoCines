@@ -7,9 +7,6 @@ export default function LanguageSwitcher({ currentLocale }) {
         router.get(route('locale.switch', { locale }), {}, {
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => {
-                //router.reload();
-            },
         });
     };
 

@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class OrderController extends Controller
 {
     private const PAGINATE_SIZE = 10;
 
-    // Display a listing of orders
+    // Función para devolver a la página principal del elemento
     public function index()
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $orders = Order::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Order/Index', ['orders' => $orders]);
+        return Inertia::render('Order/Index', ['orders' => $orders, 'langTable' => fn () => Lang::get('tableOrders'),]);
     }
 
     // Show the form for creating a new order

@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class UserController extends Controller
 {
     private const PAGINATE_SIZE = 10;
 
-    // Display a listing of users
+    // Función para devolver a la página principal del elemento
     public function index()
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $users = User::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('User/Index', ['users' => $users]);
+        return Inertia::render('User/Index', ['users' => $users, 'langTable' => fn () => Lang::get('tableUsers'),]);
     }
 
     // Show the form for creating a new user

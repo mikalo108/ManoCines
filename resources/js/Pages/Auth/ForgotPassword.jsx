@@ -19,7 +19,7 @@ export default function ForgotPassword({ status }) {
         <GuestLayout>
             <Head title="Forgot Password" />
 
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-4 text-sm text-gray-600 dark:text-gray-200"  style={{ marginInline: '35%' }}>
                 Forgot your password? No problem. Just let us know your email
                 address and we will email you a password reset link that will
                 allow you to choose a new one.
@@ -31,13 +31,13 @@ export default function ForgotPassword({ status }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit}  style={{ marginInline: '35%' }}>
                 <TextInput
                     id="email"
                     type="email"
                     name="email"
                     value={data.email}
-                    className="mt-1 block w-full"
+                    className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                     isFocused={true}
                     onChange={(e) => setData('email', e.target.value)}
                 />

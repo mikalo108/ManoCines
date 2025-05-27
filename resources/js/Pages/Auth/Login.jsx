@@ -13,7 +13,7 @@ export default function Login(props) {
         password: '',
         remember: false,
     });
-    
+
     const user = usePage().props.auth.user;
 
     const submit = (e) => {
@@ -36,7 +36,7 @@ export default function Login(props) {
         <GuestLayout 
             locale={props.locale} 
             auth={props.auth}
-            lang={props.lang} 
+            lang={props.lang}
         >
             <Head title="Log in" />
 
@@ -48,14 +48,14 @@ export default function Login(props) {
 
             <form onSubmit={submit} style={{ marginInline: '35%' }}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Email" className='dark:text-gray-200'/>
 
                     <TextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
@@ -65,14 +65,14 @@ export default function Login(props) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password" className='dark:text-gray-200' />
 
                     <TextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />

@@ -42,13 +42,13 @@ export default function Register(props) {
 
             <form onSubmit={submit} style={{ marginInline: '35%' }}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Name" className='dark:text-gray-200' />
 
                     <TextInput
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="name"
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
@@ -59,14 +59,14 @@ export default function Register(props) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Email" className='dark:text-gray-200' />
 
                     <TextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
@@ -76,26 +76,27 @@ export default function Register(props) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Password" className='dark:text-gray-200' />
 
                     <TextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} className="mt-2"  />
                 </div>
 
                 <div className="mt-4">
                     <InputLabel
                         htmlFor="password_confirmation"
                         value="Confirm Password"
+                        className='dark:text-gray-200'
                     />
 
                     <TextInput
@@ -103,7 +104,7 @@ export default function Register(props) {
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full dark:bg-gray-800 dark:text-gray-200"
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)

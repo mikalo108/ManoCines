@@ -12,11 +12,12 @@ class ProfileController extends Controller
 {
     private const PAGINATE_SIZE = 10;
 
-    // Display a listing of profiles
+    // Función para devolver a la página principal del elemento
     public function index()
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $profiles = Profile::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Profile/Index', ['profiles' => $profiles]);
+        return Inertia::render('Profile/Index', ['profiles' => $profiles,'langTable' => fn () => Lang::get('tableProfiles'),]);
     }
 
     // Show the form for creating a new profile

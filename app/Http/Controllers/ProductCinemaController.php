@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductCinema;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class ProductCinemaController extends Controller
 {
     protected $paginateSize = 10;
 
+    // Función para devolver a la página principal del elemento
     public function index()
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $productCinemas = ProductCinema::paginate($this->paginateSize);
-        return Inertia::render('ProductCinema/Index', ['productCinemas' => $productCinemas]);
+        return Inertia::render('ProductCinema/Index', ['productCinemas' => $productCinemas, 'langTable' => fn () => Lang::get('tableProductCinemas'),]);
     }
 
     public function create()

@@ -24,7 +24,7 @@ export default function AdminHeader({ auth, locale, lang }) {
                 </Link>
                 
             </div>
-            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 max-md:w-full md:col-start-3 md:col-end-4">
+            <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 md:col-start-2 md:col-end-3">
                 <LanguageSwitcher currentLocale={locale} />
             </nav>
             <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 md:col-start-4 md:col-end-5" style={{ alignItems: 'center', textAlign: 'center'}}>

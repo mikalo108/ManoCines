@@ -31,8 +31,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(Schedule $schedule)
     {
         $schedule->command('temporalreserves:update')->everyMinute();
-
-        // Load all films ordered by number of associated orders descending and share with all views globally
         
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);

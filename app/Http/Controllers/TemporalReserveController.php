@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TemporalReserve;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class TemporalReserveController extends Controller
 {
     private const PAGINATE_SIZE = 10;
+
+    // Función para devolver a la página principal del elemento
+    public function index() {
+        
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $temporalreserves = TemporalReserve::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('TemporalReserve/Index', ['temporalreserves' => $temporalreserves, 'langTable' => fn () => Lang::get('tableTemporalReserve'),]);
+    }
 
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){

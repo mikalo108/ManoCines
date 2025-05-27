@@ -7,16 +7,24 @@ use App\Models\Time;
 use App\Models\Room;
 use App\Models\Film;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class TimeController extends Controller
 {
     private const PAGINATE_SIZE = 10;
 
-    // Display a listing of times
+    // Función para devolver a la página principal del elemento
     public function index()
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $times = Time::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Time/Index', ['times' => $times]);
+        return Inertia::render('Time/Index', ['times' => $times,'langTable' => fn () => Lang::get('tableTimes'),]);
+    }
+
+    // Función para devolver a la página de detalles del elemento que se pide
+    public function show($id){
+        $time = Time::findOrFail($id);
+        return Inertia::render('Room/Show', ['time' => $time]);
     }
 
     // Show the form for creating a new time
@@ -43,13 +51,6 @@ class TimeController extends Controller
         $time->save();
 
         return redirect()->route('times.index');
-    }
-
-    // Display the specified time
-    public function show($id)
-    {
-        $time = Time::findOrFail($id);
-        return Inertia::render('Time/Show', ['time' => $time]);
     }
 
     // Show the form for editing the specified time

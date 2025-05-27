@@ -5,10 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Lang;
 
 class RoomController extends Controller
 {
     private const PAGINATE_SIZE = 10;
+
+    // Función para devolver a la página principal del elemento
+    public function index() {
+        
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $rooms = Room::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Room/Index', ['rooms' => $rooms, 'langTable' => fn () => Lang::get('tableRooms'),]);
+    }
 
     // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){

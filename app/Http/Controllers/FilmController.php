@@ -27,7 +27,10 @@ class FilmController extends Controller
         return Inertia::render('Film/Index', [
             'films' => $films,
             'langTable' => fn () => Lang::get('tableFilms'),
-            'fieldsCanFilter' => ['filmId', 'filmName'],
+            'fieldsCanFilter' => [
+                ['key' => 'filmId', 'field' => $request->filmId],
+                ['key' => 'filmName', 'field' => $request->filmName],
+            ],
         ]);
     }
 

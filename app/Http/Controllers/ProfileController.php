@@ -37,7 +37,12 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Index', [
             'profiles' => $profiles,
             'langTable' => fn () => Lang::get('tableProfiles'),
-            'fieldsCanFilter' => ['profileId', 'userId', 'name', 'surname'],
+            'fieldsCanFilter' => [
+                ['key' => 'profileId', 'field' => $request->profileId],
+                ['key' => 'userId', 'field' => $request->userId],
+                ['key' => 'name', 'field' => $request->name],
+                ['key' => 'surname', 'field' => $request->surname],
+            ],
         ]);
     }
 

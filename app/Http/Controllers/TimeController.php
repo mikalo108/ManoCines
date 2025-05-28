@@ -38,7 +38,12 @@ class TimeController extends Controller
         return Inertia::render('Time/Index', [
             'times' => $times,
             'langTable' => fn () => Lang::get('tableTimes'),
-            'fieldsCanFilter' => ['timeId', 'roomId', 'filmId', 'time'],
+            'fieldsCanFilter' => [
+                ['key' => 'timeId', 'field' => $request->timeId],
+                ['key' => 'roomId', 'field' => $request->roomId],
+                ['key' => 'filmId', 'field' => $request->filmId],
+                ['key' => 'time', 'field' => $request->time],
+            ],
         ]);
     }
 

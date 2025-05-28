@@ -28,7 +28,10 @@ class TemporalReserveController extends Controller
         return Inertia::render('TemporalReserve/Index', [
             'temporalReserves' => $temporalReserves,
             'langTable' => fn () => Lang::get('tableTemporalReserves'),
-            'fieldsCanFilter' => ['temporalReserveId', 'chairId'],
+            'fieldsCanFilter' => [
+                ['key' => 'temporalReserveId', 'field' => $request->temporalReserveId],
+                ['key' => 'chairId', 'field' => $request->chairId],
+            ],
         ]);
     }
 

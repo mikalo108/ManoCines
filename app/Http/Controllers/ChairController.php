@@ -17,7 +17,7 @@ class ChairController extends Controller
         $query = Chair::query();
         
         if ($request->filled('chairId')) {
-            $query->where('name',  $request->chairId);
+            $query->where('id',  $request->chairId);
         }
 
         if ($request->filled('roomId')) {
@@ -34,7 +34,7 @@ class ChairController extends Controller
             'chairs' => $chairList,
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableChairs'),
-            'fieldsCanFilter' => ['chairId', 'roomId', 'cinemaId'],
+            'fieldsCanFilter' => [['key'=>'chairId', 'field'=>$request->chairId], ['key'=>'roomId', 'field'=>$request->roomId], ['key'=>'cinemaId', 'field'=>$request->roomId]],
         ]);
     }
 

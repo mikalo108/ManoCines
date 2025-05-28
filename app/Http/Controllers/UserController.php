@@ -36,7 +36,12 @@ class UserController extends Controller
         return Inertia::render('User/Index', [
             'users' => $users,
             'langTable' => fn () => Lang::get('tableUsers'),
-            'fieldsCanFilter' => ['userId', 'username', 'email', 'role'],
+            'fieldsCanFilter' => [
+                ['key' => 'userId', 'field' => $request->userId],
+                ['key' => 'username', 'field' => $request->username],
+                ['key' => 'email', 'field' => $request->email],
+                ['key' => 'role', 'field' => $request->role],
+            ],
         ]);
     }
 

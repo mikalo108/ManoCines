@@ -31,7 +31,10 @@ class CityController extends Controller
             'cityName' => $request->cityName ?? '',
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableCities'),
-            'fieldsCanFilter' => ['cityId', 'cityName'],
+            'fieldsCanFilter' => [
+                ['key' => 'cityId', 'field' => $request->cityId],
+                ['key' => 'cityName', 'field' => $request->cityName],
+            ],
         ]);
     }   
 

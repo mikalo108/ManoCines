@@ -28,7 +28,10 @@ class ProductCategoryController extends Controller
         return Inertia::render('ProductCategory/Index', [
             'productCategories' => $productCategories,
             'langTable' => fn () => Lang::get('tableProductCategories'),
-            'fieldsCanFilter' => ['categoryId', 'categoryName'],
+            'fieldsCanFilter' => [
+                ['key' => 'categoryId', 'field' => $request->categoryId],
+                ['key' => 'categoryName', 'field' => $request->categoryName],
+            ],
         ]);
     }
 

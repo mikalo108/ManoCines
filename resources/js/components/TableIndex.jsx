@@ -24,9 +24,10 @@ const goToPage = (page) => {
 
 return (
     <>
+        <hr  className='bg-grey-800 mb-4 py-4'/>
         <Link
             href={route(`${keyTable}.create`)}
-            className="flex mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center"
+            className="flex mb-4 px-4 py-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center"
             style={{ justifyContent: 'center', width: '100%', alignSelf: 'center' }}
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -32,7 +32,11 @@ class ProductCinemaController extends Controller
         return Inertia::render('ProductCinema/Index', [
             'productCinemas' => $productCinemas,
             'langTable' => fn () => Lang::get('tableProductCinemas'),
-            'fieldsCanFilter' => ['productCinemaId', 'cinemaId', 'productId'],
+            'fieldsCanFilter' => [
+                ['key' => 'productCinemaId', 'field' => $request->productCinemaId],
+                ['key' => 'cinemaId', 'field' => $request->cinemaId],
+                ['key' => 'productId', 'field' => $request->productId],
+            ],
         ]);
     }
 

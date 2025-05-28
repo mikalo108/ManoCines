@@ -12,6 +12,7 @@ class CinemaController extends Controller
     private const PAGINATE_SIZE = 5;
 
     public function index(Request $request){
+        app()->setLocale(session('locale', app()->getLocale()));  
         $query = Cinema::query();
 
         if ($request->filled('cinemaId')) {
@@ -28,8 +29,12 @@ class CinemaController extends Controller
 
         return Inertia::render('Cinema/Index', [
             'cinemas' => $cinemas,
+            'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableCinemas'),
-            'fieldsCanFilter' => ['cinemaId', 'cinemaCity'],
+            'fieldsCanFilter' => [
+                ['key' => 'cinemaId', 'field' => $request->cinemaId],
+                ['key' => 'cinemaCity', 'field' => $request->cinemaCity],
+            ],
         ]);
     }
 

@@ -32,7 +32,11 @@ class OrderProductController extends Controller
         return Inertia::render('OrderProduct/Index', [
             'orderProducts' => $orderProducts,
             'langTable' => fn () => Lang::get('tableOrderProducts'),
-            'fieldsCanFilter' => ['orderProductId', 'orderId', 'productId'],
+            'fieldsCanFilter' => [
+                ['key' => 'orderProductId', 'field' => $request->orderProductId],
+                ['key' => 'orderId', 'field' => $request->orderId],
+                ['key' => 'productId', 'field' => $request->productId],
+            ],
         ]);
     }
 

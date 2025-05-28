@@ -32,7 +32,11 @@ class ProductController extends Controller
         return Inertia::render('Product/Index', [
             'products' => $products,
             'langTable' => fn () => Lang::get('tableProducts'),
-            'fieldsCanFilter' => ['productId', 'productName', 'categoryId'],
+            'fieldsCanFilter' => [
+                ['key' => 'productId', 'field' => $request->productId],
+                ['key' => 'productName', 'field' => $request->productName],
+                ['key' => 'categoryId', 'field' => $request->categoryId],
+            ],
         ]);
     }
 

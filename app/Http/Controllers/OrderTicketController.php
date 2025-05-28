@@ -36,7 +36,12 @@ class OrderTicketController extends Controller
         return Inertia::render('OrderTicket/Index', [
             'orderTickets' => $orderTickets,
             'langTable' => fn () => Lang::get('tableOrderTickets'),
-            'fieldsCanFilter' => ['orderTicketId', 'orderId', 'chairId', 'timeId'],
+            'fieldsCanFilter' => [
+                ['key' => 'orderTicketId', 'field' => $request->orderTicketId],
+                ['key' => 'orderId', 'field' => $request->orderId],
+                ['key' => 'chairId', 'field' => $request->chairId],
+                ['key' => 'timeId', 'field' => $request->timeId],
+            ],
         ]);
     }
 

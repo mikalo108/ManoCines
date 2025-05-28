@@ -27,7 +27,10 @@ class RoomController extends Controller
         return Inertia::render('Room/Index', [
             'rooms' => $rooms,
             'langTable' => fn () => Lang::get('tableRooms'),
-            'fieldsCanFilter' => ['roomId', 'cinemaId'],
+            'fieldsCanFilter' => [
+                ['key' => 'roomId', 'field' => $request->roomId],
+                ['key' => 'cinemaId', 'field' => $request->cinemaId],
+            ],
         ]);
     }
 

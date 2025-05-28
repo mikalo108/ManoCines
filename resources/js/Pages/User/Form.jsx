@@ -5,11 +5,11 @@ import BlueButton from '@/components/BlueButton';
 import { Head } from '@inertiajs/react';
 
 export default function Form(props) {
-    const keyElements = 'temporal-reserves';
-    const keyElement = 'temporal-reserve';
-    const nameTableES = 'Reservas temporales';
-    const nameElementES = 'reserva temporal';
-    const generoES = 'femenino'; // femenino o masculino
+    const keyElements = 'users';
+    const keyElement = 'user';
+    const nameTableES = 'Usuarios';
+    const nameElementES = 'usuario';
+    const generoES = 'masculino'; // femenino o masculino
 
     /* Común a partir de aquí */
 

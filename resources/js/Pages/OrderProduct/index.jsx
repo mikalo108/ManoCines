@@ -3,6 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
 import TableIndex from '@/components/TableIndex';
 import FilterForm from '@/components/FilterForm';
+import BlueButton from '@/components/BlueButton';
 
 export default function Index(props) {
     const keyOrderProducts = "order-products";
@@ -46,6 +47,7 @@ export default function Index(props) {
             <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
                 <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     <main className="mt-6">
+                        <BlueButton link={"home"}>{props.lang.back}</BlueButton>
                         <h1 className='flex justify-center text-black' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.title}</h1>
                         <h2 className='mb-12'>{props.langTable.subtitle}</h2>
                         <FilterForm fieldsCanFilter={props.fieldsCanFilter} onFilter={handleFilter} lang={props.lang} />

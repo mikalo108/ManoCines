@@ -25,4 +25,9 @@ return [
     'goto' => 'Ir',
     'clearFilterButton' => 'Limpiar',
     'filterButton' => 'Filtrar',
+    'back' => 'Ir atrás',
+    'updateButton' => 'Actualizar',
+    'createButton' => 'Crear',
+    'newElem' => 'Nuevo',
+    'editElem' => 'Editar',
 ];

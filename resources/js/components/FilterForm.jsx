@@ -40,6 +40,7 @@ return (
                 </label>
                 <input
                     type="text"
+                    style={{ borderRadius: '10px' }}
                     id={field.key}
                     name={field.key}
                     value={filters[field.value]}

@@ -16,7 +16,7 @@ export default function UserDropdown({ lang, auth }) {
                                 aria-haspopup="true"
                                 onClick={() => setIsOpen(!isOpen)}
                             >
-                                <img src="storage/general/user-icon.png" alt="Admin" />
+                                <img src="/storage/general/user-icon.png" alt="Admin" />
                             </button>
                         </div>
                         {isOpen && (
@@ -62,7 +62,7 @@ export default function UserDropdown({ lang, auth }) {
                         aria-haspopup="true"
                         onClick={() => setIsOpen(!isOpen)}
                     >
-                        <img src="storage/general/user-icon.png" alt='User' />
+                        <img src="/storage/general/user-icon.png" alt='User' />
                     </button>
                 </div>
                 {isOpen && (

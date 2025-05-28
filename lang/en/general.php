@@ -25,4 +25,9 @@ return [
     'goto' => 'Go',
     'clearFilterButton' => 'Clear',
     'filterButton' => 'Filter',
+    'back' => 'Go Back',
+    'updateButton' => 'Update',
+    'createButton' => 'Create',
+    'newElem' => 'New',
+    'editElem' => 'Edit',
 ];

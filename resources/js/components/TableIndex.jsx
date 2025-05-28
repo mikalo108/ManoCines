@@ -34,7 +34,7 @@ return (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
         </Link>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" style={{ borderRadius: '10px' }}>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>

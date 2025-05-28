@@ -14,7 +14,7 @@ export default function GuestHeader({ auth, locale, lang }) {
                     className="flex items-center gap-2 max-md:justify-center"
                     title="MañoCines"
                 >
-                    <img src="storage/general/logo.webp" alt="Logo" width='80vw' />
+                    <img src="/storage/general/logo.webp" alt="Logo" width='80vw' />
                     <h2 className="lg:text-2xl flex font-bold text-black dark:text-white">
                         MañoCines
                     </h2>                

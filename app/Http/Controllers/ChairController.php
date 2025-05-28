@@ -44,7 +44,18 @@ class ChairController extends Controller
     }
 
     public function create() {
-        return Inertia::render('Chair/Form');  
+        app()->setLocale(session('locale', app()->getLocale()));  
+        return Inertia::render('Chair/Form', [
+            'dataControl' => [
+                ['key' => 'room_id', 'field' => '', 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'row', 'field' => '', 'type' => 'number', 'posibilities' => '15'],
+                ['key' => 'column', 'field' => '', 'type' => 'select', 'posibilities' => [
+                    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+                ]],
+                ['key' => 'state', 'field' => '', 'type' => 'select', 'posibilities' => ['Available', 'Occupied']],
+                ['key' => 'price', 'field' => '', 'type' => 'number', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $r) { 
@@ -67,8 +78,18 @@ class ChairController extends Controller
     }
 
     public function edit($id) { 
+        app()->setLocale(session('locale', app()->getLocale()));  
         $ch = Chair::find($id);
-        return Inertia::render('Chair/Form', ['chair' => $ch]);
+        return Inertia::render('Chair/Form', [
+            'chair' => $ch,
+            'dataControl' => [
+                ['key' => 'room_id', 'field' => $ch->room_id, 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'row', 'field' => $ch->row, 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'column', 'field' => $ch->column, 'type' => 'hidden', 'posibilities' =>''],
+                ['key' => 'state', 'field' => $ch->state, 'type' => 'select', 'posibilities' => ['Available', 'Occupied']],
+                ['key' => 'price', 'field' => $ch->price, 'type' => 'number', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update($id, Request $r) { 

@@ -11,28 +11,37 @@ class RoomController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index() {
-        
+    public function index(Request $request) {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $rooms = Room::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Room/Index', ['rooms' => $rooms, 'langTable' => fn () => Lang::get('tableRooms'),]);
+        $query = Room::query();
+
+        if ($request->filled('roomId')) {
+            $query->where('id', $request->roomId);
+        }
+
+        if ($request->filled('cinemaId')) {
+            $query->where('cinema_id', $request->cinemaId);
+        }
+
+        $rooms = $query->orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Room/Index', [
+            'rooms' => $rooms,
+            'langTable' => fn () => Lang::get('tableRooms'),
+            'fieldsCanFilter' => ['roomId', 'cinemaId'],
+        ]);
     }
 
-    // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $room = Room::findOrFail($id);
         return Inertia::render('Room/Show', ['room' => $room]);
     }
 
-    // Función para devolver a la página de creación del elemento
     public function create() {
         $cinemas = \App\Models\Cinema::all();
         $chairs = \App\Models\Chair::all();
         return Inertia::render('Room/Form', ['cinemas' => $cinemas, 'chairs' => $chairs]);  
     }
 
-    // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
             'cinema_id' => 'required|integer|exists:cinemas,id',
@@ -43,6 +52,7 @@ class RoomController extends Controller
         ]);
 
         $rModel = new Room();
+        $rModel->cinema_id = $r->cinema_id;
         $rModel->name = $r->name;
         $rModel->capacity = $r->capacity;
         $rModel->save();
@@ -54,7 +64,6 @@ class RoomController extends Controller
         return redirect()->route('rooms.index');
     }
 
-    // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $rModel = Room::with('chairs')->find($id);
         $cinemas = \App\Models\Cinema::all();
@@ -62,7 +71,6 @@ class RoomController extends Controller
         return Inertia::render('Room/Form', ['room' => $rModel, 'cinemas' => $cinemas, 'chairs' => $chairs]);
     }
 
-    // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
             'cinema_id' => 'required|integer|exists:cinemas,id',
@@ -73,6 +81,7 @@ class RoomController extends Controller
         ]);
         
         $rModel = Room::find($id);
+        $rModel->cinema_id = $r->cinema_id;
         $rModel->name = $r->name;
         $rModel->capacity = $r->capacity;
         $rModel->save();
@@ -84,7 +93,6 @@ class RoomController extends Controller
         return redirect()->route('rooms.index');
     }
 
-    // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $rModel = Room::find($id);
         $rModel->delete();

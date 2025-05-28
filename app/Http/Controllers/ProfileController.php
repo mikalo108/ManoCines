@@ -12,21 +12,40 @@ class ProfileController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $profiles = Profile::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Profile/Index', ['profiles' => $profiles,'langTable' => fn () => Lang::get('tableProfiles'),]);
+        $query = Profile::query();
+
+        if ($request->filled('profileId')) {
+            $query->where('id', $request->profileId);
+        }
+
+        if ($request->filled('userId')) {
+            $query->where('user_id', $request->userId);
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('surname')) {
+            $query->where('surname', 'like', '%' . $request->surname . '%');
+        }
+
+        $profiles = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Profile/Index', [
+            'profiles' => $profiles,
+            'langTable' => fn () => Lang::get('tableProfiles'),
+            'fieldsCanFilter' => ['profileId', 'userId', 'name', 'surname'],
+        ]);
     }
 
-    // Show the form for creating a new profile
     public function create()
     {
         return Inertia::render('Profile/Form');
     }
 
-    // Store a newly created profile in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -50,21 +69,18 @@ class ProfileController extends Controller
         return redirect()->route('profiles.index');
     }
 
-    // Display the specified profile
     public function show($id)
     {
         $profile = Profile::findOrFail($id);
         return Inertia::render('Profile/Show', ['profile' => $profile]);
     }
 
-    // Show the form for editing the specified profile
     public function edit($id)
     {
         $profile = Profile::findOrFail($id);
         return Inertia::render('Profile/Form', ['profile' => $profile]);
     }
 
-    // Update the specified profile in storage
     public function update(Request $request, $id)
     {
         $profile = Profile::findOrFail($id);
@@ -89,7 +105,6 @@ class ProfileController extends Controller
         return redirect()->route('profiles.index');
     }
 
-    // Remove the specified profile from storage
     public function destroy($id)
     {
         $profile = Profile::findOrFail($id);

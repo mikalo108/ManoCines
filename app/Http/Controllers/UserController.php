@@ -11,21 +11,40 @@ class UserController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $users = User::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('User/Index', ['users' => $users, 'langTable' => fn () => Lang::get('tableUsers'),]);
+        $query = User::query();
+
+        if ($request->filled('userId')) {
+            $query->where('id', $request->userId);
+        }
+
+        if ($request->filled('username')) {
+            $query->where('name', 'like', '%' . $request->username . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        if ($request->filled('role')) {
+            $query->where('role', 'like', '%' . $request->role . '%');
+        }
+
+        $users = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('User/Index', [
+            'users' => $users,
+            'langTable' => fn () => Lang::get('tableUsers'),
+            'fieldsCanFilter' => ['userId', 'username', 'email', 'role'],
+        ]);
     }
 
-    // Show the form for creating a new user
     public function create()
     {
         return Inertia::render('User/Form');
     }
 
-    // Store a newly created user in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -57,21 +76,18 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    // Display the specified user
     public function show($id)
     {
         $user = User::findOrFail($id);
         return Inertia::render('User/Show', ['user' => $user]);
     }
 
-    // Show the form for editing the specified user
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return Inertia::render('User/Form', ['user' => $user]);
     }
 
-    // Update the specified user in storage
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -94,7 +110,6 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    // Remove the specified user from storage
     public function destroy($id)
     {
         $user = User::findOrFail($id);

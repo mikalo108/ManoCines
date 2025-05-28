@@ -9,14 +9,31 @@ use Illuminate\Support\Facades\Lang;
 
 class ProductCinemaController extends Controller
 {
-    protected $paginateSize = 5;
+    private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $productCinemas = ProductCinema::paginate($this->paginateSize);
-        return Inertia::render('ProductCinema/Index', ['productCinemas' => $productCinemas, 'langTable' => fn () => Lang::get('tableProductCinemas'),]);
+        $query = ProductCinema::query();
+
+        if ($request->filled('productCinemaId')) {
+            $query->where('id', $request->productCinemaId);
+        }
+
+        if ($request->filled('cinemaId')) {
+            $query->where('cinema_id', $request->cinemaId);
+        }
+
+        if ($request->filled('productId')) {
+            $query->where('product_id', $request->productId);
+        }
+
+        $productCinemas = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('ProductCinema/Index', [
+            'productCinemas' => $productCinemas,
+            'langTable' => fn () => Lang::get('tableProductCinemas'),
+            'fieldsCanFilter' => ['productCinemaId', 'cinemaId', 'productId'],
+        ]);
     }
 
     public function create()

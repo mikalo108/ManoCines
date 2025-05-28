@@ -11,21 +11,32 @@ class OrderController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $orders = Order::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Order/Index', ['orders' => $orders, 'langTable' => fn () => Lang::get('tableOrders'),]);
+        $query = Order::query();
+
+        if ($request->filled('orderId')) {
+            $query->where('id', $request->orderId);
+        }
+
+        if ($request->filled('userId')) {
+            $query->where('user_id', $request->userId);
+        }
+
+        $orders = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Order/Index', [
+            'orders' => $orders,
+            'langTable' => fn () => Lang::get('tableOrders'),
+            'fieldsCanFilter' => ['orderId', 'userId'],
+        ]);
     }
 
-    // Show the form for creating a new order
     public function create()
     {
         return Inertia::render('Order/Form');
     }
 
-    // Store a newly created order in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -49,21 +60,18 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
-    // Display the specified order
     public function show($id)
     {
         $order = Order::findOrFail($id);
         return Inertia::render('Order/Show', ['order' => $order]);
     }
 
-    // Show the form for editing the specified order
     public function edit($id)
     {
         $order = Order::findOrFail($id);
         return Inertia::render('Order/Form', ['order' => $order]);
     }
 
-    // Update the specified order in storage
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
@@ -86,7 +94,6 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
-    // Remove the specified order from storage
     public function destroy($id)
     {
         $order = Order::findOrFail($id);

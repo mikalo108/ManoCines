@@ -13,21 +13,41 @@ class TimeController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $times = Time::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Time/Index', ['times' => $times,'langTable' => fn () => Lang::get('tableTimes'),]);
+        $query = Time::query();
+
+        if ($request->filled('timeId')) {
+            $query->where('id', $request->timeId);
+        }
+
+        if ($request->filled('roomId')) {
+            $query->where('room_id', $request->roomId);
+        }
+
+        if ($request->filled('filmId')) {
+            $query->where('film_id', $request->filmId);
+        }
+
+        if ($request->filled('time')) {
+            $query->whereDate('time', $request->time);
+        }
+
+        $times = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Time/Index', [
+            'times' => $times,
+            'langTable' => fn () => Lang::get('tableTimes'),
+            'fieldsCanFilter' => ['timeId', 'roomId', 'filmId', 'time'],
+        ]);
     }
 
-    // Función para devolver a la página de detalles del elemento que se pide
-    public function show($id){
+    public function show($id)
+    {
         $time = Time::findOrFail($id);
-        return Inertia::render('Room/Show', ['time' => $time]);
+        return Inertia::render('Time/Show', ['time' => $time]);
     }
 
-    // Show the form for creating a new time
     public function create()
     {
         $rooms = Room::all();
@@ -35,7 +55,6 @@ class TimeController extends Controller
         return Inertia::render('Time/Form', ['rooms' => $rooms, 'films' => $films]);
     }
 
-    // Store a newly created time in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -53,7 +72,6 @@ class TimeController extends Controller
         return redirect()->route('times.index');
     }
 
-    // Show the form for editing the specified time
     public function edit($id)
     {
         $time = Time::findOrFail($id);
@@ -62,7 +80,6 @@ class TimeController extends Controller
         return Inertia::render('Time/Form', ['time' => $time, 'rooms' => $rooms, 'films' => $films]);
     }
 
-    // Update the specified time in storage
     public function update(Request $request, $id)
     {
         $time = Time::findOrFail($id);
@@ -81,7 +98,6 @@ class TimeController extends Controller
         return redirect()->route('times.index');
     }
 
-    // Remove the specified time from storage
     public function destroy($id)
     {
         $time = Time::findOrFail($id);

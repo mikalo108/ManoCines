@@ -11,26 +11,35 @@ class FilmController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index() {
-        
+    public function index(Request $request) {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $films = Film::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Film/Index', ['films' => $films, 'langTable' => fn () => Lang::get('tableFilms'),]);
+        $query = Film::query();
+
+        if ($request->filled('filmId')) {
+            $query->where('id', $request->filmId);
+        }
+
+        if ($request->filled('filmName')) {
+            $query->where('name', 'like', '%' . $request->filmName . '%');
+        }
+
+        $films = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Film/Index', [
+            'films' => $films,
+            'langTable' => fn () => Lang::get('tableFilms'),
+            'fieldsCanFilter' => ['filmId', 'filmName'],
+        ]);
     }
 
-    // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $film = Film::findOrFail($id);
         return Inertia::render('Film/Show', ['film' => $film]);
     }
 
-    // Función para devolver a la página de creación del elemento
     public function create() {
         return Inertia::render('Film/Form');  
     }
 
-    // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
@@ -48,13 +57,11 @@ class FilmController extends Controller
         return redirect()->route('films.index');
     }
 
-    // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $f = Film::find($id);
         return Inertia::render('Film/Form', ['film' => $f]);
     }
 
-    // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
@@ -72,7 +79,6 @@ class FilmController extends Controller
         return redirect()->route('films.index');
     }
 
-    // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $f = Film::find($id);
         $f->delete();

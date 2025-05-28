@@ -11,21 +11,36 @@ class ProductController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $products = Product::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('Product/Index', ['products' => $products, 'langTable' => fn () => Lang::get('tableProducts'),]);
+        $query = Product::query();
+
+        if ($request->filled('productId')) {
+            $query->where('id', $request->productId);
+        }
+
+        if ($request->filled('productName')) {
+            $query->where('name', 'like', '%' . $request->productName . '%');
+        }
+
+        if ($request->filled('categoryId')) {
+            $query->where('category_id', $request->categoryId);
+        }
+
+        $products = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('Product/Index', [
+            'products' => $products,
+            'langTable' => fn () => Lang::get('tableProducts'),
+            'fieldsCanFilter' => ['productId', 'productName', 'categoryId'],
+        ]);
     }
 
-    // Show the form for creating a new product
     public function create()
     {
         return Inertia::render('Product/Form');
     }
 
-    // Store a newly created product in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -47,21 +62,18 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    // Display the specified product
     public function show($id)
     {
         $product = Product::findOrFail($id);
         return Inertia::render('Product/Show', ['product' => $product]);
     }
 
-    // Show the form for editing the specified product
     public function edit($id)
     {
         $product = Product::findOrFail($id);
         return Inertia::render('Product/Form', ['product' => $product]);
     }
 
-    // Update the specified product in storage
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -84,7 +96,6 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    // Remove the specified product from storage
     public function destroy($id)
     {
         $product = Product::findOrFail($id);

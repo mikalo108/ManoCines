@@ -11,21 +11,32 @@ class ProductCategoryController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $productCategories = ProductCategory::paginate(self::PAGINATE_SIZE);
-        return Inertia::render('ProductCategory/Index', ['productCategories' => $productCategories, 'langTable' => fn () => Lang::get('tableProductCategories'),]);
+        $query = ProductCategory::query();
+
+        if ($request->filled('categoryId')) {
+            $query->where('id', $request->categoryId);
+        }
+
+        if ($request->filled('categoryName')) {
+            $query->where('name', 'like', '%' . $request->categoryName . '%');
+        }
+
+        $productCategories = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('ProductCategory/Index', [
+            'productCategories' => $productCategories,
+            'langTable' => fn () => Lang::get('tableProductCategories'),
+            'fieldsCanFilter' => ['categoryId', 'categoryName'],
+        ]);
     }
 
-    // Show the form for creating a new product category
     public function create()
     {
         return Inertia::render('ProductCategory/Form');
     }
 
-    // Store a newly created product category in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -39,21 +50,18 @@ class ProductCategoryController extends Controller
         return redirect()->route('product-categories.index');
     }
 
-    // Display the specified product category
     public function show($id)
     {
         $category = ProductCategory::findOrFail($id);
         return Inertia::render('ProductCategory/Show', ['category' => $category]);
     }
 
-    // Show the form for editing the specified product category
     public function edit($id)
     {
         $category = ProductCategory::findOrFail($id);
         return Inertia::render('ProductCategory/Form', ['category' => $category]);
     }
 
-    // Update the specified product category in storage
     public function update(Request $request, $id)
     {
         $category = ProductCategory::findOrFail($id);
@@ -68,7 +76,6 @@ class ProductCategoryController extends Controller
         return redirect()->route('product-categories.index');
     }
 
-    // Remove the specified product category from storage
     public function destroy($id)
     {
         $category = ProductCategory::findOrFail($id);

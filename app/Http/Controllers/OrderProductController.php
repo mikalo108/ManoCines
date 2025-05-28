@@ -11,21 +11,36 @@ class OrderProductController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $orderProducts = OrderProduct::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('OrderProduct/Index', ['orderProducts' => $orderProducts, 'langTable' => fn () => Lang::get('tableOrderProducts')]);
+        $query = OrderProduct::query();
+
+        if ($request->filled('orderProductId')) {
+            $query->where('id', $request->orderProductId);
+        }
+
+        if ($request->filled('orderId')) {
+            $query->where('order_id', $request->orderId);
+        }
+
+        if ($request->filled('productId')) {
+            $query->where('product_id', $request->productId);
+        }
+
+        $orderProducts = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('OrderProduct/Index', [
+            'orderProducts' => $orderProducts,
+            'langTable' => fn () => Lang::get('tableOrderProducts'),
+            'fieldsCanFilter' => ['orderProductId', 'orderId', 'productId'],
+        ]);
     }
 
-    // Show the form for creating a new order product
     public function create()
     {
         return Inertia::render('OrderProduct/Form');
     }
 
-    // Store a newly created order product in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -45,21 +60,18 @@ class OrderProductController extends Controller
         return redirect()->route('order-products.index');
     }
 
-    // Display the specified order product
     public function show($id)
     {
         $orderProduct = OrderProduct::findOrFail($id);
         return Inertia::render('OrderProduct/Show', ['orderProduct' => $orderProduct]);
     }
 
-    // Show the form for editing the specified order product
     public function edit($id)
     {
         $orderProduct = OrderProduct::findOrFail($id);
         return Inertia::render('OrderProduct/Form', ['orderProduct' => $orderProduct]);
     }
 
-    // Update the specified order product in storage
     public function update(Request $request, $id)
     {
         $orderProduct = OrderProduct::findOrFail($id);
@@ -80,7 +92,6 @@ class OrderProductController extends Controller
         return redirect()->route('order-products.index');
     }
 
-    // Remove the specified order product from storage
     public function destroy($id)
     {
         $orderProduct = OrderProduct::findOrFail($id);

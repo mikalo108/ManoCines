@@ -11,26 +11,44 @@ class OrderTicketController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index()
+    public function index(Request $request)
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $orderTickets = OrderTicket::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('OrderTicket/Index', ['orderTickets' => $orderTickets, 'langTable' => fn () => Lang::get('tableOrderTickets')]);
+        $query = OrderTicket::query();
+
+        if ($request->filled('orderTicketId')) {
+            $query->where('id', $request->orderTicketId);
+        }
+
+        if ($request->filled('orderId')) {
+            $query->where('order_id', $request->orderId);
+        }
+
+        if ($request->filled('chairId')) {
+            $query->where('chair_id', $request->chairId);
+        }
+
+        if ($request->filled('timeId')) {
+            $query->where('time_id', $request->timeId);
+        }
+
+        $orderTickets = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('OrderTicket/Index', [
+            'orderTickets' => $orderTickets,
+            'langTable' => fn () => Lang::get('tableOrderTickets'),
+            'fieldsCanFilter' => ['orderTicketId', 'orderId', 'chairId', 'timeId'],
+        ]);
     }
 
-    // Función para devolver a la página de detalles del elemento que se pide
     public function show($id){
         $orderTicket = OrderTicket::findOrFail($id);
         return Inertia::render('OrderTicket/Show', ['orderTicket' => $orderTicket]);
     }
 
-    // Función para devolver a la página de creación del elemento
     public function create() {
         return Inertia::render('OrderTicket/Form');  
     }
 
-    // Función para guardar el elemento en la base de datos
     public function store(Request $r) { 
         $r->validate([
             'order_id' => 'required|integer|exists:orders,id',  
@@ -46,13 +64,11 @@ class OrderTicketController extends Controller
         return redirect()->route('order-tickets.index');
     }
 
-    // Función para devolver a la página de edición del elemento
     public function edit($id) { 
         $ot = OrderTicket::find($id);
         return Inertia::render('OrderTicket/Form', ['orderTicket' => $ot]);
     }
 
-    // Función para actualizar el elemento en la base de datos
     public function update($id, Request $r) { 
         $r->validate([
             'order_id' => 'required|integer|exists:orders,id',  
@@ -68,7 +84,6 @@ class OrderTicketController extends Controller
         return redirect()->route('order-tickets.index');
     }
 
-    // Funcion para eliminar el elemento de la base de datos
     public function destroy($id) { 
         $ot = OrderTicket::find($id);
         $ot->delete();

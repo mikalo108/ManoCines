@@ -11,61 +11,79 @@ class TemporalReserveController extends Controller
 {
     private const PAGINATE_SIZE = 5;
 
-    // Función para devolver a la página principal del elemento
-    public function index() {
-        
+    public function index(Request $request)
+    {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $temporalReserves = TemporalReserve::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('TemporalReserve/Index', ['temporalReserves' => $temporalReserves, 'langTable' => fn () => Lang::get('tableTemporalReserves'),]);
+        $query = TemporalReserve::query();
+
+        if ($request->filled('temporalReserveId')) {
+            $query->where('id', $request->temporalReserveId);
+        }
+
+        if ($request->filled('chairId')) {
+            $query->where('chair_id', $request->chairId);
+        }
+
+        $temporalReserves = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('TemporalReserve/Index', [
+            'temporalReserves' => $temporalReserves,
+            'langTable' => fn () => Lang::get('tableTemporalReserves'),
+            'fieldsCanFilter' => ['temporalReserveId', 'chairId'],
+        ]);
     }
 
-    // Función para devolver a la página de detalles del elemento que se pide
-    public function show($id){
+    public function show($id)
+    {
         $temporalReserve = TemporalReserve::findOrFail($id);
         return Inertia::render('TemporalReserve/Show', ['temporalReserve' => $temporalReserve]);
     }
 
-    // Función para devolver a la página de creación del elemento
-    public function create() {
-        return Inertia::render('TemporalReserve/Form');  
+    public function create()
+    {
+        return Inertia::render('TemporalReserve/Form');
     }
 
-    // Función para guardar el elemento en la base de datos
-    public function store(Request $r) { 
-        $r->validate([
-            'chair_id' => 'required|integer|exists:chairs,id',  
-            'reserve_time' => 'required|date',  
+    public function store(Request $request)
+    {
+        $request->validate([
+            'chair_id' => 'required|integer|exists:chairs,id',
+            'reserve_time' => 'required|date',
         ]);
 
         $tr = new TemporalReserve();
-        $tr->chair_id = $r->chair_id;
+        $tr->chair_id = $request->chair_id;
+        $tr->reserve_time = $request->reserve_time;
         $tr->save();
+
         return redirect()->route('temporal-reserves.index');
     }
 
-    // Función para devolver a la página de edición del elemento
-    public function edit($id) { 
-        $tr = TemporalReserve::find($id);
+    public function edit($id)
+    {
+        $tr = TemporalReserve::findOrFail($id);
         return Inertia::render('TemporalReserve/Form', ['temporalReserve' => $tr]);
     }
 
-    // Función para actualizar el elemento en la base de datos
-    public function update($id, Request $r) { 
-        $r->validate([
-            'chair_id' => 'required|integer|exists:chairs,id',  
-            'reserve_time' => 'required|date',  
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'chair_id' => 'required|integer|exists:chairs,id',
+            'reserve_time' => 'required|date',
         ]);
-        
-        $tr = TemporalReserve::find($id);
-        $tr->chair_id = $r->chair_id;
+
+        $tr = TemporalReserve::findOrFail($id);
+        $tr->chair_id = $request->chair_id;
+        $tr->reserve_time = $request->reserve_time;
         $tr->save();
+
         return redirect()->route('temporal-reserves.index');
     }
 
-    // Funcion para eliminar el elemento de la base de datos
-    public function destroy($id) { 
-        $tr = TemporalReserve::find($id);
+    public function destroy($id)
+    {
+        $tr = TemporalReserve::findOrFail($id);
         $tr->delete();
+
         return redirect()->route('temporal-reserves.index');
     }
 }

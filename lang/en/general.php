@@ -23,4 +23,6 @@ return [
     'guestMessage' => 'Login to do something',
     'guestMessage_2' => 'If you are not registered, you can do it right now',
     'goto' => 'Go',
+    'clearFilterButton' => 'Clear',
+    'filterButton' => 'Filter',
 ];

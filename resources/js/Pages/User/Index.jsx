@@ -48,7 +48,7 @@ export default function Index(props) {
                     <main className="mt-6">
                         <h1 className='flex justify-center text-black' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.title}</h1>
                         <h2 className='mb-12'>{props.langTable.subtitle}</h2>
-                        <FilterForm fieldsCanFilter={props.fieldsCanFilter} onFilter={handleFilter} />
+                        <FilterForm fieldsCanFilter={props.fieldsCanFilter} onFilter={handleFilter} lang={props.lang} />
                         <TableIndex 
                             columnsTable={props.langTable.columns} 
                             items={props.users.data} 

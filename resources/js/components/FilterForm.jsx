@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const FilterForm = ({ fieldsCanFilter, onFilter }) => {
+const FilterForm = ({ fieldsCanFilter, onFilter, lang }) => {
 
   const initialState = fieldsCanFilter.reduce((acc, field) => {
     acc[field] = '';
@@ -53,14 +53,14 @@ return (
                 type="submit"
                 className="btn btn-primary px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
             >
-                Filtrar
+                {lang.filterButton}
             </button>
             <button
                 type="button"
                 onClick={handleReset}
                 className="btn btn-secondary px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
             >
-                Limpiar
+                {lang.clearFilterButton}
             </button>
         </div>
     </form>

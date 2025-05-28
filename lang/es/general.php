@@ -23,4 +23,6 @@ return [
     'guestMessage' => 'Inicia sesión para hacer algo',
     'guestMessage_2' => 'Sino estás registrado, puedes hacerlo ahora mismo',
     'goto' => 'Ir',
+    'clearFilterButton' => 'Limpiar',
+    'filterButton' => 'Filtrar',
 ];

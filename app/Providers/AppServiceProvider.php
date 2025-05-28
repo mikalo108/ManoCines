@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $films=null;
         //$films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         
-        
+        app()->setLocale(session('locale', app()->getLocale()));  
         // Share the same data with Inertia views
         Inertia::share([
             'allFilms' => $films,

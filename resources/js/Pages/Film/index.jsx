@@ -1,10 +1,14 @@
 import React from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import TableIndex from '@/Components/TableIndex';
 
 export default function Index(props) {
     const keyFilms = "films";
+
+    const handlePageChange = (page) => {
+        router.get(route('films.index'), { page }, { preserveState: true, replace: true });
+    };
 
     if (!props.auth.user.role === 'admin') {
         return (
@@ -32,7 +36,13 @@ export default function Index(props) {
                         <main className="mt-6">
                             <h1 className='flex justify-center text-black' style={{ fontWeight: 'bolder', width: '100%' }}>{props.langTable.title}</h1>
                             <h2 className='mb-12'>{props.langTable.subtitle}</h2>
-                            <TableIndex columnsTable={props.langTable.columns} items={props.films.data} keyTable={keyFilms} />
+                            <TableIndex
+                                columnsTable={props.langTable.columns}
+                                items={props.films.data}
+                                keyTable={keyFilms}
+                                pagination={props.films}
+                                onPageChange={handlePageChange}
+                            />
                         </main>
                     </div>
                 </div>

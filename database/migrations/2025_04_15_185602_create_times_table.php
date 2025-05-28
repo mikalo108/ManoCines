@@ -17,7 +17,6 @@ return new class extends Migration
 
             $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->softDeletes();
         });
     }
 

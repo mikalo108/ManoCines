@@ -13,9 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('chair_id');
             $table->timestamp('reserve_time');
             $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('chair_id')->references('id')->on('chairs')->onDelete('cascade');
+            $table->foreign('chair_id')->references('id')->on('chairs');
         });
     }
 

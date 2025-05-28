@@ -15,7 +15,6 @@ export default function ActionButtons({ item, keyTable }) {
             </div>
             
             <form
-                method="delete"
                 action={route(`${keyTable}.destroy`, item.id)}
                 onSubmit={e => {
                     if (!confirm('¿Estás seguro de que deseas borrar este elemento?')) e.preventDefault();

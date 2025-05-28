@@ -13,7 +13,6 @@ return new class extends Migration
             $table->integer('number');
             $table->integer('capacity');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

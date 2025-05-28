@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('location');
             $table->text('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

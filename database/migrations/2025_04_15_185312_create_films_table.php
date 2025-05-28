@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text('overview');
             $table->string('trailer');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

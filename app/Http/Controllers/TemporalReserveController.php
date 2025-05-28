@@ -15,8 +15,8 @@ class TemporalReserveController extends Controller
     public function index() {
         
         app()->setLocale(session('locale', app()->getLocale()));  
-        $temporalreserves = TemporalReserve::orderBy('created_at', 'desc')->paginate(self::PAGINATE_SIZE);
-        return Inertia::render('TemporalReserve/Index', ['temporalreserves' => $temporalreserves, 'langTable' => fn () => Lang::get('tableTemporalReserve'),]);
+        $temporalReserves = TemporalReserve::orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        return Inertia::render('TemporalReserve/Index', ['temporalReserves' => $temporalReserves, 'langTable' => fn () => Lang::get('tableTemporalReserves'),]);
     }
 
     // Función para devolver a la página de detalles del elemento que se pide

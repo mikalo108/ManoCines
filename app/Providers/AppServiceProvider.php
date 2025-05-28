@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\UpdateTemporalReserves;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Models\Film;
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Schedule $schedule)
     {
+        //$schedule->command(UpdateTemporalReserves::handle());
         
         $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
         View::share('allFilms', $films);

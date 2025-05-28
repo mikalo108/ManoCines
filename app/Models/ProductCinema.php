@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductCinema extends Model
 {
-    protected $table = 'cinemas_products';
+    protected $table = 'product_cinemas';
 
     protected $fillable = [
-        'cinema_id',
         'product_id',
+        'cinema_id',
     ];
 }

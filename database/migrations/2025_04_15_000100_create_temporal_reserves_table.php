@@ -8,19 +8,17 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('temporal_reserves', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('total', 10, 2);
+            $table->unsignedBigInteger('chair_id');
+            $table->timestamp('reserve_time');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('chair_id')->references('id')->on('chairs')->onDelete('cascade');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('temporal_reserves');
     }
 };

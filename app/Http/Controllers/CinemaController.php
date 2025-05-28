@@ -39,15 +39,22 @@ class CinemaController extends Controller
     }
 
     public function show($id){
-        $cinema = Cinema::with(['products', 'rooms'])->findOrFail($id);
+        $cinema = Cinema::findOrFail($id);
         return Inertia::render('Cinema/show', ['cinema' => $cinema]);
     }
 
     public function create() {
-        $cities = \App\Models\City::all();
-        $products = \App\Models\Product::all();
-        $chairs = \App\Models\Chair::all();
-        return Inertia::render('Cinema/form', ['cities' => $cities, 'products' => $products, 'chairs' => $chairs]);
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $cities_lastID = \App\Models\City::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Cinema/form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'location', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'description', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'city_id', 'field' => '', 'type' => 'number', 'posibilities' => $cities_lastID],
+            ],
+        ]);
     }
 
     public function store(Request $r) { 
@@ -56,10 +63,6 @@ class CinemaController extends Controller
             'location' => 'required|string|max:255',  
             'description' => 'nullable|string|max:1000',  
             'city_id' => 'required|integer|exists:cities,id',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
         ]);
 
         $c = new Cinema();
@@ -67,15 +70,6 @@ class CinemaController extends Controller
         $c->location = $r->location;
         $c->description = $r->description;
         $c->save();
-
-        $c->cities()->attach($r->city_id);
-
-        if ($r->has('products')) {
-            $c->products()->attach($r->products);
-        }
-        if ($r->has('chairs')) {
-            $c->chairs()->attach($r->chairs);
-        }
 
         return redirect()->route('cinemas.index');
     }
@@ -94,10 +88,6 @@ class CinemaController extends Controller
             'location' => 'required|string|max:255',  
             'description' => 'nullable|string|max:1000',  
             'city_id' => 'required|integer|exists:cities,id',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
         ]);
         
         $c = Cinema::find($id);
@@ -105,11 +95,6 @@ class CinemaController extends Controller
         $c->location = $r->location;
         $c->description = $r->description;
         $c->save();
-
-        $c->cities()->sync([$r->city_id]);
-
-        $c->products()->sync($r->products ?? []);
-        $c->chairs()->sync($r->chairs ?? []);
 
         return redirect()->route('cinemas.index');
     }

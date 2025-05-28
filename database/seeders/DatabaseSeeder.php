@@ -11,22 +11,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(UserTableSeeder::class);
-        $this->call(ProfileTableSeeder::class);
-        $this->call(CinemaTableSeeder::class);
-        $this->call(FilmTableSeeder::class);
-        $this->call(RoomTableSeeder::class);
-        $this->call(ChairTableSeeder::class);
-        $this->call(TemporalReserveTableSeeder::class);
-        $this->call(ProductCategoryTableSeeder::class);
-        $this->call(ProductTableSeeder::class);
-        $this->call(CinemaRoomTableSeeder::class);
-        $this->call(TimeTableSeeder::class);
-        $this->call(CinemasProductsSeeder::class);
-        $this->call(OrderTableSeeder::class);
-        $this->call(OrderTicketTableSeeder::class);
-        $this->call(OrderProductTableSeeder::class);
-        $this->call(CitiesTableSeeder::class);
-        $this->call(CinemaCityTableSeeder::class);
+        $this->call(UserTableSeeder::class); // 000000
+        $this->call(ProfileTableSeeder::class); // 000020
+        $this->call(CitiesTableSeeder::class); // 000030
+        $this->call(CinemaTableSeeder::class); // 000040
+        $this->call(RoomTableSeeder::class); // 000050
+        $this->call(CinemaRoomTableSeeder::class); // 000060
+        $this->call(ChairTableSeeder::class); // 000070
+        $this->call(FilmTableSeeder::class); // 000080
+        $this->call(TimeTableSeeder::class); // 000090
+        $this->call(TemporalReserveTableSeeder::class); // 000100
+        $this->call(ProductCategoryTableSeeder::class); // 000110
+        $this->call(ProductTableSeeder::class); // 000120
+        $this->call(ProductCinemasSeeder::class); // 000130
+        $this->call(OrderTableSeeder::class); // 000140
+        $this->call(OrderTicketTableSeeder::class); // 000150
+        $this->call(OrderProductTableSeeder::class); // 000160
     }
 }

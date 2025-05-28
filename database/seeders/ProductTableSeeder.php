@@ -91,6 +91,24 @@ class ProductTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Cocacola 1L con hielo',
+                'description' => 'Refrescante bebida de 1L de la marca Cocacola',
+                'image' => 'cocacola.webp',
+                'price' => 3.99,
+                'product_category_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Haribo Favoritos 100g',
+                'description' => 'Chuches, las más queridas',
+                'image' => 'haribo_favoritos.webp',
+                'price' => 1.99,
+                'product_category_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

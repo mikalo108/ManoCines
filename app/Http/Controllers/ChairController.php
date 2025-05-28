@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Chair;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
+use App\Models\Room;
 
 class ChairController extends Controller
 {
@@ -44,10 +45,11 @@ class ChairController extends Controller
     }
 
     public function create() {
-        app()->setLocale(session('locale', app()->getLocale()));  
+        app()->setLocale(session('locale', app()->getLocale()));
+        $rooms_lastID = Room::orderBy('id', 'desc')->first()?->id;
         return Inertia::render('Chair/Form', [
             'dataControl' => [
-                ['key' => 'room_id', 'field' => '', 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'room_id', 'field' => '', 'type' => 'number', 'posibilities' => $rooms_lastID],
                 ['key' => 'row', 'field' => '', 'type' => 'number', 'posibilities' => '15'],
                 ['key' => 'column', 'field' => '', 'type' => 'select', 'posibilities' => [
                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -61,7 +63,7 @@ class ChairController extends Controller
     public function store(Request $r) { 
         $r->validate([
             'room_id' => 'required|integer|exists:rooms,id',  
-            'row' => 'required|string|max:10',  
+            'row' => 'required|numeric|max:10',  
             'column' => 'required|string|max:10',
             'state' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
@@ -94,17 +96,11 @@ class ChairController extends Controller
 
     public function update($id, Request $r) { 
         $r->validate([
-            'room_id' => 'required|integer|exists:rooms,id',  
-            'row' => 'required|string|max:10',  
-            'column' => 'required|string|max:10',
             'state' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
         ]);
         
         $ch = Chair::find($id);
-        $ch->room_id = $r->room_id;
-        $ch->row = $r->row;
-        $ch->column = $r->column;
         $ch->state = $r->state;
         $ch->price = $r->price;
         $ch->save();

@@ -11,7 +11,7 @@ return [
         'description' => 'Descripción',
         'image' => 'Imagen',
         'price' => 'Precio',
-        'category' => 'Categoría',
+        'product_category_id' => 'ID de Categoría de Producto',
         'created_at' => 'Creado en',
         'updated_at' => 'Actualizado en',
         'actions' => 'Acciones',

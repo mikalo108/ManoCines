@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Lang;
 
 class TimeController extends Controller
 {
-    private const PAGINATE_SIZE = 10;
+    private const PAGINATE_SIZE = 5;
 
     // Función para devolver a la página principal del elemento
     public function index()

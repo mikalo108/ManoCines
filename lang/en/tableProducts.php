@@ -11,7 +11,7 @@ return [
         'description' => 'Description',
         'image' => 'Image',
         'price' => 'Price',
-        'category' => 'Category',
+        'product_category_id' => 'Product Category ID',
         'created_at' => 'Created At',
         'updated_at' => 'Updated At',
         'actions' => 'Actions',

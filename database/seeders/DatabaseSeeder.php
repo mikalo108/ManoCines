@@ -18,12 +18,11 @@ class DatabaseSeeder extends Seeder
         $this->call(RoomTableSeeder::class);
         $this->call(ChairTableSeeder::class);
         $this->call(TemporalReserveTableSeeder::class);
+        $this->call(ProductCategoryTableSeeder::class);
         $this->call(ProductTableSeeder::class);
         $this->call(CinemaRoomTableSeeder::class);
         $this->call(TimeTableSeeder::class);
         $this->call(CinemasProductsSeeder::class);
-        $this->call(CinemasProductsSeeder::class);
-        $this->call(ProductCategoryTableSeeder::class);
         $this->call(OrderTableSeeder::class);
         $this->call(OrderTicketTableSeeder::class);
         $this->call(OrderProductTableSeeder::class);

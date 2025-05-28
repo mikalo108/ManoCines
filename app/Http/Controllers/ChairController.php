@@ -16,7 +16,13 @@ class ChairController extends Controller
     {
         app()->setLocale(session('locale', app()->getLocale()));  
         $query = Chair::query();
-        // Filtrar por nombre de la butaca si se proporciona
+        
+        // Filtrar por id de la butaca si se proporciona
+        if ($request->filled('chairId')) {
+            $query->where('name', 'like', '%' . $request->chairId . '%');
+        }
+
+         // Filtrar por nombre de la butaca si se proporciona
         if ($request->filled('chairName')) {
             $query->where('name', 'like', '%' . $request->chairName . '%');
         }

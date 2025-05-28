@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Lang;
 
 class ProductCinemaController extends Controller
 {
-    protected $paginateSize = 10;
+    protected $paginateSize = 5;
 
     // Función para devolver a la página principal del elemento
     public function index()

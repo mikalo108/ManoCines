@@ -33,8 +33,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //$schedule->command(UpdateTemporalReserves::handle());
         
-        $films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
-        View::share('allFilms', $films);
+        $films=null;
+        //$films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
+        
         
         // Share the same data with Inertia views
         Inertia::share([

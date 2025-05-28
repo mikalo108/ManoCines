@@ -1,3 +1,4 @@
+import { right } from '@popperjs/core';
 import React, { useState, useEffect } from 'react';
 
 const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
@@ -46,7 +47,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key} <span className='text-red-500' style={{float:'right'}}>{lang.noChange}</span>
             </label>
             <input
               type="text"

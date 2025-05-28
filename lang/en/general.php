@@ -30,4 +30,5 @@ return [
     'createButton' => 'Create',
     'newElem' => 'New',
     'editElem' => 'Edit',
+    'noChange' => '(You can\'t change this)'
 ];

@@ -45,7 +45,7 @@ return (
                     name={field.key}
                     value={filters[field.value]}
                     onChange={handleChange}
-                    className="filter-input"
+                    className="filter-input dark:text-black"
                 />
             </div>
         ))}

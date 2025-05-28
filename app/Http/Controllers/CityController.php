@@ -43,8 +43,14 @@ class CityController extends Controller
         return Inertia::render('City/Show', ['city' => $city]);
     }
 
-    public function create() {
-        return Inertia::render('City/Form');  
+    public function create() { 
+        app()->setLocale(session('locale', app()->getLocale()));          
+
+        return Inertia::render('City/Form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function store(Request $r) { 
@@ -60,8 +66,15 @@ class CityController extends Controller
     }
 
     public function edit($id) { 
+        app()->setLocale(session('locale', app()->getLocale()));          
         $c = City::find($id);
-        return Inertia::render('City/Form', ['city' => $c]);
+
+        return Inertia::render('City/Form', [
+            'city' => $c,
+            'dataControl' => [
+                ['key' => 'name', 'field' => $c->name, 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function update($id, Request $r) { 

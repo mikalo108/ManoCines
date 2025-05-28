@@ -1,4 +1,3 @@
-import { right } from '@popperjs/core';
 import React, { useState, useEffect } from 'react';
 
 const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
@@ -6,7 +5,6 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
 
   useEffect(() => {
     if (element) {
-      // Initialize formData with keys from dataControl and values from element if exist
       const initialData = {};
       dataControl.forEach(({ key, field }) => {
         if (element[key] !== undefined && element[key] !== null) {
@@ -19,7 +17,6 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
       });
       setFormData(initialData);
     } else {
-      // No element, initialize with empty strings or field values if provided
       const initialData = {};
       dataControl.forEach(({ key, field }) => {
         initialData[key] = field !== undefined && field !== null ? field : '';
@@ -28,12 +25,31 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
     }
   }, [element, dataControl]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = (e, key, type) => {
+    if (type === 'image') {
+      const file = e.target.files && e.target.files[0];
+      setFormData(prev => ({
+        ...prev,
+        [key]: file ? file.name : '',
+        [`${key}_file`]: file || null,
+        [`${key}_preview`]: undefined,
+      }));
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          setFormData(prev => ({
+            ...prev,
+            [`${key}_preview`]: ev.target.result,
+          }));
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [key]: e.target.value,
+      }));
+    }
   };
 
   const todayDate = new Date().toISOString().split('T')[0];
@@ -41,9 +57,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
   const renderInputField = ({ key, field, type, posibilities }) => {
     switch (type) {
       case 'hidden':
-        if (!field) {
-          return null;
-        }
+        if (!field) return null;
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
@@ -58,6 +72,49 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               readOnly
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-200 cursor-not-allowed"
             />
+          </div>
+        );
+      case 'image':
+        return (
+          <div key={key} className="mb-4">
+            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+              {key}
+            </label>
+            <input
+              type="file"
+              id={key}
+              name={key}
+              accept="image/*"
+              onChange={e => handleChange(e, key, type)}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              style={{ borderRadius: '10px', width: '100%', marginBottom: '16px' }}
+              title={field ? field : ''}
+            />
+            <div className="flex flex-row items-center space-x-4 mb-2"></div>
+            <div className="flex flex-row items-center space-x-4 mb-2">
+              {field && (
+                <img
+                  src={`/storage/films/${field}`}
+                  alt={key}
+                  className="max-w-md h-40 object-contain border"
+                  style={{ background: '#f3f3f3', borderRadius: '8px' }}
+                />
+              )}
+              {field && formData[`${key}_preview`] && (
+                <span className="mx-2 text-2xl">→</span>
+              )}
+              {formData[`${key}_preview`] && (
+                <img
+                  src={formData[`${key}_preview`]}
+                  alt="preview"
+                  className="max-w-md h-40 object-contain border"
+                  style={{ background: '#f3f3f3', borderRadius: '8px' }}
+                />
+              )}
+            </div>
+            <div className="text-gray-500 text-sm mt-1">
+              {field || formData[`${key}_preview`] ? '' : 'Ninguna imagen seleccionada'}
+            </div>
           </div>
         );
       case 'number':
@@ -75,7 +132,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               min={1}
               max={posibilities || ''}
               style={{ borderRadius: '10px' }}
-              onChange={handleChange}
+              onChange={e => handleChange(e, key, type)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -91,7 +148,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               name={key}
               value={formData[key] || ''}
               style={{ borderRadius: '10px' }}
-              onChange={handleChange}
+              onChange={e => handleChange(e, key, type)}
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
@@ -118,7 +175,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               min={todayDate}
               required
               style={{ borderRadius: '10px' }}
-              onChange={handleChange}
+              onChange={e => handleChange(e, key, type)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -136,7 +193,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               name={key}
               value={formData[key] || ''}
               style={{ borderRadius: '10px' }}
-              onChange={handleChange}
+              onChange={e => handleChange(e, key, type)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
@@ -144,8 +201,59 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    dataControl.forEach(({ key, type }) => {
+      if (type === 'image' && formData[`${key}_file`]) {
+        form.append(key, formData[`${key}_file`]);
+      } else {
+        form.append(key, formData[key]);
+      }
+    });
+
+    let url, method;
+    if (element) {
+      url = `/films/${element}`;
+      method = 'POST';
+      form.append('_method', 'put');
+    } else {
+      url = '/films';
+      method = 'POST';
+    }
+
+    fetch(url, {
+      method: method,
+      body: form,
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Accept': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.json();
+        }
+      })
+      .then(data => {
+        // Puedes manejar mensajes de éxito o error aquí
+        if (data && data.message) {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   return (
-    <form action={element ? route(`${keyElements}.update`, element) : route(`${keyElements}.store`)}>
+    <form 
+      onSubmit={handleSubmit}
+      encType="multipart/form-data"
+    >
       {dataControl.map(({ key, field, type, posibilities }) => {
         if ((element && element[key] !== undefined) || field !== undefined) {
           return renderInputField({ key, field, type, posibilities });

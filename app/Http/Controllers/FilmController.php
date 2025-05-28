@@ -40,44 +40,81 @@ class FilmController extends Controller
     }
 
     public function create() {
-        return Inertia::render('Film/Form');  
+        app()->setLocale(session('locale', app()->getLocale()));          
+
+        return Inertia::render('Film/Form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'image', 'field' => '', 'type' => 'image', 'posibilities' => ''],
+                ['key' => 'overview', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'trailer', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function store(Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
-            'image' => 'nullable|string|max:255',  
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  
             'overview' => 'nullable|string',  
             'trailer' => 'nullable|string|max:255',  
         ]);
 
         $f = new Film();
         $f->name = $r->name;
-        $f->image = $r->image;
         $f->overview = $r->overview;
         $f->trailer = $r->trailer;
+
+        // Si hay archivo, guárdalo con un nombre único y extensión original
+        if ($r->hasFile('image')) {
+            $file = $r->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = uniqid('film_', true) . '.' . $extension;
+            $file->storeAs('public/films', $filename);
+            $f->image = $filename;
+        }
+
         $f->save();
         return redirect()->route('films.index');
     }
 
     public function edit($id) { 
+        app()->setLocale(session('locale', app()->getLocale()));          
         $f = Film::find($id);
-        return Inertia::render('Film/Form', ['film' => $f]);
+
+        return Inertia::render('Film/Form', [
+         'film' => $f,
+         'dataControl' => [
+                ['key' => 'name', 'field' => $f->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'image', 'field' => $f->image, 'type' => 'image', 'posibilities' => ''],
+                ['key' => 'overview', 'field' => $f->overview, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'trailer', 'field' => $f->trailer, 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function update($id, Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
-            'image' => 'nullable|string|max:255',  
-            'overview' => 'nullable|string',  
-            'trailer' => 'nullable|string|max:255',  
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  
+            'overview' => 'required|string',
+            'trailer' => 'required|string|max:255',  
         ]);
-        
+
         $f = Film::find($id);
         $f->name = $r->name;
-        $f->image = $r->image;
         $f->overview = $r->overview;
         $f->trailer = $r->trailer;
+
+        // Si hay archivo, guárdalo con un nombre único y extensión original
+        if ($r->hasFile('image')) {
+            $file = $r->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = uniqid('film_', true) . '.' . $extension;
+            $file->storeAs('public/films', $filename);
+            $f->image = $filename;
+        }
+
         $f->save();
         return redirect()->route('films.index');
     }

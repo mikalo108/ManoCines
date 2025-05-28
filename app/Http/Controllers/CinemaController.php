@@ -47,7 +47,7 @@ class CinemaController extends Controller
         app()->setLocale(session('locale', app()->getLocale()));          
         $cities_lastID = \App\Models\City::orderBy('id', 'desc')->first()?->id;
 
-        return Inertia::render('Cinema/form', [
+        return Inertia::render('Cinema/Form', [
          'dataControl' => [
                 ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'location', 'field' => '', 'type' => 'text', 'posibilities' => ''],
@@ -75,11 +75,19 @@ class CinemaController extends Controller
     }
 
     public function edit($id) { 
-        $c = Cinema::with(['products', 'chairs'])->find($id);
-        $cities = \App\Models\City::all();
-        $products = \App\Models\Product::all();
-        $chairs = \App\Models\Chair::all();
-        return Inertia::render('Cinema/form', ['cinema' => $c, 'cities' => $cities, 'products' => $products, 'chairs' => $chairs]);
+        $c = Cinema::findOrFail($id);
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $cities_lastID = \App\Models\City::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Cinema/Form', [ 
+            'cinema' => $c,
+            'dataControl' => [
+                ['key' => 'name', 'field' => $c->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'location', 'field' => $c->location, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'description', 'field' => $c->description, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'city_id', 'field' => $c->city_id, 'type' => 'hidden', 'posibilities' => $cities_lastID],
+            ],
+        ]);
     }
 
     public function update($id, Request $r) { 

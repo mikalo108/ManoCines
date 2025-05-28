@@ -55,9 +55,17 @@ class TimeController extends Controller
 
     public function create()
     {
-        $rooms = Room::all();
-        $films = Film::all();
-        return Inertia::render('Time/Form', ['rooms' => $rooms, 'films' => $films]);
+        app()->setLocale(session('locale', app()->getLocale()));        
+        $rooms_lastID = Room::orderBy('id', 'desc')->first()?->id;
+        $films_lastID = Film::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Time/Form', [
+         'dataControl' => [
+                ['key' => 'room_id', 'field' => '', 'type' => 'number', 'posibilities' => $rooms_lastID],
+                ['key' => 'film_id', 'field' => '', 'type' => 'number', 'posibilities' => $films_lastID],
+                ['key' => 'time', 'field' => '', 'type' => 'date', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -79,10 +87,19 @@ class TimeController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));        
         $time = Time::findOrFail($id);
-        $rooms = Room::all();
-        $films = Film::all();
-        return Inertia::render('Time/Form', ['time' => $time, 'rooms' => $rooms, 'films' => $films]);
+        $rooms_lastID = Room::orderBy('id', 'desc')->first()?->id;
+        $films_lastID = Film::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Time/Form', [
+         'time' => $time,
+         'dataControl' => [
+                ['key' => 'room_id', 'field' => $time->room_id, 'type' => 'number', 'posibilities' => $rooms_lastID],
+                ['key' => 'film_id', 'field' => $time->film_id, 'type' => 'number', 'posibilities' => $films_lastID],
+                ['key' => 'time', 'field' => $time->time, 'type' => 'date', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)

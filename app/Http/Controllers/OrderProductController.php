@@ -42,7 +42,18 @@ class OrderProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('OrderProduct/Form');
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $orders_lastID = \App\Models\Order::orderBy('id', 'desc')->first()?->id;
+        $products_lastID = \App\Models\Product::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('OrderProduct/Form', [
+         'dataControl' => [
+                ['key' => 'order_id', 'field' => '', 'type' => 'number', 'posibilities' => $orders_lastID],
+                ['key' => 'product_id', 'field' => '', 'type' => 'number', 'posibilities' => $products_lastID],
+                ['key' => 'quantity', 'field' => '', 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'note', 'field' => '', 'type' => 'number', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -53,6 +64,14 @@ class OrderProductController extends Controller
             'quantity' => 'required|integer|min:1',
             'note' => 'nullable|string',
         ]);
+
+        if (OrderProduct::where('order_id', $request->order_id)
+            ->where('product_id', $request->product_id)
+            ->exists()) {
+            return redirect()->back()
+                ->withErrors(['order_product' => 'Ya existe una relación con este Order ID y Product ID.'])
+                ->withInput();
+        }
 
         $orderProduct = new OrderProduct();
         $orderProduct->order_id = $request->order_id;
@@ -72,8 +91,20 @@ class OrderProductController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));          
         $orderProduct = OrderProduct::findOrFail($id);
-        return Inertia::render('OrderProduct/Form', ['orderProduct' => $orderProduct]);
+        $orders_lastID = \App\Models\Order::orderBy('id', 'desc')->first()?->id;
+        $products_lastID = \App\Models\Product::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('OrderProduct/Form', [
+            'orderProduct' => $orderProduct,
+            'dataControl' => [
+                ['key' => 'order_id', 'field' => $orderProduct->order_id, 'type' => 'number', 'posibilities' => $orders_lastID],
+                ['key' => 'product_id', 'field' => $orderProduct->product_id, 'type' => 'number', 'posibilities' => $products_lastID],
+                ['key' => 'quantity', 'field' => $orderProduct->quantity, 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'note', 'field' => $orderProduct->note, 'type' => 'number', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)

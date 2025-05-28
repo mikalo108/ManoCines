@@ -42,12 +42,23 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('Product/Form');
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Product/Form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'description', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'image', 'field' => '', 'type' => 'image', 'posibilities' => ''],
+                ['key' => 'price', 'field' => '', 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
+            ],
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $r)
     {
-        $request->validate([
+        $r->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
@@ -56,11 +67,20 @@ class ProductController extends Controller
         ]);
 
         $product = new Product();
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->image = $request->image;
-        $product->price = $request->price;
-        $product->category = $request->category;
+        $product->name = $r->name;
+        $product->description = $r->description;
+        
+        // Si hay archivo, guárdalo con un nombre único y extensión original
+        if ($r->hasFile('image')) {
+            $file = $r->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = uniqid('film_', true) . '.' . $extension;
+            $file->storeAs('/storage/films', $filename);
+            $product->image = $filename;
+        }
+
+        $product->price = $r->price;
+        $product->category = $r->category;
         $product->save();
 
         return redirect()->route('products.index');
@@ -74,15 +94,27 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $product = Product::findOrFail($id);
-        return Inertia::render('Product/Form', ['product' => $product]);
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Product/Form', [
+         'product' => $product,
+         'dataControl' => [
+                ['key' => 'name', 'field' => $product->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'description', 'field' => $product->description, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'image', 'field' => $product->image, 'type' => 'image', 'posibilities' => ''],
+                ['key' => 'price', 'field' => $product->price, 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'cinema_id', 'field' => $product->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
+            ],
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $r, $id)
     {
         $product = Product::findOrFail($id);
 
-        $request->validate([
+        $r->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|string|max:255',
@@ -90,11 +122,20 @@ class ProductController extends Controller
             'category' => 'nullable|string|max:255',
         ]);
 
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->image = $request->image;
-        $product->price = $request->price;
-        $product->category = $request->category;
+        $product->name = $r->name;
+        $product->description = $r->description;
+        
+        // Si hay archivo, guárdalo con un nombre único y extensión original
+        if ($r->hasFile('image')) {
+            $file = $r->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = uniqid('film_', true) . '.' . $extension;
+            $file->storeAs('/storage/films', $filename);
+            $product->image = $filename;
+        }
+
+        $product->price = $r->price;
+        $product->category = $r->category;
         $product->save();
 
         return redirect()->route('products.index');

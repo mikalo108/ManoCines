@@ -40,9 +40,15 @@ class RoomController extends Controller
     }
 
     public function create() {
-        $cinemas = \App\Models\Cinema::all();
-        $chairs = \App\Models\Chair::all();
-        return Inertia::render('Room/Form', ['cinemas' => $cinemas, 'chairs' => $chairs]);  
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Room/Form', [
+         'dataControl' => [
+                ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function store(Request $r) { 
@@ -54,51 +60,56 @@ class RoomController extends Controller
             'chairs.*' => 'integer|exists:chairs,id',
         ]);
 
-        $rModel = new Room();
-        $rModel->cinema_id = $r->cinema_id;
-        $rModel->name = $r->name;
-        $rModel->capacity = $r->capacity;
-        $rModel->save();
+        $room = new Room();
+        $room->cinema_id = $r->cinema_id;
+        $room->name = $r->name;
+        $room->capacity = $r->capacity;
+        $room->save();
 
         if ($r->has('chairs')) {
-            $rModel->chairs()->attach($r->chairs);
+            $room->chairs()->attach($r->chairs);
         }
 
         return redirect()->route('rooms.index');
     }
 
     public function edit($id) { 
-        $rModel = Room::with('chairs')->find($id);
-        $cinemas = \App\Models\Cinema::all();
-        $chairs = \App\Models\Chair::all();
-        return Inertia::render('Room/Form', ['room' => $rModel, 'cinemas' => $cinemas, 'chairs' => $chairs]);
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $room = Room::findOrFail($id);
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Room/Form', [
+            'room' => $room,
+            'dataControl' => [
+                ['key' => 'cinema_id', 'field' => $room->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'name', 'field' => $room->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'quantity', 'field' => $room->quantity, 'type' => 'hidden', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function update($id, Request $r) { 
         $r->validate([
             'cinema_id' => 'required|integer|exists:cinemas,id',
             'name' => 'required|string|max:255',  
-            'capacity' => 'required|integer|min:1',  
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
         ]);
         
-        $rModel = Room::find($id);
-        $rModel->cinema_id = $r->cinema_id;
-        $rModel->name = $r->name;
-        $rModel->capacity = $r->capacity;
-        $rModel->save();
+        $room = Room::find($id);
+        $room->cinema_id = $r->cinema_id;
+        $room->name = $r->name;
+        $room->capacity = $r->capacity;
+        $room->save();
 
         if ($r->has('chairs')) {
-            $rModel->chairs()->sync($r->chairs);
+            $room->chairs()->sync($r->chairs);
         }
 
         return redirect()->route('rooms.index');
     }
 
     public function destroy($id) { 
-        $rModel = Room::find($id);
-        $rModel->delete();
+        $room = Room::find($id);
+        $room->delete();
         return redirect()->route('rooms.index');
     }
 }

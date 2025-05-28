@@ -43,7 +43,14 @@ class TemporalReserveController extends Controller
 
     public function create()
     {
-        return Inertia::render('TemporalReserve/Form');
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('TemporalReserve/Form', [
+         'dataControl' => [
+                ['key' => 'chair_id', 'field' => '', 'type' => 'number', 'posibilities' => $chairs_lastID],
+            ],
+        ]); 
     }
 
     public function store(Request $request)
@@ -63,8 +70,17 @@ class TemporalReserveController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $tr = TemporalReserve::findOrFail($id);
-        return Inertia::render('TemporalReserve/Form', ['temporalReserve' => $tr]);
+        $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('TemporalReserve/Form', [
+         'temporalReserve' => $tr,
+         'dataControl' => [
+                ['key' => 'chair_id', 'field' => $tr->chair_id, 'type' => 'number', 'posibilities' => $chairs_lastID],
+                ['key' => 'reserve_time', 'field' => $tr->reserve_time, 'type' => 'hidden', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function update(Request $request, $id)

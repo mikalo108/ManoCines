@@ -28,6 +28,10 @@ class ProductCinemaController extends Controller
             $query->where('product_id', $request->productId);
         }
 
+        if ($request->filled('quantity')) {
+            $query->where('quantity', $request->quantity);
+        }
+
         $productCinemas = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
         return Inertia::render('ProductCinema/Index', [
             'productCinemas' => $productCinemas,
@@ -36,13 +40,24 @@ class ProductCinemaController extends Controller
                 ['key' => 'productCinemaId', 'field' => $request->productCinemaId],
                 ['key' => 'cinemaId', 'field' => $request->cinemaId],
                 ['key' => 'productId', 'field' => $request->productId],
+                ['key' => 'quantity', 'field' => $request->quantity],
             ],
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('ProductCinema/Form');
+        app()->setLocale(session('locale', app()->getLocale()));        
+        $products_lastID = \App\Models\Product::orderBy('id', 'desc')->first()?->id;
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('ProductCinema/Form', [
+         'dataControl' => [
+                ['key' => 'product_id', 'field' => '', 'type' => 'number', 'posibilities' => $products_lastID],
+                ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'quantity', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -68,8 +83,21 @@ class ProductCinemaController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));        
         $productCinema = ProductCinema::findOrFail($id);
-        return Inertia::render('ProductCinema/Form', ['productCinema' => $productCinema]);
+        $products_lastID = \App\Models\Product::orderBy('id', 'desc')->first()?->id;
+        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+         
+
+        return Inertia::render('ProductCinema/Form', [
+            'productCinema' => $productCinema,
+            'dataControl' => [
+                ['key' => 'product_id', 'field' => $productCinema->product_id, 'type' => 'number', 'posibilities' => $products_lastID],
+                ['key' => 'cinema_id', 'field' => $productCinema->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'quantity', 'field' => $productCinema->quantity, 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
+        
     }
 
     public function update(Request $request, $id)

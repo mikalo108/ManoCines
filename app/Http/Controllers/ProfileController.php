@@ -17,6 +17,8 @@ class ProfileController extends Controller
         app()->setLocale(session('locale', app()->getLocale()));  
         $query = Profile::query();
 
+
+
         if ($request->filled('profileId')) {
             $query->where('id', $request->profileId);
         }
@@ -33,6 +35,14 @@ class ProfileController extends Controller
             $query->where('surname', 'like', '%' . $request->surname . '%');
         }
 
+        if ($request->filled('country')) {
+            $query->where('country', 'like', '%' . $request->country . '%');
+        }
+
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+
         $profiles = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
         return Inertia::render('Profile/Index', [
             'profiles' => $profiles,
@@ -42,13 +52,27 @@ class ProfileController extends Controller
                 ['key' => 'userId', 'field' => $request->userId],
                 ['key' => 'name', 'field' => $request->name],
                 ['key' => 'surname', 'field' => $request->surname],
+                ['key' => 'country', 'field' => $request->country],
+                ['key' => 'phone', 'field' => $request->phone],
             ],
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Profile/Form');
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $users_lastID = \App\Models\User::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Profile/Form', [
+         'dataControl' => [
+                ['key' => 'user_id', 'field' => '', 'type' => 'number', 'posibilities' => $users_lastID],
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'surname', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'country', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'city', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'phone', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -82,8 +106,21 @@ class ProfileController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $profile = Profile::findOrFail($id);
-        return Inertia::render('Profile/Form', ['profile' => $profile]);
+        $users_lastID = \App\Models\User::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Profile/Form', [
+         'profile' => $profile,
+         'dataControl' => [
+                ['key' => 'user_id', 'field' => $profile->user_id, 'type' => 'number', 'posibilities' => $users_lastID],
+                ['key' => 'name', 'field' => $profile->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'surname', 'field' => $profile->surname, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'country', 'field' => $profile->country, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'city', 'field' => $profile->city, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'phone', 'field' => $profile->phone, 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)

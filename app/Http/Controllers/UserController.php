@@ -47,7 +47,19 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('User/Form');
+        app()->setLocale(session('locale', app()->getLocale()));    
+
+        return Inertia::render('User/Form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'surname', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'email', 'field' => '', 'type' => 'email', 'posibilities' => ''],
+                ['key' => 'password', 'field' => '', 'type' => 'password', 'posibilities' => ''],
+                ['key' => 'role', 'field' => '', 'type' => 'text', 'posibilities' => ['Admin', 'Client']],
+                ['key' => 'country', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'phone', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -89,8 +101,21 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));    
         $user = User::findOrFail($id);
-        return Inertia::render('User/Form', ['user' => $user]);
+
+        return Inertia::render('User/Form', [
+         'user' => $user,
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'surname', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'email', 'field' => '', 'type' => 'email', 'posibilities' => ''],
+                ['key' => 'password', 'field' => '', 'type' => 'password', 'posibilities' => ''],
+                ['key' => 'role', 'field' => '', 'type' => 'text', 'posibilities' => ['Admin', 'Client']],
+                ['key' => 'country', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'phone', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)

@@ -37,7 +37,13 @@ class ProductCategoryController extends Controller
 
     public function create()
     {
-        return Inertia::render('ProductCategory/Form');
+        app()->setLocale(session('locale', app()->getLocale()));          
+
+        return Inertia::render('ProductCategory/Form', [
+         'dataControl' => [
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function store(Request $request)
@@ -61,8 +67,15 @@ class ProductCategoryController extends Controller
 
     public function edit($id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));          
         $category = ProductCategory::findOrFail($id);
-        return Inertia::render('ProductCategory/Form', ['category' => $category]);
+
+        return Inertia::render('ProductCategory/Form', [
+         'dataControl' => [
+                'category' => $category,
+                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)

@@ -70,7 +70,7 @@ class FilmController extends Controller
             $file = $r->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid('film_', true) . '.' . $extension;
-            $file->storeAs('public/films', $filename);
+            $file->storeAs('/storage/films', $filename);
             $f->image = $filename;
         }
 

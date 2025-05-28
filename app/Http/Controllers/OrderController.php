@@ -37,28 +37,25 @@ class OrderController extends Controller
 
     public function create()
     {
-        return Inertia::render('Order/Form');
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $users_lastID = \App\Models\User::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Order/Form', [
+         'dataControl' => [
+                ['key' => 'user_id', 'field' => '', 'type' => 'number', 'posibilities' => $users_lastID],
+            ],
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
-            'subtotal' => 'required|numeric',
-            'total' => 'required|numeric',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
         ]);
 
         $order = new Order();
         $order->user_id = $request->user_id;
-        $order->subtotal = $request->subtotal;
-        $order->total = $request->total;
         $order->save();
-
-        if ($request->has('products')) {
-            $order->products()->attach($request->products);
-        }
 
         return redirect()->route('orders.index');
     }
@@ -72,7 +69,17 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::findOrFail($id);
-        return Inertia::render('Order/Form', ['order' => $order]);
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $users_lastID = \App\Models\User::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('Order/Form', [
+         'order' => $order,
+         'dataControl' => [
+                ['key' => 'user_id', 'field' => '', 'type' => 'number', 'posibilities' => $users_lastID],
+                ['key' => 'total', 'field' => isset($order->total) && $order->total >= 1 ? $order->total : 0, 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'subtotal', 'field' => isset($order->subtotal) && $order->subtotal >= 1 ? $order->subtotal : 0, 'type' => 'hidden', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -81,15 +88,9 @@ class OrderController extends Controller
 
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
-            'subtotal' => 'required|numeric',
-            'total' => 'required|numeric',
-            'products' => 'array',
-            'products.*' => 'integer|exists:products,id',
         ]);
 
         $order->user_id = $request->user_id;
-        $order->subtotal = $request->subtotal;
-        $order->total = $request->total;
         $order->save();
 
         $order->products()->sync($request->products ?? []);

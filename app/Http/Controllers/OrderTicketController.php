@@ -51,7 +51,19 @@ class OrderTicketController extends Controller
     }
 
     public function create() {
-        return Inertia::render('OrderTicket/Form');  
+        app()->setLocale(session('locale', app()->getLocale()));          
+        $orders_lastID = \App\Models\Order::orderBy('id', 'desc')->first()?->id;
+        $times_lastID = \App\Models\Time::orderBy('id', 'desc')->first()?->id;
+        $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('OrderTicket/Form', [
+         'dataControl' => [
+                ['key' => 'order_id', 'field' => '', 'type' => 'number', 'posibilities' => $orders_lastID],
+                ['key' => 'time_id', 'field' => '', 'type' => 'number', 'posibilities' => $times_lastID],
+                ['key' => 'chair_id', 'field' => '', 'type' => 'number', 'posibilities' => $chairs_lastID],
+                ['key' => 'note', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]); 
     }
 
     public function store(Request $r) { 
@@ -70,8 +82,21 @@ class OrderTicketController extends Controller
     }
 
     public function edit($id) { 
+        app()->setLocale(session('locale', app()->getLocale()));          
         $ot = OrderTicket::find($id);
-        return Inertia::render('OrderTicket/Form', ['orderTicket' => $ot]);
+        $orders_lastID = \App\Models\Order::orderBy('id', 'desc')->first()?->id;
+        $times_lastID = \App\Models\Time::orderBy('id', 'desc')->first()?->id;
+        $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
+
+        return Inertia::render('OrderTicket/Form', [
+         'orderTicket' => $ot,
+         'dataControl' => [
+                ['key' => 'order_id', 'field' => $ot->order_id, 'type' => 'number', 'posibilities' => $orders_lastID],
+                ['key' => 'time_id', 'field' => $ot->time_id, 'type' => 'number', 'posibilities' => $times_lastID],
+                ['key' => 'chair_id', 'field' => $ot->chair_id, 'type' => 'number', 'posibilities' => $chairs_lastID],
+                ['key' => 'note', 'field' => $ot->note, 'type' => 'text', 'posibilities' => ''],
+            ],
+        ]);
     }
 
     public function update($id, Request $r) { 

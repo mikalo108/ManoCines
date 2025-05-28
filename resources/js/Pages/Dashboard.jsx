@@ -7,7 +7,7 @@ export default function Dashboard(props) {
     const user = usePage().props.auth.user;
 
     // Comprobar si el usuario es admin para devolver el layout correspondiente
-    const Layout = user.role === 'admin' ? AdminLayout : AuthenticatedLayout;
+    const Layout = user.role === 'Admin' ? AdminLayout : AuthenticatedLayout;
 
     return (
         <Layout
@@ -26,7 +26,7 @@ export default function Dashboard(props) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            {props.auth.user.role === 'admin' ? (
+                            {props.auth.user.role === 'Admin' ? (
                                 <p className="text-lg font-semibold">
                                     {props.lang.welcome}, Admin! {props.lang.dashboard_description}
                                 </p>

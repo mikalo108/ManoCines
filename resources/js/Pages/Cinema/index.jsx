@@ -23,7 +23,7 @@ export default function Index(props) {
             router.get(route('cinemas.index'), { page: 1, ...newFilters }, { preserveState: true, replace: true });
         };
 
-    if (props.auth.user.role !== 'admin') {
+    if (props.auth.user.role !== 'Admin') {
         return (
             <AdminLayout
                 locale={props.locale} 
@@ -36,7 +36,7 @@ export default function Index(props) {
                 </div>
             </AdminLayout>
         );
-    } else if (props.auth.user.role === 'admin') {
+    } else if (props.auth.user.role === 'Admin') {
         return (
             <AdminLayout
                 locale={props.locale} 

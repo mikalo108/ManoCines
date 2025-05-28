@@ -65,7 +65,7 @@ export default function Welcome(props) {
 
     const Layout = (() => {
         // Determine which layout to use based on user role
-        if (user && user.role === 'admin') {
+        if (user && user.role === 'Admin') {
             return AdminLayout;
         } else if (user) {
             return AuthenticatedLayout;

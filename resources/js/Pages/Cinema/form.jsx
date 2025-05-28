@@ -16,7 +16,7 @@ export default function Form(props) {
     const nameTable = props.locale==='en' ? `${keyElements}`.charAt(0).toUpperCase() + `${keyElements}`.slice(1) : nameTableES;
     const newElementLang = props.locale==='en' ? props.lang.newElem : generoES==='femenino' ? props.lang.newElem.slice(0,-1)+"a" : props.lang.newElem;
 
-    if (props.auth.user.role !== 'admin') {
+    if (props.auth.user.role !== 'Admin') {
             return (
                 <AdminLayout
                     locale={props.locale} 
@@ -29,7 +29,7 @@ export default function Form(props) {
                     </div>
                 </AdminLayout>
             );
-        } else if (props.auth.user.role === 'admin') {
+        } else if (props.auth.user.role === 'Admin') {
             return (
                 <AdminLayout
                     locale={props.locale} 

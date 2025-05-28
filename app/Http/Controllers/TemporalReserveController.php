@@ -47,8 +47,9 @@ class TemporalReserveController extends Controller
         $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('TemporalReserve/Form', [
-         'dataControl' => [
+            'dataControl' => [
                 ['key' => 'chair_id', 'field' => '', 'type' => 'number', 'posibilities' => $chairs_lastID],
+                ['key' => 'reserve_time', 'field' => ['fecha' => '', 'hora' => '', 'minuto' => ''], 'type' => 'date', 'posibilities' => ''],
             ],
         ]); 
     }
@@ -74,11 +75,15 @@ class TemporalReserveController extends Controller
         $tr = TemporalReserve::findOrFail($id);
         $chairs_lastID = \App\Models\Chair::orderBy('id', 'desc')->first()?->id;
 
+        $fecha = date('Y-m-d', strtotime($tr->reserve_time));
+        $hora = date('H', strtotime($tr->reserve_time));
+        $minuto = date('i', strtotime($tr->reserve_time));
+
         return Inertia::render('TemporalReserve/Form', [
-         'temporalReserve' => $tr,
-         'dataControl' => [
+            'temporalReserve' => $tr,
+            'dataControl' => [
                 ['key' => 'chair_id', 'field' => $tr->chair_id, 'type' => 'number', 'posibilities' => $chairs_lastID],
-                ['key' => 'reserve_time', 'field' => $tr->reserve_time, 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'reserve_time', 'field' => ['fecha' => $fecha, 'hora' => $hora, 'minuto' => $minuto], 'type' => 'date', 'posibilities' => ''],
             ],
         ]); 
     }
@@ -87,12 +92,19 @@ class TemporalReserveController extends Controller
     {
         $request->validate([
             'chair_id' => 'required|integer|exists:chairs,id',
-            'reserve_time' => 'required|date',
+            'reserve_time_fecha' => 'required|date',
+            'reserve_time_hora' => 'required|integer|min:0|max:23',
+            'reserve_time_minuto' => 'required|integer|min:0|max:59',
         ]);
+
+        $fecha = $request->input('reserve_time_fecha');
+        $hora = str_pad($request->input('reserve_time_hora'), 2, '0', STR_PAD_LEFT);
+        $minuto = str_pad($request->input('reserve_time_minuto'), 2, '0', STR_PAD_LEFT);
+        $fechaCompleta = "{$fecha} {$hora}:{$minuto}:00";
 
         $tr = TemporalReserve::findOrFail($id);
         $tr->chair_id = $request->chair_id;
-        $tr->reserve_time = $request->reserve_time;
+        $tr->reserve_time = $fechaCompleta;
         $tr->save();
 
         return redirect()->route('temporal-reserves.index');

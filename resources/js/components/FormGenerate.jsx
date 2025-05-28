@@ -61,7 +61,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key} <span className='text-red-500' style={{float:'right'}}>{lang.noChange}</span>
+              {key.charAt(0).toUpperCase() + key.slice(1)} <span className='text-red-500' style={{float:'right'}}>{lang.noChange}</span>
             </label>
             <input
               type="text"
@@ -78,7 +78,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
             <input
               type="file"
@@ -121,7 +121,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
             <input
               type="number"
@@ -141,7 +141,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
             <select
               id={key}
@@ -165,14 +165,75 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
+            </label>
+            <div className="flex flex-row gap-2 items-center">
+              <input
+          type="date"
+          id={key}
+          name={key}
+          value={formData[key] || ''}
+          min={todayDate}
+          required
+          style={{ borderRadius: '10px' }}
+          onChange={e => handleChange(e, key, type)}
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <input
+          type="number"
+          min={0}
+          max={23}
+          name={`${key}_hour`}
+          value={formData[`${key}_hour`] || ''}
+          onChange={e => {
+            let val = e.target.value;
+            if (val === '') val = '';
+            else val = Math.max(0, Math.min(23, Number(val)));
+            setFormData(prev => ({
+              ...prev,
+              [`${key}_hour`]: val
+            }));
+          }}
+          placeholder="HH"
+          className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
+          style={{ borderRadius: '10px' }}
+          required
+              />
+              <span>:</span>
+              <input
+          type="number"
+          min={0}
+          max={59}
+          name={`${key}_minute`}
+          value={formData[`${key}_minute`] || ''}
+          onChange={e => {
+            let val = e.target.value;
+            if (val === '') val = '';
+            else val = Math.max(0, Math.min(59, Number(val)));
+            setFormData(prev => ({
+              ...prev,
+              [`${key}_minute`]: val
+            }));
+          }}
+          placeholder="MM"
+          className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
+          style={{ borderRadius: '10px' }}
+          required
+              />
+            </div>
+          </div>
+        );
+      case 'email':
+        return (
+          <div key={key} className="mb-4">
+            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
             <input
-              type="date"
+              type="email"
               id={key}
               name={key}
               value={formData[key] || ''}
-              min={todayDate}
               required
               style={{ borderRadius: '10px' }}
               onChange={e => handleChange(e, key, type)}
@@ -180,12 +241,32 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
             />
           </div>
         );
+      case 'password':
+        return (
+          <div key={key} className="mb-4">
+            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+              {key.charAt(0).toUpperCase() + key.slice(1)}
+            </label>
+            <input
+              type="password"
+              id={key}
+              name={key}
+              value={formData[key] || ''}
+              required
+              style={{ borderRadius: '10px' }}
+              onChange={e => handleChange(e, key, type)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              autoComplete="new-password"
+            />
+          </div>
+        );
+      
       case 'text':
       default:
         return (
           <div key={key} className="mb-4">
             <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key}
+              {key.charAt(0).toUpperCase() + key.slice(1)}
             </label>
             <input
               type="text"

@@ -41,34 +41,22 @@ class RoomController extends Controller
 
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Room/Form', [
          'dataControl' => [
-                ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
-                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'number', 'field' => '', 'type' => 'number', 'posibilities' => ''],
             ],
         ]); 
     }
 
     public function store(Request $r) { 
         $r->validate([
-            'cinema_id' => 'required|integer|exists:cinemas,id',
-            'name' => 'required|string|max:255',  
-            'capacity' => 'required|integer|min:1',  
-            'chairs' => 'array',
-            'chairs.*' => 'integer|exists:chairs,id',
+            'number' => 'required|string|max:255',
         ]);
 
         $room = new Room();
-        $room->cinema_id = $r->cinema_id;
         $room->name = $r->name;
-        $room->capacity = $r->capacity;
         $room->save();
-
-        if ($r->has('chairs')) {
-            $room->chairs()->attach($r->chairs);
-        }
 
         return redirect()->route('rooms.index');
     }
@@ -76,14 +64,12 @@ class RoomController extends Controller
     public function edit($id) { 
         app()->setLocale(session('locale', app()->getLocale()));  
         $room = Room::findOrFail($id);
-        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Room/Form', [
             'room' => $room,
             'dataControl' => [
-                ['key' => 'cinema_id', 'field' => $room->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
-                ['key' => 'name', 'field' => $room->name, 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'quantity', 'field' => $room->quantity, 'type' => 'hidden', 'posibilities' => ''],
+                ['key' => 'number', 'field' => $room->number, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'capacity', 'field' => $room->capacity, 'type' => 'hidden', 'posibilities' => ''],
             ],
         ]); 
     }
@@ -95,14 +81,8 @@ class RoomController extends Controller
         ]);
         
         $room = Room::find($id);
-        $room->cinema_id = $r->cinema_id;
         $room->name = $r->name;
-        $room->capacity = $r->capacity;
         $room->save();
-
-        if ($r->has('chairs')) {
-            $room->chairs()->sync($r->chairs);
-        }
 
         return redirect()->route('rooms.index');
     }

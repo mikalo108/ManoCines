@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import TableIndex from '@/components/TableIndex';
 import FilterForm from '@/components/FilterForm';
 import BlueButton from '@/components/BlueButton';
 
 export default function Index(props) {
     const keyOrderProducts = "order-products";
+    const user = usePage().props.auth.user;
 
    // State to hold current filters
        const [filters, setFilters] = useState({});

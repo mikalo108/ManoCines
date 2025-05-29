@@ -1,42 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router, usePage } from '@inertiajs/react';
-import TableIndex from '@/components/TableIndex';
-import FilterForm from '@/components/FilterForm';
 import BlueButton from '@/components/BlueButton';
 
-export default function Index(props) {
-    const keyFilms = "films";
+export default function IndexForACinema(props) {
     const user = usePage().props.auth.user;
-    console.log(props.films);
-
-    // State to hold current filters
-        const [filters, setFilters] = useState({});
-    
-        // Handle page change with current filters
-        const handlePageChange = (page) => {
-            router.get(route('films.index'), { page, ...filters }, { preserveState: true, replace: true });
-        };
-    
-        // Handle filter submission
-        const handleFilter = (newFilters) => {
-            setFilters(newFilters);
-            // Reset to page 1 when filters change
-            router.get(route('films.index'), { page: 1, ...newFilters }, { preserveState: true, replace: true });
-        };
 
         const Layout = (() => {
-                        // Determine which layout to use based on user role
-                        if (user && user.role === 'Admin') {
-                            return AdminLayout;
-                        } else if (user) {
-                            return AuthenticatedLayout;
-                        } else {
-                            return GuestLayout;
-                        }
-                    })();
+            // Determine which layout to use based on user role
+            if (user && user.role === 'Admin') {
+                return AdminLayout;
+            } else if (user) {
+                return AuthenticatedLayout;
+            } else {
+                return GuestLayout;
+            }
+        })();
 
     if (props.auth.user.role !== 'Admin') {
         return (
@@ -55,13 +36,13 @@ export default function Index(props) {
                             <h2 className='flex justify-center mb-8'>{props.langTable.subtitleClient}</h2>
                             <h3 className='flex justify-center mb-12'>{props.langTable.infoYouCanDo}</h3>
                             <div className="flex flex-wrap justify-center gap-8">
-                                {props.films.data ? (
-                                    props.films.data.map((film) => (
-                                    <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80">
+                                {props.films ? (
+                                    props.films.map((film) => (
+                                    <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80 cursor-pointer group" onClick={() => router.visit(route('times.films', { cinema: props.cinema.id, film: film.id }))}>
                                         <img
                                             src={"/storage/films/"+film.image}
                                             alt={film.name}
-                                            className="w-60 h-96 object-cover rounded-xl shadow-md mb-4"
+                                            className="w-60 h-96 object-cover rounded-xl shadow-md mb-4 group-hover:opacity-80 transition-opacity duration-300"
                                         />
                                         <h2 className="text-2xl font-bold text-center mb-2">{film.name}</h2>
                                         {film.overview && (

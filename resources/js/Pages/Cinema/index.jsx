@@ -59,23 +59,23 @@ export default function Index(props) {
                             e.preventDefault();
                             router.get(route('cinemas.index'), {
                             ...filters,
-                            cinemaCityId: e.target.elements.cinemaCityId.value,
+                            cinemaCityName: e.target.elements.cinemaCityName.value,
                             }, { preserveState: true, replace: true });
                         }}
                         className="flex flex-col items-center mb-8"
                     >
-                        <label htmlFor="cinemaCityId" className="mb-2 font-semibold">
+                        <label htmlFor="cinemaCityName" className="mb-2 font-semibold">
                             {props.langTable.selectCity}
                         </label>
                         <select
-                            id="cinemaCityId"
-                            name="cinemaCityId"
+                            id="cinemaCityName"
+                            name="cinemaCityName"
                             defaultValue={props.fieldsCanFilter[2].field || ""}
                             className="border rounded px-3 py-2 mb-4"
                             onChange={e => {
                             router.get(route('cinemas.index'), {
                                 ...filters,
-                                cinemaCityId: e.target.value,
+                                cinemaCityName: e.target.value,
                             }, { preserveState: true, replace: true });
                             }}
                         >
@@ -96,19 +96,19 @@ export default function Index(props) {
                             >
                                 <h2 className="text-4xl font-bold mb-2 text-black">{cinema.name}</h2>
                                 <a
-                                    href={`https://maps.google.com/?q=${encodeURIComponent(cinema.address)}`}
+                                    href={`https://maps.google.com/?q=${encodeURIComponent(cinema.location)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-2xl text-gray-500 underline underline-offset-4 mb-6"
                                     style={{ fontWeight: 400 }}
                                 >
-                                    {cinema.address}
+                                    {cinema.location}
                                 </a>
                                 <button
                                     className="mt-2 px-8 py-4 rounded-2xl border text-2xl bg-gray-200 text-black hover:bg-gray-300 transition"
                                     onClick={() => router.get(route('films.cinema', cinema.id))}
                                 >
-                                    Go
+                                    {props.lang.goto}
                                 </button>
                             </div>
                         ))}

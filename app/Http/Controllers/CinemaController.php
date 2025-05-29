@@ -21,12 +21,12 @@ class CinemaController extends Controller
         }
 
         if ($request->filled('cinemaCityName')) {
-            $query->whereHas('cities', function ($q) use ($request) {
+            $query->whereHas('city', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->cinemaCityName . '%');
             });
         }
 
-        if($request->filled('cinemaCity_id')){
+        if($request->filled('cinemaCityId')){
             $query->where('city_id', $request->cinemaCityId);
         }
 
@@ -48,7 +48,7 @@ class CinemaController extends Controller
 
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));          
-        $cities_lastID = \App\Models\City::orderBy('id', 'desc')->first()?->id;
+        $cities_lastID = City::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Cinema/Form', [
          'dataControl' => [
@@ -81,7 +81,7 @@ class CinemaController extends Controller
     public function edit($id) { 
         $c = Cinema::findOrFail($id);
         app()->setLocale(session('locale', app()->getLocale()));          
-        $cities_lastID = \App\Models\City::orderBy('id', 'desc')->first()?->id;
+        $cities_lastID = City::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Cinema/Form', [ 
             'cinema' => $c,

@@ -1,11 +1,26 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
 
-const BlueButton = ({ link, children }) => {
+const BlueButton = ({ link, params, children }) => {
 
+  let href;
+
+  if (params) {
+    if (Array.isArray(params)) {
+      const paramObj = {};
+      params.forEach(param => {
+        paramObj[param.key] = param.value;
+      });
+      href = route(link, paramObj);
+    } else {
+      href = route(link, params);
+    }
+  } else {
+    href = route(link);
+  }
   return (
     <Link
-      href={route(link)}
+      href={href}
       style={{
         backgroundColor: '#007bff',
         color: 'white',

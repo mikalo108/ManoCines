@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cinema;
 use Illuminate\Http\Request;
 use App\Models\Time;
 use App\Models\Room;
@@ -31,7 +32,7 @@ class TimeController extends Controller
         }
 
         if ($request->filled('time')) {
-            $query->whereDate('time', $request->time);
+            $query->where('time', 'like', '%' . $request->time . '%');
         }
 
         $times = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
@@ -44,6 +45,48 @@ class TimeController extends Controller
                 ['key' => 'filmId', 'field' => $request->filmId],
                 ['key' => 'time', 'field' => $request->time],
             ],
+        ]);
+    }
+
+    public function indexForAFilm($cinemaId, $filmId, Request $request)
+    {
+        app()->setLocale(session('locale', app()->getLocale()));
+
+        $film = Film::findOrFail($filmId);
+        $cinema = Cinema::where('id', $cinemaId)->first();
+
+        $roomIds = Time::where('film_id', $filmId)
+            ->whereIn('room_id', function ($query) use ($cinemaId) {
+                $query->select('room_id')
+                    ->from('cinemas_rooms')
+                    ->where('cinema_id', $cinemaId);
+            })
+            ->pluck('room_id')
+            ->unique()
+            ->toArray();
+
+        $rooms = Room::whereIn('id', $roomIds)->get();
+
+        $times = Time::where('film_id', $filmId)
+            ->whereIn('room_id', function ($query) use ($cinemaId) {
+                $query->select('room_id')
+                    ->from('cinemas_rooms')
+                    ->where('cinema_id', $cinemaId);
+            })
+            ->get();
+
+
+        if ($request->filled('timeDate')) {
+            $times->where('time', 'like',  $request->timeDate . '%');
+        }
+
+        return Inertia::render('Time/IndexForAFilm', [
+            'langTable' => Lang::get('tableTimes'),
+            'timeDate' => $request->timeDate,
+            'film' => $film,
+            'cinema' => $cinema,
+            'rooms' => $rooms,
+            'times' => $times,
         ]);
     }
 
@@ -61,7 +104,7 @@ class TimeController extends Controller
             ],
         ]);
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([

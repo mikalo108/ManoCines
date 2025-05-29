@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
 
     // Chairs
     Route::get('chairs', [ChairController::class, 'index'])->name('chairs.index');
+    Route::get('/{cinema}/{film}/{time}/{room}/chairs', [ChairController::class, 'indexForATime'])->name('chairs.time');
     Route::get('chairs/create', [ChairController::class, 'create'])->name('chairs.create');
     Route::post('chairs/store', [ChairController::class, 'store'])->name('chairs.store');
     Route::get('chairs/edit/{chair}', [ChairController::class, 'edit'])->name('chairs.edit');
@@ -210,6 +211,7 @@ Route::middleware('auth')->group(function () {
 
     // Times
     Route::get('times', [TimeController::class, 'index'])->name('times.index');
+    Route::get('/{cinema}/{film}/times', [TimeController::class, 'indexForAFilm'])->name('times.films');
     Route::get('times/create', [TimeController::class, 'create'])->name('times.create');
     Route::post('times/store', [TimeController::class, 'store'])->name('times.store');
     Route::get('times/edit/{time}', [TimeController::class, 'edit'])->name('times.edit');

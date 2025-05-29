@@ -39,11 +39,11 @@ class Cinema extends Model
 
     /**
      * Relación N:1 con el modelo City
-     *  - Un cine puede estar en muchas ciudades.
+     *  - Un cine solo puede estar en una ciudad..
      *  - Una ciudad puede tener muchos cines.
      */
-    public function cities()
+    public function city()
     {
-        return $this->belongsToMany(City::class, 'city_cinema');
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

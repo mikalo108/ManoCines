@@ -37,6 +37,7 @@ class FilmController extends Controller
 
     public function indexForACinema($cinema_id)
     {
+        app()->setLocale(session('locale', app()->getLocale()));  
         $cinema = \App\Models\Cinema::findOrFail($cinema_id);
         $films = Film::whereHas('times.room.cinemas', function ($query) use ($cinema_id) {
             $query->where('cinemas.id', $cinema_id);

@@ -39,6 +39,21 @@ class ChairController extends Controller
         ]);
     }
 
+    public function indexForATime($cinema_id, $film_id, $room_id, $time_id){
+        app()->setLocale(session('locale', app()->getLocale()));
+
+        $chairs = Chair::where('room_id', $room_id)->orderBy('id', 'desc')->get();
+
+        return Inertia::render('Chair/IndexForATime', [
+            'chairs' => $chairs,
+            'cinema_id' => $cinema_id,
+            'film_id' => $film_id,
+            'room_id' => $room_id,
+            'time_id' => $time_id,
+            'langTable' => fn () => Lang::get('tableChairs'),
+        ]);
+    }
+
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));
         $rooms_lastID = Room::orderBy('id', 'desc')->first()?->id;

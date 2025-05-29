@@ -40,14 +40,82 @@ export default function Index(props) {
     if (props.auth.user.role !== 'Admin') {
         return (
             <Layout
-                locale={props.locale} 
-                auth={props.auth} 
-                lang={props.lang}
+            currentPage={"cinemas"}
+            locale={props.locale} 
+            auth={props.auth} 
+            lang={props.lang}
             >
-                <div>
-                    <h1>Access Denied</h1>
-                    <p>You do not have permission to view this page.</p>
+            <Head title="Cinemas" />
+            <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
+                <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+                <main className="mt-6">
+                    <BlueButton link={"home"}>{props.lang.back}</BlueButton>
+                    <h1 className='flex justify-center text-black dark:text-white mt-8' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.titleClient}</h1>
+                    <h2 className='flex justify-center mb-8'>{props.langTable.subtitleClient}</h2>
+                    <h3 className='flex justify-center mb-12'>{props.langTable.infoYouCanDo}</h3>
+                    <form
+                        method="GET"
+                        onSubmit={e => {
+                            e.preventDefault();
+                            router.get(route('cinemas.index'), {
+                            ...filters,
+                            cinemaCityId: e.target.elements.cinemaCityId.value,
+                            }, { preserveState: true, replace: true });
+                        }}
+                        className="flex flex-col items-center mb-8"
+                    >
+                        <label htmlFor="cinemaCityId" className="mb-2 font-semibold">
+                            {props.langTable.selectCity}
+                        </label>
+                        <select
+                            id="cinemaCityId"
+                            name="cinemaCityId"
+                            defaultValue={props.fieldsCanFilter[2].field || ""}
+                            className="border rounded px-3 py-2 mb-4"
+                            onChange={e => {
+                            router.get(route('cinemas.index'), {
+                                ...filters,
+                                cinemaCityId: e.target.value,
+                            }, { preserveState: true, replace: true });
+                            }}
+                        >
+                            <option value="">{props.langTable.chooseCity}</option>
+                            {props.citiesAvailable.map(city => (
+                            <option key={city} value={city}>
+                                {city}
+                            </option>
+                            ))}
+                        </select>
+                    </form>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {props.cinemas.data.map((cinema) => (
+                            <div
+                                key={cinema.id}
+                                className="border rounded-2xl p-8 flex flex-col items-start shadow-sm bg-white"
+                                style={{ minWidth: 280, maxWidth: 350 }}
+                            >
+                                <h2 className="text-4xl font-bold mb-2 text-black">{cinema.name}</h2>
+                                <a
+                                    href={`https://maps.google.com/?q=${encodeURIComponent(cinema.address)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-2xl text-gray-500 underline underline-offset-4 mb-6"
+                                    style={{ fontWeight: 400 }}
+                                >
+                                    {cinema.address}
+                                </a>
+                                <button
+                                    className="mt-2 px-8 py-4 rounded-2xl border text-2xl bg-gray-200 text-black hover:bg-gray-300 transition"
+                                    onClick={() => router.get(route('films.cinema', cinema.id))}
+                                >
+                                    Go
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </main>
                 </div>
+            </div>
             </Layout>
         );
     } else if (props.auth.user.role === 'Admin') {

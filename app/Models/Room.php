@@ -23,7 +23,7 @@ class Room extends Model
      */
     public function cinemas()
     {
-        return $this->hasMany(Cinema::class, 'cinemas_rooms');
+        return $this->belongsToMany(Cinema::class, 'cinemas_rooms');
     }
 
     /**

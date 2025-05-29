@@ -10,6 +10,7 @@ import BlueButton from '@/components/BlueButton';
 export default function Index(props) {
     const keyFilms = "films";
     const user = usePage().props.auth.user;
+    console.log(props.films);
 
     // State to hold current filters
         const [filters, setFilters] = useState({});
@@ -45,15 +46,17 @@ export default function Index(props) {
                 auth={props.auth}
                 lang={props.lang}
             >
-                <Head title={"Films"} />
+                <Head title={"Films "+props.cinema.name} />
                 <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                         <main className="mt-6">
-                            <BlueButton link={"home"}>{props.lang.back}</BlueButton>
+                            <BlueButton link={"cinemas.index"}>{props.lang.back}</BlueButton>
                             <h1 className='flex justify-center text-black dark:text-white mt-8' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.titleClient}</h1>
-                            <h3 className='flex justify-center mb-12'>{props.langTable.onlyReadFilms}</h3>
+                            <h2 className='flex justify-center mb-8'>{props.langTable.subtitleClient}</h2>
+                            <h3 className='flex justify-center mb-12'>{props.langTable.infoYouCanDo}</h3>
                             <div className="flex flex-wrap justify-center gap-8">
-                                {props.films.data.map((film) => (
+                                {props.films.data ? (
+                                    props.films.data.map((film) => (
                                     <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80">
                                         <img
                                             src={"/storage/films/"+film.image}
@@ -65,7 +68,11 @@ export default function Index(props) {
                                             <h3 className="text-lg text-gray-600 text-center mb-2">{film.overview}</h3>
                                         )}
                                     </div>
-                                ))}
+                                    ))
+                                ) : (
+                                        <h2 className="text-2xl font-bold text-center mb-2">{props.langTable.noData}</h2>
+                                )}
+                                
                             </div>
                         </main>
                     </div>
@@ -73,31 +80,7 @@ export default function Index(props) {
             </Layout>
         );
     } else if (props.auth.user.role === 'Admin') {
-        return (
-            <AdminLayout
-                locale={props.locale}
-                auth={props.auth}
-                lang={props.lang}
-            >
-                <Head title="Index - Films" />
-                <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
-                    <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                        <main className="mt-6">
-                            <BlueButton link={"home"}>{props.lang.back}</BlueButton>
-                            <h1 className='flex justify-center text-black dark:text-white mt-8' style={{ fontWeight: 'bolder', width: '100%' }}>{props.langTable.title}</h1>
-                            <h2 className='flex justify-center mb-12'>{props.langTable.subtitle}</h2>
-                            <FilterForm fieldsCanFilter={props.fieldsCanFilter} onFilter={handleFilter} lang={props.lang} />
-                            <TableIndex
-                                columnsTable={props.langTable.columns}
-                                items={props.films.data}
-                                keyTable={keyFilms}
-                                pagination={props.films}
-                                onPageChange={handlePageChange}
-                            />
-                        </main>
-                    </div>
-                </div>
-            </AdminLayout>
-        );
+        router.get(route('films.index'));
+        return null;
     }
 }

@@ -59,12 +59,6 @@ class ProductCategoryController extends Controller
         return redirect()->route('product-categories.index');
     }
 
-    public function show($id)
-    {
-        $category = ProductCategory::findOrFail($id);
-        return Inertia::render('ProductCategory/Show', ['category' => $category]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));          

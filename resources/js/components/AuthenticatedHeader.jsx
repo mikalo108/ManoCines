@@ -1,10 +1,17 @@
 import { Link } from '@inertiajs/react';
-import LanguageSwitcher from './LanguageSwitcher';
 import { useState } from 'react';
 import UserDropdown from '@/components/UserDropdown';
+import CartDropdown from '@/components/CartDropdown';
 
-export default function AuthenticatedHeader({ auth, locale, lang }) {
+export default function AuthenticatedHeader({ currentPage, auth, locale, lang }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const activeLinkStyle = {
+        backgroundColor: 'rgba(107, 114, 128, 0.2)',
+        color: '#000', 
+        borderRadius: '9999px',
+        transition: 'all 0.2s',
+    };
 
     return (
         <header 
@@ -27,18 +34,21 @@ export default function AuthenticatedHeader({ auth, locale, lang }) {
             <nav className="lg:grid lg:gap-2 lg:justify-items-center lg:grid-cols-3 lg:grid-rows-1">
                     <Link
                         href={route('films.index')}
+                        style={currentPage === 'films' ? activeLinkStyle : null}
                         className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
                         {lang.films}
                     </Link>
                     <Link
                         href={route('cinemas.index')}
+                        style={currentPage === 'cinemas' ? activeLinkStyle : null}
                         className="rounded-full px-3 py-2 text-black ring-1 ring-transparent transition hover:bg-gray-500 hover:bg-opacity-20 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                     >
                         {lang.cinemas}
                     </Link>
             </nav>
             <nav className="-mx-3 flex flex-1 justify-end md:justify-items-end align-items-center gap-3 max-md:justify-center max-md:gap-2 md:col-start-4 md:col-end-5" style={{ alignItems: 'center', textAlign: 'center'}}>
+                <CartDropdown auth={auth} />
                 <UserDropdown lang={lang} auth={auth} />
             </nav>
         </header>

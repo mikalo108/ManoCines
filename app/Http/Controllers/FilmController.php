@@ -35,9 +35,18 @@ class FilmController extends Controller
         ]);
     }
 
-    public function show($id){
-        $film = Film::findOrFail($id);
-        return Inertia::render('Film/Show', ['film' => $film]);
+    public function indexForACinema($cinema_id)
+    {
+        $cinema = \App\Models\Cinema::findOrFail($cinema_id);
+        $films = Film::whereHas('times.room.cinemas', function ($query) use ($cinema_id) {
+            $query->where('cinemas.id', $cinema_id);
+        })->orderBy('id', 'desc')->get();
+
+        return Inertia::render('Film/IndexForACinema', [
+            'films' => $films,
+            'cinema' => $cinema,
+            'langTable' => fn () => Lang::get('tableFilms'),
+        ]);
     }
 
     public function create() {

@@ -87,12 +87,6 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        return Inertia::render('Product/Show', ['product' => $product]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));  

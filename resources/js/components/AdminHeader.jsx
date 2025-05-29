@@ -6,6 +6,8 @@ import UserDropdown from '@/components/UserDropdown';
 export default function AdminHeader({ auth, locale, lang }) {
     const [isOpen, setIsOpen] = useState(false);
 
+
+
     return (
         <header 
             style={{ zIndex: 100, marginInline:'50px', borderBottom:'1px solid #ccc', marginBottom:'40px'}} 

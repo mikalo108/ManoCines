@@ -62,12 +62,6 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
-    public function show($id)
-    {
-        $order = Order::findOrFail($id);
-        return Inertia::render('Order/Show', ['order' => $order]);
-    }
-
     public function edit($id)
     {
         $order = Order::findOrFail($id);

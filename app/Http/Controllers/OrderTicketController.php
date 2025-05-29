@@ -45,11 +45,6 @@ class OrderTicketController extends Controller
         ]);
     }
 
-    public function show($id){
-        $orderTicket = OrderTicket::findOrFail($id);
-        return Inertia::render('OrderTicket/Show', ['orderTicket' => $orderTicket]);
-    }
-
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));          
         $orders_lastID = \App\Models\Order::orderBy('id', 'desc')->first()?->id;

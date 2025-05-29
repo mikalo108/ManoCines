@@ -82,12 +82,6 @@ class OrderProductController extends Controller
         return redirect()->route('order-products.index');
     }
 
-    public function show($id)
-    {
-        $orderProduct = OrderProduct::findOrFail($id);
-        return Inertia::render('OrderProduct/Show', ['orderProduct' => $orderProduct]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));          

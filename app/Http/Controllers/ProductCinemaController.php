@@ -83,12 +83,6 @@ class ProductCinemaController extends Controller
         return redirect()->route('product-cinemas.index');
     }
 
-    public function show($id)
-    {
-        $productCinema = ProductCinema::findOrFail($id);
-        return Inertia::render('ProductCinema/Show', ['productCinema' => $productCinema]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));        

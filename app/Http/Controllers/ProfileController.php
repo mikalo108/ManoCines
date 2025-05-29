@@ -105,12 +105,6 @@ class ProfileController extends Controller
         return redirect()->route('profiles.index');
     }
 
-    public function show($id)
-    {
-        $profile = Profile::findOrFail($id);
-        return Inertia::render('Profile/Show', ['profile' => $profile]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));  

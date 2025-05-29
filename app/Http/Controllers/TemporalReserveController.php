@@ -35,12 +35,6 @@ class TemporalReserveController extends Controller
         ]);
     }
 
-    public function show($id)
-    {
-        $temporalReserve = TemporalReserve::findOrFail($id);
-        return Inertia::render('TemporalReserve/Show', ['temporalReserve' => $temporalReserve]);
-    }
-
     public function create()
     {
         app()->setLocale(session('locale', app()->getLocale()));  

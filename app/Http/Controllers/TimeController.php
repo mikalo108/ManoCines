@@ -47,12 +47,6 @@ class TimeController extends Controller
         ]);
     }
 
-    public function show($id)
-    {
-        $time = Time::findOrFail($id);
-        return Inertia::render('Time/Show', ['time' => $time]);
-    }
-
     public function create()
     {
         app()->setLocale(session('locale', app()->getLocale()));        

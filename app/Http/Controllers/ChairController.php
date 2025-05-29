@@ -39,11 +39,6 @@ class ChairController extends Controller
         ]);
     }
 
-    public function show($id){
-        $chair = Chair::findOrFail($id);
-        return Inertia::render('Chair/Show', ['chair' => $chair]);
-    }
-
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));
         $rooms_lastID = Room::orderBy('id', 'desc')->first()?->id;

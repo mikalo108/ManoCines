@@ -25,12 +25,11 @@ return [
     'goto' => 'Go',
     'clearFilterButton' => 'Clear',
     'filterButton' => 'Filter',
-    'back' => 'Go Back',
+    'back' => 'Back',
     'updateButton' => 'Update',
     'createButton' => 'Create',
     'newElem' => 'New',
     'editElem' => 'Edit',
     'noChange' => '(You can\'t change this)',
     'passwordsDoNotMatch' => 'Passwords do not match',
-
 ];

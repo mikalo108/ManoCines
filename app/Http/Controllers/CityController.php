@@ -37,12 +37,7 @@ class CityController extends Controller
             ],
         ]);
     }   
-
-    public function show($id){
-        $city = City::findOrFail($id);
-        return Inertia::render('City/Show', ['city' => $city]);
-    }
-
+    
     public function create() { 
         app()->setLocale(session('locale', app()->getLocale()));          
 

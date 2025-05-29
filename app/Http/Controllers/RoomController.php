@@ -34,11 +34,6 @@ class RoomController extends Controller
         ]);
     }
 
-    public function show($id){
-        $room = Room::findOrFail($id);
-        return Inertia::render('Room/Show', ['room' => $room]);
-    }
-
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));  
 

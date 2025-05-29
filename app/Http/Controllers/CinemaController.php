@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cinema;
+use App\Models\City;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
 
@@ -19,28 +20,30 @@ class CinemaController extends Controller
             $query->where('id', $request->cinemaId);
         }
 
-        if ($request->filled('cinemaCity')) {
+        if ($request->filled('cinemaCityName')) {
             $query->whereHas('cities', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->cinemaCity . '%');
+                $q->where('name', 'like', '%' . $request->cinemaCityName . '%');
             });
         }
 
-        $cinemas = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        if($request->filled('cinemaCity_id')){
+            $query->where('city_id', $request->cinemaCityId);
+        }
 
+        $cinemas = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+        $citiesAvailable = City::orderBy('name')->pluck('name')->toArray();
+        
         return Inertia::render('Cinema/Index', [
+            'citiesAvailable' => $citiesAvailable,
             'cinemas' => $cinemas,
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableCinemas'),
             'fieldsCanFilter' => [
                 ['key' => 'cinemaId', 'field' => $request->cinemaId],
-                ['key' => 'cinemaCity', 'field' => $request->cinemaCity],
+                ['key' => 'cinemaCityId', 'field' => $request->cinemaCityId],
+                ['key' => 'cinemaCityName', 'field' => $request->cinemaCityName],
             ],
         ]);
-    }
-
-    public function show($id){
-        $cinema = Cinema::findOrFail($id);
-        return Inertia::render('Cinema/show', ['cinema' => $cinema]);
     }
 
     public function create() {

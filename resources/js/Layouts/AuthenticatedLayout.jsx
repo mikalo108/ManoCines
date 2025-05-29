@@ -2,7 +2,7 @@ import AuthenticatedHeader from '@/Components/AuthenticatedHeader';
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function AuthenticatedLayout({ children }) {
+export default function AuthenticatedLayout({ currentPage, children }) {
     const { auth, locale, lang } = usePage().props;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -10,7 +10,7 @@ export default function AuthenticatedLayout({ children }) {
 
     return (
         <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
-                <AuthenticatedHeader auth={auth} locale={locale} lang={lang} />
+                <AuthenticatedHeader currentPage={currentPage} auth={auth} locale={locale} lang={lang} />
     
                 <div className="bg-gray-50 text-black/50 dark:bg-zinc-800 dark:text-white/50">
                     {children}

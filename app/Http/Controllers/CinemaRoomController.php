@@ -42,11 +42,6 @@ class CinemaRoomController extends Controller
         ]);
     }
 
-    public function show($id){
-        $cinemaRoom = CinemaRoom::findOrFail($id);
-        return Inertia::render('CinemaRoom/show', ['cinemaRoom' => $cinemaRoom]);
-    }
-
     public function create() {
         app()->setLocale(session('locale', app()->getLocale()));          
         $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;

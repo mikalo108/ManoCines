@@ -78,12 +78,6 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        return Inertia::render('User/Show', ['user' => $user]);
-    }
-
     public function edit($id)
     {
         app()->setLocale(session('locale', app()->getLocale()));    

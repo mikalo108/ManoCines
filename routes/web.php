@@ -100,7 +100,6 @@ Route::middleware('auth')->group(function () {
     Route::post('chairs/store', [ChairController::class, 'store'])->name('chairs.store');
     Route::get('chairs/edit/{chair}', [ChairController::class, 'edit'])->name('chairs.edit');
     Route::put('chairs/update/{chair}', [ChairController::class, 'update'])->name('chairs.update');
-    Route::get('chairs/{chair}', [ChairController::class, 'show'])->name('chairs.show');
     Route::get('chairs/delete/{chair}', [ChairController::class, 'destroy'])->name('chairs.destroy');
 
     // Cinemas
@@ -109,7 +108,6 @@ Route::middleware('auth')->group(function () {
     Route::post('cinemas/store', [CinemaController::class, 'store'])->name('cinemas.store');
     Route::get('cinemas/edit/{cinema}', [CinemaController::class, 'edit'])->name('cinemas.edit');
     Route::put('cinemas/update/{cinema}', [CinemaController::class, 'update'])->name('cinemas.update');
-    Route::get('cinemas/{cinema}', [CinemaController::class, 'show'])->name('cinemas.show');
     Route::get('cinemas/delete/{cinema}', [CinemaController::class, 'destroy'])->name('cinemas.destroy');
     
     // Cinema Rooms
@@ -118,7 +116,6 @@ Route::middleware('auth')->group(function () {
     Route::post('cinema-rooms/store', [CinemaRoomController::class, 'store'])->name('cinema-rooms.store');
     Route::get('cinema-rooms/edit/{cinema_room}', [CinemaRoomController::class, 'edit'])->name('cinema-rooms.edit');
     Route::put('cinema-rooms/update/{cinema_room}', [CinemaRoomController::class, 'update'])->name('cinema-rooms.update');
-    Route::get('cinema-rooms/{cinema_room}', [CinemaRoomController::class, 'show'])->name('cinema-rooms.show');
     Route::get('cinema-rooms/delete/{cinema_room}', [CinemaRoomController::class, 'destroy'])->name('cinema-rooms.destroy');
 
     // Cities
@@ -127,16 +124,15 @@ Route::middleware('auth')->group(function () {
     Route::post('cities/store', [CityController::class, 'store'])->name('cities.store');
     Route::get('cities/edit/{city}', [CityController::class, 'edit'])->name('cities.edit');
     Route::put('cities/update/{city}', [CityController::class, 'update'])->name('cities.update');
-    Route::get('cities/{city}', [CityController::class, 'show'])->name('cities.show');
     Route::get('cities/delete/{city}', [CityController::class, 'destroy'])->name('cities.destroy');
 
     // Films
     Route::get('films', [FilmController::class, 'index'])->name('films.index');
+    Route::get('/cinemas/films/{cinema}', [FilmController::class, 'indexForACinema'])->name('films.cinema');
     Route::get('films/create', [FilmController::class, 'create'])->name('films.create');
     Route::post('films/store', [FilmController::class, 'store'])->name('films.store');
     Route::get('films/edit/{film}', [FilmController::class, 'edit'])->name('films.edit');
     Route::put('films/update/{film}', [FilmController::class, 'update'])->name('films.update');
-    Route::get('films/{film}', [FilmController::class, 'show'])->name('films.show');
     Route::get('films/delete/{film}', [FilmController::class, 'destroy'])->name('films.destroy');
 
     // Orders
@@ -145,7 +141,6 @@ Route::middleware('auth')->group(function () {
     Route::post('orders/store', [OrderController::class, 'store'])->name('orders.store');
     Route::get('orders/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
     Route::put('orders/update/{order}', [OrderController::class, 'update'])->name('orders.update');
-    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('orders/delete/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     // Order Products
@@ -154,7 +149,6 @@ Route::middleware('auth')->group(function () {
     Route::post('order-products/store', [OrderProductController::class, 'store'])->name('order-products.store');
     Route::get('order-products/edit/{order_product}', [OrderProductController::class, 'edit'])->name('order-products.edit');
     Route::put('order-products/update/{order_product}', [OrderProductController::class, 'update'])->name('order-products.update');
-    Route::get('order-products/{order_product}', [OrderProductController::class, 'show'])->name('order-products.show');
     Route::get('order-products/delete/{order_product}', [OrderProductController::class, 'destroy'])->name('order-products.destroy');
 
     // Order Tickets
@@ -163,7 +157,6 @@ Route::middleware('auth')->group(function () {
     Route::post('order-tickets/store', action: [OrderTicketController::class, 'store'])->name('order-tickets.store');
     Route::get('order-tickets/edit/{order_ticket}', [OrderTicketController::class, 'edit'])->name('order-tickets.edit');
     Route::put('order-tickets/update/{order_ticket}', [OrderTicketController::class, 'update'])->name('order-tickets.update');
-    Route::get('order-tickets/{order_ticket}', [OrderTicketController::class, 'show'])->name('order-tickets.show');
     Route::get('order-tickets/delete/{order_ticket}', [OrderTicketController::class, 'destroy'])->name('order-tickets.destroy');
 
     // Product Categories
@@ -172,7 +165,6 @@ Route::middleware('auth')->group(function () {
     Route::post('product-categories/store', [ProductCategoryController::class, 'store'])->name('product-categories.store');
     Route::get('product-categories/edit/{product_category}', [ProductCategoryController::class, 'edit'])->name('product-categories.edit');
     Route::put('product-categories/update/{product_category}', [ProductCategoryController::class, 'update'])->name('product-categories.update');
-    Route::get('product-categories/{product_category}', [ProductCategoryController::class, 'show'])->name('product-categories.show');
     Route::get('product-categories/delete/{product_category}', [ProductCategoryController::class, 'destroy'])->name('product-categories.destroy');
 
     // Product Cinemas
@@ -181,7 +173,6 @@ Route::middleware('auth')->group(function () {
     Route::post('product-cinemas/store', [ProductCinemaController::class, 'store'])->name('product-cinemas.store');
     Route::get('product-cinemas/edit/{product_cinema}', [ProductCinemaController::class, 'edit'])->name('product-cinemas.edit');
     Route::put('product-cinemas/update/{product_cinema}', [ProductCinemaController::class, 'update'])->name('product-cinemas.update');
-    Route::get('product-cinemas/{product_cinema}', [ProductCinemaController::class, 'show'])->name('product-cinemas.show');
     Route::get('product-cinemas/delete/{product_cinema}', [ProductCinemaController::class, 'destroy'])->name('product-cinemas.destroy');
 
     // Products
@@ -190,7 +181,6 @@ Route::middleware('auth')->group(function () {
     Route::post('products/store', [ProductController::class, 'store'])->name('products.store');
     Route::get('products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('products/update/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::get('products/delete/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     // Profiles
@@ -199,7 +189,6 @@ Route::middleware('auth')->group(function () {
     Route::post('profiles/store', [ProfileController::class, 'store'])->name('profiles.store');
     Route::get('profiles/edit/{profile}', [ProfileController::class, 'edit'])->name('profiles.edit');
     Route::put('profiles/update/{profile}', [ProfileController::class, 'update'])->name('profiles.update');
-    Route::get('profiles/{profile}', [ProfileController::class, 'show'])->name('profiles.show');
     Route::get('profiles/delete/{profile}', [ProfileController::class, 'destroy'])->name('profiles.destroy');
     Route::get('/myProfile', [ProfileController::class, 'myProfile'])->name('profile.myProfile');
 
@@ -209,7 +198,6 @@ Route::middleware('auth')->group(function () {
     Route::post('rooms/store', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('rooms/edit/{room}', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::put('rooms/update/{room}', [RoomController::class, 'update'])->name('rooms.update');
-    Route::get('rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
     Route::get('rooms/delete/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 
     // Temporal Reserves
@@ -218,7 +206,6 @@ Route::middleware('auth')->group(function () {
     Route::post('temporal-reserves/store', [TemporalReserveController::class, 'store'])->name('temporal-reserves.store');
     Route::get('temporal-reserves/edit/{temporal_reserve}', [TemporalReserveController::class, 'edit'])->name('temporal-reserves.edit');
     Route::put('temporal-reserves/update/{temporal_reserve}', [TemporalReserveController::class, 'update'])->name('temporal-reserves.update');
-    Route::get('temporal-reserves/{temporal_reserve}', [TemporalReserveController::class, 'show'])->name('temporal-reserves.show');
     Route::get('temporal-reserves/delete/{temporal_reserve}', [TemporalReserveController::class, 'destroy'])->name('temporal-reserves.destroy');
 
     // Times
@@ -227,7 +214,6 @@ Route::middleware('auth')->group(function () {
     Route::post('times/store', [TimeController::class, 'store'])->name('times.store');
     Route::get('times/edit/{time}', [TimeController::class, 'edit'])->name('times.edit');
     Route::put('times/update/{time}', [TimeController::class, 'update'])->name('times.update');
-    Route::get('times/{time}', [TimeController::class, 'show'])->name('times.show');
     Route::get('times/delete/{time}', [TimeController::class, 'destroy'])->name('times.destroy');
 
     // Users
@@ -236,7 +222,6 @@ Route::middleware('auth')->group(function () {
     Route::post('users/store', [UserController::class, 'store'])->name('users.store');
     Route::get('users/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
     Route::put('users/update/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('users/delete/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 return [
     'title' => 'Tabla Cines',
+    'titleClient' => 'Cines',
     'subtitle' => 'Gestiona los cines.',
+    'subtitleClient' => '¿Donde vas a ir a ver la película?',
+    'infoYouCanDo' => 'Porfavor, filtre por una ciudad para ver los cines disponibles.',
     'columns' => [
         'id' => 'ID',
         'name' => 'Nombre',

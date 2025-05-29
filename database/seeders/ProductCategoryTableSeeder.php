@@ -12,18 +12,18 @@ class ProductCategoryTableSeeder extends Seeder
         DB::table('products_categories')->insert([
             [
                 'name' => 'Pop Corns',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Sweets',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'name' => 'Drinks',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

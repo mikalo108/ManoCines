@@ -59,9 +59,8 @@ class OrderTicketController extends Controller
         return Inertia::render('OrderTicket/Form', [
          'dataControl' => [
                 ['key' => 'order_id', 'field' => '', 'type' => 'number', 'posibilities' => $orders_lastID],
-                ['key' => 'time_id', 'field' => '', 'type' => 'number', 'posibilities' => $times_lastID],
                 ['key' => 'chair_id', 'field' => '', 'type' => 'number', 'posibilities' => $chairs_lastID],
-                ['key' => 'note', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'time_id', 'field' => '', 'type' => 'number', 'posibilities' => $times_lastID],
             ],
         ]); 
     }
@@ -92,9 +91,8 @@ class OrderTicketController extends Controller
          'orderTicket' => $ot,
          'dataControl' => [
                 ['key' => 'order_id', 'field' => $ot->order_id, 'type' => 'number', 'posibilities' => $orders_lastID],
-                ['key' => 'time_id', 'field' => $ot->time_id, 'type' => 'number', 'posibilities' => $times_lastID],
                 ['key' => 'chair_id', 'field' => $ot->chair_id, 'type' => 'number', 'posibilities' => $chairs_lastID],
-                ['key' => 'note', 'field' => $ot->note, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'time_id', 'field' => $ot->time_id, 'type' => 'number', 'posibilities' => $times_lastID],
             ],
         ]);
     }

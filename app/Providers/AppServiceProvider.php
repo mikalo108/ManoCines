@@ -33,8 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //$schedule->command(UpdateTemporalReserves::handle());
         
-        $films=null;
-        //$films = Film::withCount('orders')->orderBy('orders_count', 'desc')->get();
+        $films = Film::orderBy('id', 'desc')->get();
         
         app()->setLocale(session('locale', app()->getLocale()));  
         // Share the same data with Inertia views

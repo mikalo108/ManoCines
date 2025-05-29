@@ -46,10 +46,10 @@ export default function Index(props) {
             <Head title="Index - Product Categories" />
             <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
                 <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                    <main className="flex justify-center mt-6">
+                    <main className="mt-6">
                         <BlueButton link={"home"}>{props.lang.back}</BlueButton>
                         <h1 className='flex justify-center text-black dark:text-white mt-8' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.title}</h1>
-                        <h2 className='mb-12'>{props.langTable.subtitle}</h2>
+                        <h2 className='flex justify-center mb-12'>{props.langTable.subtitle}</h2>
                         <FilterForm fieldsCanFilter={props.fieldsCanFilter} onFilter={handleFilter} lang={props.lang} />
                         <TableIndex 
                             columnsTable={props.langTable.columns} 

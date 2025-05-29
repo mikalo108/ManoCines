@@ -71,9 +71,9 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::findOrFail($id);
 
         return Inertia::render('ProductCategory/Form', [
+         'category' => $category,
          'dataControl' => [
-                'category' => $category,
-                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'name', 'field' => $category->name, 'type' => 'text', 'posibilities' => ''],
             ],
         ]);
     }

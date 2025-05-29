@@ -13,14 +13,14 @@ class CinemaRoomTableSeeder extends Seeder
             [
                 'cinema_id' => 1,
                 'room_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'cinema_id' => 2,
                 'room_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

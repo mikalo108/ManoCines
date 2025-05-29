@@ -14,15 +14,15 @@ class OrderTableSeeder extends Seeder
                 'user_id' => 1,
                 'subtotal' => 20.00,
                 'total' => 24.20,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'user_id' => 2,
                 'subtotal' => 15.00,
                 'total' => 18.15,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

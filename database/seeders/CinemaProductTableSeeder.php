@@ -14,15 +14,15 @@ class CinemaProductTableSeeder extends Seeder
                 'product_id' => 1,
                 'cinema_id' => 1,
                 'quantity' => 50,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'product_id' => 2,
                 'cinema_id' => 2,
                 'quantity' => 30,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

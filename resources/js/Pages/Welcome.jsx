@@ -77,29 +77,33 @@ export default function Welcome(props) {
     if (user) {
         return (
             <Layout
-                locale={props.locale} 
-                auth={props.auth} 
-                lang={props.lang}
+            locale={props.locale} 
+            auth={props.auth} 
+            lang={props.lang}
             >
             <Head title="Welcome" />
             <div className="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
-                <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                    <main className="mt-6">
-                        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8 md:grid-cols-2 max-md:grid-cols-1 flex flex-col items-center justify-center">
-                            {tables.map((table) => (
-                                <div key={table.key} className="max-w-sm rounded-2xl shadow-lg bg-white p-6 dark:bg-neutral-900" style={{ marginInline: '20%' }}>
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{table.name}</h2>
-                                    <a 
-                                        href={route(table.route)}
-                                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors inline-block"
-                                    >
-                                        {props.lang.goto}
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    </main>
+            <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+                <main className="mt-6">
+                <div className="grid gap-6 lg:grid-cols-3 lg:gap-8 md:grid-cols-2 max-md:grid-cols-1 flex flex-col items-center justify-center">
+                    {tables.map((table) => (
+                    <div
+                        key={table.key}
+                        className="max-w-sm rounded-2xl shadow-lg bg-white p-6 dark:bg-neutral-900 border border-transparent dark:border-gray-300"
+                        style={{ marginInline: '20%' }}
+                    >
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{table.name}</h2>
+                        <a 
+                        href={route(table.route)}
+                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors inline-block"
+                        >
+                        {props.lang.goto}
+                        </a>
+                    </div>
+                    ))}
                 </div>
+                </main>
+            </div>
             </div>
             </Layout>
         );

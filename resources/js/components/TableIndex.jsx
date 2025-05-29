@@ -24,7 +24,7 @@ const goToPage = (page) => {
 
 return (
     <>
-        <hr  className='bg-grey-800 mb-4 py-4'/>
+        <hr className='bg-grey-800 mb-4 py-4' />
         <Link
             href={route(`${keyTable}.create`)}
             className="flex mb-4 px-4 py-4 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center"
@@ -34,7 +34,10 @@ return (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
         </Link>
-        <div className="overflow-x-auto" style={{ borderRadius: '10px' }}>
+        <div
+            className="overflow-x-auto"
+            style={{ borderRadius: '10px', maxWidth: '100vw', maxHeight: '500px', overflowY: 'auto' }}
+        >
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
@@ -78,8 +81,8 @@ return (
                 </tbody>
             </table>
         </div>
-        <div className="flex justify-center mt-4" style={{ width: '100%' }}>
-            <nav className="inline-flex -space-x-px">
+        <div className="flex justify-center mt-12 w-full">
+            <nav className="inline-flex -space-x-px overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" style={{ maxWidth: '100%', whiteSpace: 'nowrap' }}>
                 <button
                     className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
                     aria-label="Anterior"

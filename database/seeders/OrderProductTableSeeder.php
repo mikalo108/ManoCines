@@ -15,16 +15,16 @@ class OrderProductTableSeeder extends Seeder
                 'product_id' => 1,
                 'quantity' => 2,
                 'note' => 'Sin azúcar',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'order_id' => 2,
                 'product_id' => 2,
                 'quantity' => 1,
                 'note' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

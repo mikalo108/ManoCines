@@ -52,12 +52,9 @@ class UserController extends Controller
         return Inertia::render('User/Form', [
          'dataControl' => [
                 ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'surname', 'field' => '', 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'email', 'field' => '', 'type' => 'email', 'posibilities' => ''],
                 ['key' => 'password', 'field' => '', 'type' => 'password', 'posibilities' => ''],
-                ['key' => 'role', 'field' => '', 'type' => 'text', 'posibilities' => ['Admin', 'Client']],
-                ['key' => 'country', 'field' => '', 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'phone', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'role', 'field' => '', 'type' => 'select', 'posibilities' => ['Admin', 'Client']],
             ],
         ]);
     }
@@ -69,26 +66,14 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|max:255',
-            'surname' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->role = $request->role ?? 'client'; // Default role is 'client'
+        $user->role = $request->role ?? 'Client';
         $user->save();
-
-        $user->profile()->create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'country' => $request->country,
-            'city' => $request->city,
-            'phone' => $request->phone,
-        ]);
 
         return redirect()->route('users.index');
     }
@@ -107,13 +92,10 @@ class UserController extends Controller
         return Inertia::render('User/Form', [
          'user' => $user,
          'dataControl' => [
-                ['key' => 'name', 'field' => '', 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'surname', 'field' => '', 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'email', 'field' => '', 'type' => 'email', 'posibilities' => ''],
-                ['key' => 'password', 'field' => '', 'type' => 'password', 'posibilities' => ''],
-                ['key' => 'role', 'field' => '', 'type' => 'text', 'posibilities' => ['Admin', 'Client']],
-                ['key' => 'country', 'field' => '', 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'phone', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'name', 'field' => $user->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'email', 'field' => $user->email, 'type' => 'email', 'posibilities' => ''],
+                ['key' => 'password', 'field' => $user->password, 'type' => 'password', 'posibilities' => ''],
+                ['key' => 'role', 'field' => $user->role, 'type' => 'select', 'posibilities' => ['Admin', 'Client']],
             ],
         ]);
     }

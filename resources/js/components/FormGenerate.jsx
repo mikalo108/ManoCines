@@ -3,27 +3,19 @@ import React, { useState, useEffect } from 'react';
 const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
   const [formData, setFormData] = useState({});
 
-  useEffect(() => {
-    if (element) {
-      const initialData = {};
-      dataControl.forEach(({ key, field }) => {
-        if (element[key] !== undefined && element[key] !== null) {
-          initialData[key] = element[key];
-        } else if (field !== undefined && field !== null) {
-          initialData[key] = field;
-        } else {
-          initialData[key] = '';
-        }
-      });
-      setFormData(initialData);
+ useEffect(() => {
+  const initialData = {};
+  dataControl.forEach(({ key, field, type }) => {
+    if (type === 'date' && typeof field === 'object' && field !== null) {
+      initialData[`${key}`] = field.fecha || '';
+      initialData[`${key}_hour`] = field.hora || '';
+      initialData[`${key}_minute`] = field.minuto || '';
     } else {
-      const initialData = {};
-      dataControl.forEach(({ key, field }) => {
-        initialData[key] = field !== undefined && field !== null ? field : '';
-      });
-      setFormData(initialData);
+      initialData[key] = field !== undefined && field !== null ? field : '';
     }
-  }, [element, dataControl]);
+  });
+  setFormData(initialData);
+}, [element, dataControl]);
 
   const handleChange = (e, key, type) => {
     if (type === 'image') {
@@ -94,7 +86,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
             <div className="flex flex-row items-center space-x-4 mb-2">
               {field && (
                 <img
-                  src={`/storage/films/${field}`}
+                  src={`/storage/${keyElements}/${field}`}
                   alt={key}
                   className="max-w-md h-40 object-contain border"
                   style={{ background: '#f3f3f3', borderRadius: '8px' }}
@@ -162,101 +154,109 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
           </div>
         );
       case 'date':
-        return (
-          <div key={key} className="mb-4">
-            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </label>
-            <div className="flex flex-row gap-2 items-center">
-              <input
-          type="date"
-          id={key}
-          name={key}
-          value={formData[key] || ''}
-          min={todayDate}
-          required
-          style={{ borderRadius: '10px' }}
-          onChange={e => handleChange(e, key, type)}
-          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-              <input
-          type="number"
-          min={0}
-          max={23}
-          name={`${key}_hour`}
-          value={formData[`${key}_hour`] || ''}
-          onChange={e => {
-            let val = e.target.value;
-            if (val === '') val = '';
-            else val = Math.max(0, Math.min(23, Number(val)));
-            setFormData(prev => ({
-              ...prev,
-              [`${key}_hour`]: val
-            }));
-          }}
-          placeholder="HH"
-          className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
-          style={{ borderRadius: '10px' }}
-          required
-              />
-              <span>:</span>
-              <input
-          type="number"
-          min={0}
-          max={59}
-          name={`${key}_minute`}
-          value={formData[`${key}_minute`] || ''}
-          onChange={e => {
-            let val = e.target.value;
-            if (val === '') val = '';
-            else val = Math.max(0, Math.min(59, Number(val)));
-            setFormData(prev => ({
-              ...prev,
-              [`${key}_minute`]: val
-            }));
-          }}
-          placeholder="MM"
-          className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
-          style={{ borderRadius: '10px' }}
-          required
-              />
-            </div>
-          </div>
-        );
-      case 'email':
-        return (
-          <div key={key} className="mb-4">
-            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </label>
+      return (
+        <div key={key} className="mb-4">
+          <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+            {key.charAt(0).toUpperCase() + key.slice(1)}
+          </label>
+          <div className="flex flex-row gap-2 items-center">
             <input
-              type="email"
+              type="date"
               id={key}
               name={key}
               value={formData[key] || ''}
+              min={todayDate}
               required
               style={{ borderRadius: '10px' }}
-              onChange={e => handleChange(e, key, type)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={e => setFormData(prev => ({ ...prev, [key]: e.target.value }))}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <input
+              type="number"
+              min={0}
+              max={23}
+              name={`${key}_hour`}
+              value={formData[`${key}_hour`] || ''}
+              onChange={e => {
+                let val = e.target.value;
+                if (val === '') val = '';
+                else val = Math.max(0, Math.min(23, Number(val)));
+                setFormData(prev => ({
+                  ...prev,
+                  [`${key}_hour`]: val
+                }));
+              }}
+              placeholder="HH"
+              className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
+              style={{ borderRadius: '10px' }}
+              required
+            />
+            <span>:</span>
+            <input
+              type="number"
+              min={0}
+              max={59}
+              name={`${key}_minute`}
+              value={formData[`${key}_minute`] || ''}
+              onChange={e => {
+                let val = e.target.value;
+                if (val === '') val = '';
+                else val = Math.max(0, Math.min(59, Number(val)));
+                setFormData(prev => ({
+                  ...prev,
+                  [`${key}_minute`]: val
+                }));
+              }}
+              placeholder="MM"
+              className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
+              style={{ borderRadius: '10px' }}
+              required
             />
           </div>
-        );
+        </div>
+      );
       case 'password':
         return (
-          <div key={key} className="mb-4">
-            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </label>
+          <div key={key} className="mb-4" style={{ position: 'relative' }}>
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                id={`${key}_enable`}
+                style={{ marginRight: '10px', position: 'relative', left: 0, top: 0 }}
+                checked={!!formData[`${key}_enabled`]}
+                onChange={e => {
+                  setFormData(prev => {
+                    let updated = { ...prev, [`${key}_enabled`]: e.target.checked };
+                    if (!e.target.checked) {
+                      updated[`${key}_temp`] = prev[key] || '';
+                      updated[key] = '';
+                    } else {
+                      updated[key] = prev[`${key}_temp`] || '';
+                    }
+                    return updated;
+                  });
+                }}
+              />
+              <label htmlFor={key} className="block text-gray-700 font-bold dark:text-white" style={{ flex: 1 }}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </label>
+            </div>
             <input
               type="password"
               id={key}
               name={key}
-              value={formData[key] || ''}
-              required
-              style={{ borderRadius: '10px' }}
+              value={field}
+              required={!!formData[`${key}_enabled`]}
+              style={{
+                borderRadius: '10px',
+                backgroundColor: !formData[`${key}_enabled`] ? '#d1d5db' : undefined,
+                userSelect: !formData[`${key}_enabled`] ? 'none' : undefined,
+                cursor: !formData[`${key}_enabled`] ? 'not-allowed' : undefined,
+              }}
               onChange={e => handleChange(e, key, type)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               autoComplete="new-password"
+              disabled={!formData[`${key}_enabled`]}
             />
           </div>
         );
@@ -295,11 +295,11 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
 
     let url, method;
     if (element) {
-      url = `/films/${element}`;
+      url = `/${keyElements}/${element}`;
       method = 'POST';
       form.append('_method', 'put');
     } else {
-      url = '/films';
+      url = `/${keyElements}`;
       method = 'POST';
     }
 

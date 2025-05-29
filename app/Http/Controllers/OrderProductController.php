@@ -51,7 +51,7 @@ class OrderProductController extends Controller
                 ['key' => 'order_id', 'field' => '', 'type' => 'number', 'posibilities' => $orders_lastID],
                 ['key' => 'product_id', 'field' => '', 'type' => 'number', 'posibilities' => $products_lastID],
                 ['key' => 'quantity', 'field' => '', 'type' => 'number', 'posibilities' => ''],
-                ['key' => 'note', 'field' => '', 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'note', 'field' => '', 'type' => 'text', 'posibilities' => ''],
             ],
         ]);
     }
@@ -102,7 +102,7 @@ class OrderProductController extends Controller
                 ['key' => 'order_id', 'field' => $orderProduct->order_id, 'type' => 'number', 'posibilities' => $orders_lastID],
                 ['key' => 'product_id', 'field' => $orderProduct->product_id, 'type' => 'number', 'posibilities' => $products_lastID],
                 ['key' => 'quantity', 'field' => $orderProduct->quantity, 'type' => 'number', 'posibilities' => ''],
-                ['key' => 'note', 'field' => $orderProduct->note, 'type' => 'number', 'posibilities' => ''],
+                ['key' => 'note', 'field' => $orderProduct->note, 'type' => 'text', 'posibilities' => ''],
             ],
         ]);
     }

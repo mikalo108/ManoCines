@@ -17,8 +17,8 @@ class ProfileTableSeeder extends Seeder
                 'country' => 'Spain',
                 'city' => 'Madrid',
                 'phone' => '123456789',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
                 'user_id' => 2,
@@ -27,8 +27,8 @@ class ProfileTableSeeder extends Seeder
                 'country' => 'Spain',
                 'city' => 'Barcelona',
                 'phone' => '987654321',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ]);
     }

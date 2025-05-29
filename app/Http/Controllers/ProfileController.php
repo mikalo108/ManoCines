@@ -78,13 +78,20 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id' => 'required|integer',
             'name' => 'nullable|string|max:100',
             'surname' => 'nullable|string|max:100',
             'country' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:100',
             'phone' => 'nullable|string|max:20',
         ]);
+
+        $validation = Profile::where('user_id', $request->user_id);
+        if ($validation->exists()) {
+            return redirect()->back()
+                ->withErrors(['profile' => 'Ya existe una relación con esta User ID.'])
+                ->withInput();
+        }
 
         $profile = new Profile();
         $profile->user_id = $request->user_id;
@@ -125,10 +132,9 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
-        $profile = Profile::findOrFail($id);
 
         $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id' => 'required|integer',
             'name' => 'nullable|string|max:100',
             'surname' => 'nullable|string|max:100',
             'country' => 'nullable|string|max:100',
@@ -136,6 +142,14 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
+        $validation = Profile::where('user_id', $request->user_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['profile' => 'Ya existe una relación con esta User ID.'])
+                ->withInput();
+        }
+
+        $profile = Profile::findOrFail($id);
         $profile->user_id = $request->user_id;
         $profile->name = $request->name;
         $profile->surname = $request->surname;

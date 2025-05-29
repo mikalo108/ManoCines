@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -43,7 +44,7 @@ class ProductController extends Controller
     public function create()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+        $product_categories_lastID = \App\Models\ProductCategory::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Product/Form', [
          'dataControl' => [
@@ -51,7 +52,7 @@ class ProductController extends Controller
                 ['key' => 'description', 'field' => '', 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'image', 'field' => '', 'type' => 'image', 'posibilities' => ''],
                 ['key' => 'price', 'field' => '', 'type' => 'number', 'posibilities' => ''],
-                ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'product_category_id', 'field' => '', 'type' => 'number', 'posibilities' => $product_categories_lastID],
             ],
         ]);
     }
@@ -61,9 +62,9 @@ class ProductController extends Controller
         $r->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'price' => 'nullable|string|max:255',
-            'category' => 'nullable|string|max:255',
+            'product_category_id' => 'nullable|string|max:255',
         ]);
 
         $product = new Product();
@@ -75,12 +76,12 @@ class ProductController extends Controller
             $file = $r->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid('film_', true) . '.' . $extension;
-            $file->storeAs('/storage/films', $filename);
+            Storage::disk('public')->putFileAs('products', $file, $filename);
             $product->image = $filename;
         }
 
         $product->price = $r->price;
-        $product->category = $r->category;
+        $product->product_category_id = $r->product_category_id;
         $product->save();
 
         return redirect()->route('products.index');
@@ -96,7 +97,7 @@ class ProductController extends Controller
     {
         app()->setLocale(session('locale', app()->getLocale()));  
         $product = Product::findOrFail($id);
-        $cinemas_lastID = \App\Models\Cinema::orderBy('id', 'desc')->first()?->id;
+        $product_categories_lastID = \App\Models\ProductCategory::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Product/Form', [
          'product' => $product,
@@ -105,23 +106,22 @@ class ProductController extends Controller
                 ['key' => 'description', 'field' => $product->description, 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'image', 'field' => $product->image, 'type' => 'image', 'posibilities' => ''],
                 ['key' => 'price', 'field' => $product->price, 'type' => 'number', 'posibilities' => ''],
-                ['key' => 'cinema_id', 'field' => $product->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
+                ['key' => 'product_category_id', 'field' => $product->product_category_id, 'type' => 'number', 'posibilities' => $product_categories_lastID],
             ],
         ]);
     }
 
     public function update(Request $r, $id)
     {
-        $product = Product::findOrFail($id);
-
         $r->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'price' => 'nullable|string|max:255',
-            'category' => 'nullable|string|max:255',
+            'product_category_id' => 'nullable|string|max:255',
         ]);
 
+        $product = Product::findOrFail($id);
         $product->name = $r->name;
         $product->description = $r->description;
         
@@ -130,12 +130,12 @@ class ProductController extends Controller
             $file = $r->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid('film_', true) . '.' . $extension;
-            $file->storeAs('/storage/films', $filename);
+            Storage::disk('public')->putFileAs('products', $file, $filename);
             $product->image = $filename;
         }
 
         $product->price = $r->price;
-        $product->category = $r->category;
+        $product->product_category_id = $r->product_category_id;
         $product->save();
 
         return redirect()->route('products.index');

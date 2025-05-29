@@ -60,7 +60,6 @@ class CityController extends Controller
 
         $c = new City();
         $c->name = $r->name;
-        $c->cinema_id = $r->cinema_id;
         $c->save();
         return redirect()->route('cities.index');
     }
@@ -82,9 +81,8 @@ class CityController extends Controller
             'name' => 'required|string|max:255', 
         ]);
         
-        $c = City::find($id);
+        $c = City::findOrFail($id);
         $c->name = $r->name;
-        $c->cinema_id = $r->cinema_id;
         $c->save();
         return redirect()->route('cities.index');
     }

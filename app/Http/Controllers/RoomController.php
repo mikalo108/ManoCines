@@ -55,7 +55,8 @@ class RoomController extends Controller
         ]);
 
         $room = new Room();
-        $room->name = $r->name;
+        $room->number = $r->number;
+        $room->capacity=0;
         $room->save();
 
         return redirect()->route('rooms.index');
@@ -76,12 +77,11 @@ class RoomController extends Controller
 
     public function update($id, Request $r) { 
         $r->validate([
-            'cinema_id' => 'required|integer|exists:cinemas,id',
-            'name' => 'required|string|max:255',  
+            'number' => 'required|string|max:255',  
         ]);
         
         $room = Room::find($id);
-        $room->name = $r->name;
+        $room->number = $r->number;
         $room->save();
 
         return redirect()->route('rooms.index');

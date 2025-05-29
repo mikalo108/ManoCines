@@ -31,4 +31,5 @@ return [
     'newElem' => 'Nuevo',
     'editElem' => 'Editar',
     'noChange' => '(No puedes cambiar este campo)',
+    'passwordsDoNotMatch' => 'Las contraseñas no coinciden',
 ];

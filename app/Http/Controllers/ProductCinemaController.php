@@ -55,7 +55,7 @@ class ProductCinemaController extends Controller
          'dataControl' => [
                 ['key' => 'product_id', 'field' => '', 'type' => 'number', 'posibilities' => $products_lastID],
                 ['key' => 'cinema_id', 'field' => '', 'type' => 'number', 'posibilities' => $cinemas_lastID],
-                ['key' => 'quantity', 'field' => '', 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'quantity', 'field' => '', 'type' => 'number', 'posibilities' => ''],
             ],
         ]);
     }
@@ -67,9 +67,17 @@ class ProductCinemaController extends Controller
             'product_id' => 'required|integer|exists:products,id',
         ]);
 
+        $validation = ProductCinema::where('cinema_id', $request->cinema_id)->where('product_id', $request->product_id);
+        if ($validation->exists()) {
+            return redirect()->back()
+                ->withErrors(['product_cinema' => 'Ya existe una relación con esta Cinema ID y Product ID.'])
+                ->withInput();
+        }
+
         $productCinema = new ProductCinema();
         $productCinema->cinema_id = $request->cinema_id;
         $productCinema->product_id = $request->product_id;
+        $productCinema->quantity = $request->quantity;
         $productCinema->save();
 
         return redirect()->route('product-cinemas.index');
@@ -94,7 +102,7 @@ class ProductCinemaController extends Controller
             'dataControl' => [
                 ['key' => 'product_id', 'field' => $productCinema->product_id, 'type' => 'number', 'posibilities' => $products_lastID],
                 ['key' => 'cinema_id', 'field' => $productCinema->cinema_id, 'type' => 'number', 'posibilities' => $cinemas_lastID],
-                ['key' => 'quantity', 'field' => $productCinema->quantity, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'quantity', 'field' => $productCinema->quantity, 'type' => 'number', 'posibilities' => ''],
             ],
         ]);
         
@@ -107,10 +115,19 @@ class ProductCinemaController extends Controller
         $request->validate([
             'cinema_id' => 'required|integer|exists:cinemas,id',
             'product_id' => 'required|integer|exists:products,id',
+            'quantity' => 'required|integer',
         ]);
+
+        $validation = ProductCinema::where('cinema_id', $request->cinema_id)->where('product_id', $request->product_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['product_cinema' => 'Ya existe una relación con esta Cinema ID y Product ID.'])
+                ->withInput();
+        }
 
         $productCinema->cinema_id = $request->cinema_id;
         $productCinema->product_id = $request->product_id;
+        $productCinema->quantity = $request->quantity;
         $productCinema->save();
 
         return redirect()->route('product-cinemas.index');

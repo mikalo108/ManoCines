@@ -10,39 +10,41 @@ export default function Welcome(props) {
     const films = props['allFilms'] || [];
 
     const tablesES = [
-        { name: 'Ciudades', route: 'cities.index', key: 'cities' },
-        { name: 'Cines', route: 'cinemas.index', key: 'cinemas' },
-        { name: 'Salas', route: 'rooms.index', key: 'rooms' },
         { name: 'Butacas', route: 'chairs.index', key: 'chairs' },
-        { name: 'Reservas Temporales', route: 'temporal-reserves.index', key: 'temporal-reserves' },
+        { name: 'Cines', route: 'cinemas.index', key: 'cinemas' },
+        { name: 'Cines <-> Salas', route: 'cinema-rooms.index', key: 'cinema-rooms' },
+        { name: 'Ciudades', route: 'cities.index', key: 'cities' },
         { name: 'Películas', route: 'films.index', key: 'films' },
-        { name: 'Horarios', route: 'times.index', key: 'times' },
         { name: 'Pedidos', route: 'orders.index', key: 'orders' },
         { name: 'Pedidos <-> Productos', route: 'order-products.index', key: 'order-products' },
         { name: 'Pedidos <-> Entradas', route: 'order-tickets.index', key: 'order-tickets' },
         { name: 'Productos', route: 'products.index', key: 'products' },
         { name: 'Categorias de Productos', route: 'product-categories.index', key: 'product-categories' },
         { name: 'Productos <-> Cines', route: 'product-cinemas.index', key: 'product-cinemas' },
-        { name: 'Usuarios', route: 'users.index', key: 'users' },
         { name: 'Perfiles', route: 'profiles.index', key: 'profiles' },
+        { name: 'Salas', route: 'rooms.index', key: 'rooms' },
+        { name: 'Reservas Temporales', route: 'temporal-reserves.index', key: 'temporal-reserves' },
+        { name: 'Horarios', route: 'times.index', key: 'times' },
+        { name: 'Usuarios', route: 'users.index', key: 'users' },
     ];
 
     const tablesEN = [
-        { name: 'Cities', route: 'cities.index', key: 'cities' },
-        { name: 'Cinemas', route: 'cinemas.index', key: 'cinemas' },
-        { name: 'Rooms', route: 'rooms.index', key: 'rooms' },
         { name: 'Chairs', route: 'chairs.index', key: 'chairs' },
-        { name: 'Temporal Reserves', route: 'temporal-reserves.index', key: 'temporal-reserves' },
+        { name: 'Cinemas', route: 'cinemas.index', key: 'cinemas' },
+        { name: 'Cinema <-> Rooms', route: 'cinema-rooms.index', key: 'cinema-rooms' },
+        { name: 'Cities', route: 'cities.index', key: 'cities' },
         { name: 'Films', route: 'films.index', key: 'films' },
-        { name: 'Times', route: 'times.index', key: 'times' },
         { name: 'Orders', route: 'orders.index', key: 'orders' },
         { name: 'Orders <-> Products', route: 'order-products.index', key: 'order-products' },
         { name: 'Orders <-> Tickets', route: 'order-tickets.index', key: 'order-tickets' },
         { name: 'Products', route: 'products.index', key: 'products' },
         { name: 'Product Categories', route: 'product-categories.index', key: 'product-categories' },
         { name: 'Products <-> Cinemas', route: 'product-cinemas.index', key: 'product-cinemas' },
-        { name: 'Users', route: 'users.index', key: 'users' },
         { name: 'Profiles', route: 'profiles.index', key: 'profiles' },
+        { name: 'Rooms', route: 'rooms.index', key: 'rooms' },
+        { name: 'Temporal Reserves', route: 'temporal-reserves.index', key: 'temporal-reserves' },
+        { name: 'Times', route: 'times.index', key: 'times' },
+        { name: 'Users', route: 'users.index', key: 'users' },
     ];
 
     const tables = props.locale === 'es' ? tablesES : tablesEN;

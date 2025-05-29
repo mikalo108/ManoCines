@@ -55,6 +55,8 @@ class OrderController extends Controller
 
         $order = new Order();
         $order->user_id = $request->user_id;
+        $order->total=0;
+        $order->subtotal=0;
         $order->save();
 
         return redirect()->route('orders.index');
@@ -75,7 +77,7 @@ class OrderController extends Controller
         return Inertia::render('Order/Form', [
          'order' => $order,
          'dataControl' => [
-                ['key' => 'user_id', 'field' => '', 'type' => 'number', 'posibilities' => $users_lastID],
+                ['key' => 'user_id', 'field' => $order->user_id, 'type' => 'number', 'posibilities' => $users_lastID],
                 ['key' => 'total', 'field' => isset($order->total) && $order->total >= 1 ? $order->total : 0, 'type' => 'hidden', 'posibilities' => ''],
                 ['key' => 'subtotal', 'field' => isset($order->subtotal) && $order->subtotal >= 1 ? $order->subtotal : 0, 'type' => 'hidden', 'posibilities' => ''],
             ],
@@ -84,16 +86,14 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
 
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
+        $order = Order::findOrFail($id);
         $order->user_id = $request->user_id;
         $order->save();
-
-        $order->products()->sync($request->products ?? []);
 
         return redirect()->route('orders.index');
     }

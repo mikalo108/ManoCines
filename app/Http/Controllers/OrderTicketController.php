@@ -72,6 +72,13 @@ class OrderTicketController extends Controller
             'time_id' => 'required|integer|exists:times,id',
         ]);
 
+        $validation = OrderTicket::where('chair_id', $r->chair_id)->where('time_id', $r->time_id);
+        if ($validation->exists()) {
+            return redirect()->back()
+                ->withErrors(['order_ticket' => 'Ya existe una relación con esta Chair ID y Time ID.'])
+                ->withInput();
+        }
+
         $ot = new OrderTicket();
         $ot->order_id = $r->order_id;
         $ot->chair_id = $r->chair_id;
@@ -103,6 +110,13 @@ class OrderTicketController extends Controller
             'chair_id' => 'required|integer|exists:chairs,id',
             'time_id' => 'required|integer|exists:times,id',
         ]);
+
+        $validation = OrderTicket::where('chair_id', $r->chair_id)->where('time_id', $r->time_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['order_ticket' => 'Ya existe una relación con esta Chair ID y Time ID.'])
+                ->withInput();
+        }
         
         $ot = OrderTicket::find($id);
         $ot->order_id = $r->order_id;

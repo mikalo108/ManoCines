@@ -59,11 +59,25 @@ class TemporalReserveController extends Controller
         $request->validate([
             'chair_id' => 'required|integer|exists:chairs,id',
             'reserve_time' => 'required|date',
+            'reserve_time_hour' => 'required|integer|min:0|max:23',
+            'reserve_time_minute' => 'required|integer|min:0|max:59',
         ]);
+
+        $validation = TemporalReserve::where('chair_id', $request->chair_id);
+        if ($validation->exists()) {
+            return redirect()->back()
+                ->withErrors(['temporal_reseve' => 'Esta Chair ID ya está bloqueada.'])
+                ->withInput();
+        }
+
+        $fecha = $request->input('reserve_time');
+        $hora = str_pad($request->input('reserve_time_hour'), 2, '0', STR_PAD_LEFT);
+        $minuto = str_pad($request->input('reserve_time_minute'), 2, '0', STR_PAD_LEFT);
+        $fechaCompleta = "{$fecha} {$hora}:{$minuto}:00";
 
         $tr = new TemporalReserve();
         $tr->chair_id = $request->chair_id;
-        $tr->reserve_time = $request->reserve_time;
+        $tr->reserve_time = $fechaCompleta;
         $tr->save();
 
         return redirect()->route('temporal-reserves.index');
@@ -92,14 +106,21 @@ class TemporalReserveController extends Controller
     {
         $request->validate([
             'chair_id' => 'required|integer|exists:chairs,id',
-            'reserve_time_fecha' => 'required|date',
-            'reserve_time_hora' => 'required|integer|min:0|max:23',
-            'reserve_time_minuto' => 'required|integer|min:0|max:59',
+            'reserve_time' => 'required|date',
+            'reserve_time_hour' => 'required|integer|min:0|max:23',
+            'reserve_time_minute' => 'required|integer|min:0|max:59',
         ]);
 
-        $fecha = $request->input('reserve_time_fecha');
-        $hora = str_pad($request->input('reserve_time_hora'), 2, '0', STR_PAD_LEFT);
-        $minuto = str_pad($request->input('reserve_time_minuto'), 2, '0', STR_PAD_LEFT);
+        $validation = TemporalReserve::where('chair_id', $request->chair_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['temporal_reseve' => 'Esta Chair ID ya está bloqueada.'])
+                ->withInput();
+        }
+
+        $fecha = $request->input('reserve_time');
+        $hora = str_pad($request->input('reserve_time_hour'), 2, '0', STR_PAD_LEFT);
+        $minuto = str_pad($request->input('reserve_time_minute'), 2, '0', STR_PAD_LEFT);
         $fechaCompleta = "{$fecha} {$hora}:{$minuto}:00";
 
         $tr = TemporalReserve::findOrFail($id);

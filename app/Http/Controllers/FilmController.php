@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Film;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
@@ -55,7 +56,7 @@ class FilmController extends Controller
     public function store(Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',  
             'overview' => 'nullable|string',  
             'trailer' => 'nullable|string|max:255',  
         ]);
@@ -70,7 +71,7 @@ class FilmController extends Controller
             $file = $r->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid('film_', true) . '.' . $extension;
-            $file->storeAs('/storage/films', $filename);
+            Storage::disk('public')->putFileAs('films', $file, $filename);
             $f->image = $filename;
         }
 
@@ -96,7 +97,7 @@ class FilmController extends Controller
     public function update($id, Request $r) { 
         $r->validate([
             'name' => 'required|string|max:255',  
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',  
             'overview' => 'required|string',
             'trailer' => 'required|string|max:255',  
         ]);
@@ -111,7 +112,7 @@ class FilmController extends Controller
             $file = $r->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = uniqid('film_', true) . '.' . $extension;
-            $file->storeAs('public/films', $filename);
+            Storage::disk('public')->putFileAs('films', $file, $filename);
             $f->image = $filename;
         }
 

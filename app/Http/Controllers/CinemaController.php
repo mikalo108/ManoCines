@@ -69,6 +69,7 @@ class CinemaController extends Controller
         $c->name = $r->name;
         $c->location = $r->location;
         $c->description = $r->description;
+        $c->city_id=$r->city_id;
         $c->save();
 
         return redirect()->route('cinemas.index');
@@ -85,7 +86,7 @@ class CinemaController extends Controller
                 ['key' => 'name', 'field' => $c->name, 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'location', 'field' => $c->location, 'type' => 'text', 'posibilities' => ''],
                 ['key' => 'description', 'field' => $c->description, 'type' => 'text', 'posibilities' => ''],
-                ['key' => 'city_id', 'field' => $c->city_id, 'type' => 'hidden', 'posibilities' => $cities_lastID],
+                ['key' => 'city_id', 'field' => $c->city_id, 'type' => 'number', 'posibilities' => $cities_lastID],
             ],
         ]);
     }
@@ -102,6 +103,7 @@ class CinemaController extends Controller
         $c->name = $r->name;
         $c->location = $r->location;
         $c->description = $r->description;
+        $c->city_id=$r->city_id;
         $c->save();
 
         return redirect()->route('cinemas.index');

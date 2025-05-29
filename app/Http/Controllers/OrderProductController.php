@@ -65,9 +65,8 @@ class OrderProductController extends Controller
             'note' => 'nullable|string',
         ]);
 
-        if (OrderProduct::where('order_id', $request->order_id)
-            ->where('product_id', $request->product_id)
-            ->exists()) {
+        $validation = OrderProduct::where('order_id', $request->order_id)->where('product_id', $request->product_id);
+        if ($validation->exists()) {
             return redirect()->back()
                 ->withErrors(['order_product' => 'Ya existe una relación con este Order ID y Product ID.'])
                 ->withInput();
@@ -117,6 +116,13 @@ class OrderProductController extends Controller
             'quantity' => 'required|integer|min:1',
             'note' => 'nullable|string',
         ]);
+
+        $validation = OrderProduct::where('order_id', $request->order_id)->where('product_id', $request->product_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['order_product' => 'Ya existe una relación con este Order ID y Product ID.'])
+                ->withInput();
+        }
 
         $orderProduct->order_id = $request->order_id;
         $orderProduct->product_id = $request->product_id;

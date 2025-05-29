@@ -73,14 +73,21 @@ class TimeController extends Controller
         $request->validate([
             'room_id' => 'required|integer|exists:rooms,id',
             'film_id' => 'required|integer|exists:films,id',
-            'time_fecha' => 'required|date',
-            'time_hora' => 'required|integer|min:0|max:23',
-            'time_minuto' => 'required|integer|min:0|max:59',
+            'time' => 'required|date',
+            'time_hour' => 'required|integer|min:0|max:23',
+            'time_minute' => 'required|integer|min:0|max:59',
         ]);
 
+        $validation = Time::where('room_id', $request->room_id)->where('film_id', $request->film_id);
+        if ($validation->exists()) {
+            return redirect()->back()
+                ->withErrors(['time' => 'Ya existe una relación con esta Room ID y Film ID.'])
+                ->withInput();
+        }
+
         $fecha = $request->input('time_fecha');
-        $hora = str_pad($request->input('time_hora'), 2, '0', STR_PAD_LEFT);
-        $minuto = str_pad($request->input('time_minuto'), 2, '0', STR_PAD_LEFT);
+        $hora = str_pad($request->input('time_hour'), 2, '0', STR_PAD_LEFT);
+        $minuto = str_pad($request->input('time_minute'), 2, '0', STR_PAD_LEFT);
         $fechaCompleta = "{$fecha} {$hora}:{$minuto}:00";
 
         $time = new Time();
@@ -118,14 +125,21 @@ class TimeController extends Controller
         $request->validate([
             'room_id' => 'required|integer|exists:rooms,id',
             'film_id' => 'required|integer|exists:films,id',
-            'time_fecha' => 'required|date',
-            'time_hora' => 'required|integer|min:0|max:23',
+            'time' => 'required|date',
+            'time_hour' => 'required|integer|min:0|max:23',
             'time_minuto' => 'required|integer|min:0|max:59',
         ]);
 
-        $fecha = $request->input('time_fecha');
-        $hora = str_pad($request->input('time_hora'), 2, '0', STR_PAD_LEFT);
-        $minuto = str_pad($request->input('time_minuto'), 2, '0', STR_PAD_LEFT);
+        $validation = Time::where('room_id', $request->room_id)->where('film_id', $request->film_id);
+        if ($validation->exists() && $validation->id != $id) {
+            return redirect()->back()
+                ->withErrors(['time' => 'Ya existe una relación con esta Room ID y Film ID.'])
+                ->withInput();
+        }
+
+        $fecha = $request->input('time');
+        $hora = str_pad($request->input('time_hour'), 2, '0', STR_PAD_LEFT);
+        $minuto = str_pad($request->input('time_minute'), 2, '0', STR_PAD_LEFT);
         $fechaCompleta = "{$fecha} {$hora}:{$minuto}:00";
 
         $time = Time::findOrFail($id);

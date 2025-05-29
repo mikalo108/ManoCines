@@ -10,6 +10,7 @@ return [
         'name' => 'Nombre',
         'location' => 'Ubicación',
         'description' => 'Descripción',
+        'city_id' => 'ID de Ciudad',
         'created_at' => 'Creado en',
         'updated_at' => 'Actualizado en',
         'actions' => 'Acciones',

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChairController;
 use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\CinemaRoomController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\OrderController;
@@ -99,7 +100,7 @@ Route::middleware('auth')->group(function () {
     // Chairs
     Route::get('chairs', [ChairController::class, 'index'])->name('chairs.index');
     Route::get('chairs/create', [ChairController::class, 'create'])->name('chairs.create');
-    Route::post('chairs/store/{chair}', [ChairController::class, 'store'])->name('chairs.store');
+    Route::post('chairs/store', [ChairController::class, 'store'])->name('chairs.store');
     Route::get('chairs/edit/{chair}', [ChairController::class, 'edit'])->name('chairs.edit');
     Route::put('chairs/update/{chair}', [ChairController::class, 'update'])->name('chairs.update');
     Route::get('chairs/{chair}', [ChairController::class, 'show'])->name('chairs.show');
@@ -113,6 +114,15 @@ Route::middleware('auth')->group(function () {
     Route::put('cinemas/update/{cinema}', [CinemaController::class, 'update'])->name('cinemas.update');
     Route::get('cinemas/{cinema}', [CinemaController::class, 'show'])->name('cinemas.show');
     Route::get('cinemas/delete/{cinema}', [CinemaController::class, 'destroy'])->name('cinemas.destroy');
+    
+    // Cinema Rooms
+    Route::get('cinema-rooms', [CinemaRoomController::class, 'index'])->name('cinema-rooms.index');
+    Route::get('cinema-rooms/create', [CinemaRoomController::class, 'create'])->name('cinema-rooms.create');
+    Route::post('cinema-rooms/store', [CinemaRoomController::class, 'store'])->name('cinema-rooms.store');
+    Route::get('cinema-rooms/edit/{cinema_room}', [CinemaRoomController::class, 'edit'])->name('cinema-rooms.edit');
+    Route::put('cinema-rooms/update/{cinema_room}', [CinemaRoomController::class, 'update'])->name('cinema-rooms.update');
+    Route::get('cinema-rooms/{cinema_room}', [CinemaRoomController::class, 'show'])->name('cinema-rooms.show');
+    Route::get('cinema-rooms/delete/{cinema_room}', [CinemaRoomController::class, 'destroy'])->name('cinema-rooms.destroy');
 
     // Cities
     Route::get('cities', [CityController::class, 'index'])->name('cities.index');

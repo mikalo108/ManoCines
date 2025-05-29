@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
   const [formData, setFormData] = useState({});
+  
 
  useEffect(() => {
   const initialData = {};
@@ -36,6 +37,11 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         };
         reader.readAsDataURL(file);
       }
+    } else if (type === 'date') {
+      setFormData(prev => ({
+        ...prev,
+        [key]: e.target.value,
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
@@ -165,7 +171,7 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               id={key}
               name={key}
               value={formData[key] || ''}
-              min={todayDate}
+              min={!element ? todayDate : undefined}
               required
               style={{ borderRadius: '10px' }}
               onChange={e => setFormData(prev => ({ ...prev, [key]: e.target.value }))}
@@ -179,12 +185,18 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               value={formData[`${key}_hour`] || ''}
               onChange={e => {
                 let val = e.target.value;
-                if (val === '') val = '';
-                else val = Math.max(0, Math.min(23, Number(val)));
-                setFormData(prev => ({
-                  ...prev,
-                  [`${key}_hour`]: val
-                }));
+                if (val === '') {
+                  setFormData(prev => ({
+                    ...prev,
+                    [`${key}_hour`]: ''
+                  }));
+                } else {
+                  val = Math.max(0, Math.min(23, Number(val)));
+                  setFormData(prev => ({
+                    ...prev,
+                    [`${key}_hour`]: val
+                  }));
+                }
               }}
               placeholder="HH"
               className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
@@ -200,12 +212,18 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
               value={formData[`${key}_minute`] || ''}
               onChange={e => {
                 let val = e.target.value;
-                if (val === '') val = '';
-                else val = Math.max(0, Math.min(59, Number(val)));
-                setFormData(prev => ({
-                  ...prev,
-                  [`${key}_minute`]: val
-                }));
+                if (val === '') {
+                  setFormData(prev => ({
+                    ...prev,
+                    [`${key}_minute`]: ''
+                  }));
+                } else {
+                  val = Math.max(0, Math.min(59, Number(val)));
+                  setFormData(prev => ({
+                    ...prev,
+                    [`${key}_minute`]: val
+                  }));
+                }
               }}
               placeholder="MM"
               className="shadow appearance-none border rounded py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
@@ -216,98 +234,240 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         </div>
       );
       case 'password':
-        return (
-          <div key={key} className="mb-4" style={{ position: 'relative' }}>
-            <div className="flex items-center mb-2">
+        // Si es creación (no hay element), no mostrar checkbox y el campo siempre está activado
+        if (!element) {
+          return (
+            <div key={key} className="mb-4" style={{ position: 'relative' }}>
+              <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </label>
+              <input
+                type="password"
+                id={key}
+                name={key}
+                value={formData[key] || ''}
+                required
+                style={{ borderRadius: '10px' }}
+                onChange={e => handleChange(e, key, type)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                autoComplete="new-password"
+              />
+              <label htmlFor={`${key}_confirmation`} className="block text-gray-700 font-bold mb-2 dark:text-white mt-4">
+                {lang.confirmPassword || 'Confirm Password'}
+              </label>
+              <input
+                type="password"
+                id={`${key}_confirmation`}
+                name={`${key}_confirmation`}
+                value={formData[`${key}_confirmation`] || ''}
+                required
+                style={{ borderRadius: '10px' }}
+                onChange={e => setFormData(prev => ({ ...prev, [`${key}_confirmation`]: e.target.value }))}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                autoComplete="new-password"
+              />
+              {formData[key] && formData[`${key}_confirmation`] && formData[key] !== formData[`${key}_confirmation`] && (
+                <div className="text-red-500 text-sm mt-1">
+                  {lang.passwordsDoNotMatch || 'Passwords do not match'}
+                </div>
+              )}
+            </div>
+          );
+        } else {
+            return (
+            <div key={key} className="mb-4" style={{ position: 'relative' }}>
+              <div className="flex items-center mb-2">
+                
               <input
                 type="checkbox"
                 id={`${key}_enable`}
                 style={{ marginRight: '10px', position: 'relative', left: 0, top: 0 }}
                 checked={!!formData[`${key}_enabled`]}
-                onChange={e => {
+                  onChange={e => {
                   setFormData(prev => {
-                    let updated = { ...prev, [`${key}_enabled`]: e.target.checked };
-                    if (!e.target.checked) {
-                      updated[`${key}_temp`] = prev[key] || '';
-                      updated[key] = '';
-                    } else {
-                      updated[key] = prev[`${key}_temp`] || '';
+                    let updated = { ...prev };
+                    if (e.target.checked) {
+                    // Restore password and confirmation if they exist
+                    if (prev[`${key}_temp`] !== undefined) {
+                      updated[key] = prev[`${key}_temp`];
                     }
-                    return updated;
-                  });
-                }}
-              />
-              <label htmlFor={key} className="block text-gray-700 font-bold dark:text-white" style={{ flex: 1 }}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </label>
-            </div>
-            <input
-              type="password"
-              id={key}
-              name={key}
-              value={field}
-              required={!!formData[`${key}_enabled`]}
-              style={{
-                borderRadius: '10px',
-                backgroundColor: !formData[`${key}_enabled`] ? '#d1d5db' : undefined,
-                userSelect: !formData[`${key}_enabled`] ? 'none' : undefined,
-                cursor: !formData[`${key}_enabled`] ? 'not-allowed' : undefined,
-              }}
-              onChange={e => handleChange(e, key, type)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              autoComplete="new-password"
-              disabled={!formData[`${key}_enabled`]}
-            />
-          </div>
-        );
-      
+                    if (prev[`${key}_confirmation_temp`] !== undefined) {
+                      updated[`${key}_confirmation`] = prev[`${key}_confirmation_temp`];
+                    }
+                    updated[`${key}_enabled`] = true;
+                    } else {
+                    // Store current password and confirmation temporarily
+                    updated[`${key}_temp`] = prev[key] || '';
+                    updated[`${key}_confirmation_temp`] = prev[`${key}_confirmation`] || '';
+                    updated[key] = '';
+                    updated[`${key}_confirmation`] = '';
+                    updated[`${key}_enabled`] = false;
+                    }
+                      return updated;
+                      })}}
+                      />
+                    <label htmlFor={key} className="block text-gray-700 font-bold dark:text-white" style={{ flex: 1 }}>
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </label>
+                    {!formData[`${key}_enabled`]}
+                  </div>
+                  <input
+                    type="password"
+                    id={key}
+                    name={key}
+                    value={formData[key] || ''}
+                    required={!!formData[`${key}_enabled`]}
+                    style={{
+                    borderRadius: '10px',
+                    backgroundColor: !formData[`${key}_enabled`] ? '#d1d5db' : undefined,
+                    userSelect: !formData[`${key}_enabled`] ? 'none' : undefined,
+                    cursor: !formData[`${key}_enabled`] ? 'not-allowed' : undefined,
+                    }}
+                    onChange={e => setFormData(prev => ({
+                    ...prev,
+                    [key]: formData[`${key}_enabled`] ? e.target.value : prev[key],
+                    [`${key}_temp`]: prev[`${key}_temp`] !== undefined ? prev[`${key}_temp`] : prev[key]
+                    }))}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    autoComplete="new-password"
+                    disabled={!formData[`${key}_enabled`]}
+                  />
+                  {formData[`${key}_enabled`] && (
+                    <>
+                      <label htmlFor={`${key}_confirmation`} className="block text-gray-700 font-bold mb-2 dark:text-white mt-4">
+                        {lang.confirmPassword || 'Confirm Password'}
+                      </label>
+                      <input
+                        type="password"
+                        id={`${key}_confirmation`}
+                        name={`${key}_confirmation`}
+                        value={formData[`${key}_confirmation`] || ''}
+                        required={!!formData[`${key}_enabled`]}
+                        style={{ borderRadius: '10px' }}
+                        onChange={e => setFormData(prev => ({
+                          ...prev,
+                          [`${key}_confirmation`]: e.target.value,
+                          [`${key}_confirmation_temp`]: prev[`${key}_confirmation_temp`] !== undefined ? prev[`${key}_confirmation_temp`] : prev[`${key}_confirmation`]
+                        }))}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        autoComplete="new-password"
+                        disabled={!formData[`${key}_enabled`]}
+                      />
+                    </>
+                  )}
+                  {formData[key] && formData[`${key}_confirmation`] && formData[key] !== formData[`${key}_confirmation`] && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {lang.passwordsDoNotMatch || 'Passwords do not match'}
+                    </div>
+                  )}
+                </div>
+            );
+        }
       case 'text':
-      default:
         return (
           <div key={key} className="mb-4">
-            <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
-              {key.charAt(0).toUpperCase() + key.slice(1)}
-            </label>
-            <input
-              type="text"
-              id={key}
-              name={key}
-              value={formData[key] || ''}
-              style={{ borderRadius: '10px' }}
-              onChange={e => handleChange(e, key, type)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+        <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+          {key.charAt(0).toUpperCase() + key.slice(1)}
+        </label>
+        <input
+          type="text"
+          id={key}
+          name={key}
+          value={formData[key] || ''}
+          required
+          style={{ borderRadius: '10px' }}
+          onChange={e => handleChange(e, key, type)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
           </div>
         );
+      case 'email':
+        return (
+          <div key={key} className="mb-4">
+        <label htmlFor={key} className="block text-gray-700 font-bold mb-2 dark:text-white">
+          {key.charAt(0).toUpperCase() + key.slice(1)}
+        </label>
+        <input
+          type="email"
+          id={key}
+          name={key}
+          value={formData[key] || ''}
+          required
+          style={{ borderRadius: '10px' }}
+          onChange={e => handleChange(e, key, type)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Password confirmation validation
+    let passwordError = false;
+    dataControl.forEach(({ key, type }) => {
+      if (type === 'password') {
+        // Solo validar si está activado el cambio de contraseña o si es creación
+        if (!element || formData[`${key}_enabled`]) {
+          if (formData[key] !== formData[`${key}_confirmation`]) {
+            passwordError = true;
+          }
+        }
+      }
+    });
+    if (passwordError) {
+      alert(lang.passwordsDoNotMatch || 'Passwords do not match');
+      return;
+    }
+
     const form = new FormData();
     dataControl.forEach(({ key, type }) => {
-      if (type === 'image' && formData[`${key}_file`]) {
-        form.append(key, formData[`${key}_file`]);
+      if (type === 'image') {
+        // If a new file is selected, append the file object; otherwise, append the existing filename if present
+        if (formData[`${key}_file`]) {
+          form.append(key, formData[`${key}_file`]);
+        } else if (formData[key]) {
+          form.append(key, formData[key]);
+        } else {
+          form.append(key, '');
+        }
+      } else if (type === 'date') {
+        const hour = formData[`${key}_hour`] !== '' ? formData[`${key}_hour`] : '0';
+        const minute = formData[`${key}_minute`] !== '' ? formData[`${key}_minute`] : '0';
+        form.append(key, formData[key] || '');
+        form.append(`${key}_hour`, hour);
+        form.append(`${key}_minute`, minute);
+      } else if (type === 'password') {
+          if (!element || formData[`${key}_enabled`]) {
+            form.append(key, formData[key] || '');
+            form.append(`${key}_confirmation`, formData[`${key}_confirmation`] || '');
+          }
       } else {
-        form.append(key, formData[key]);
+        form.append(key, formData[key] !== undefined ? formData[key] : '');
       }
     });
 
     let url, method;
     if (element) {
-      url = `/${keyElements}/${element}`;
+      url = `/${keyElements}/update/${element.id}`;
       method = 'POST';
       form.append('_method', 'put');
     } else {
-      url = `/${keyElements}`;
+      url = `/${keyElements}/store`;
       method = 'POST';
     }
 
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
     fetch(url, {
       method: method,
       body: form,
       headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'X-CSRF-TOKEN': csrfToken,
         'Accept': 'application/json',
       },
       credentials: 'same-origin',
@@ -320,7 +480,6 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
         }
       })
       .then(data => {
-        // Puedes manejar mensajes de éxito o error aquí
         if (data && data.message) {
           alert(data.message);
         }
@@ -331,16 +490,10 @@ const FormGenerate = ({ element, dataControl, keyElements, lang }) => {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit}
-      encType="multipart/form-data"
-    >
-      {dataControl.map(({ key, field, type, posibilities }) => {
-        if ((element && element[key] !== undefined) || field !== undefined) {
-          return renderInputField({ key, field, type, posibilities });
-        }
-        return null;
-      })}
+    <form onSubmit={handleSubmit}>
+      {dataControl.map(({ key, field, type, posibilities }) => (
+        renderInputField({ key, field, type, posibilities })
+      ))}
       <input
         style={{
           backgroundColor: '#007bff',

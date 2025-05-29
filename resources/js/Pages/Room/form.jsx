@@ -1,8 +1,10 @@
 import React from 'react';
 import FormGenerate from '@/components/FormGenerate';
-import AdminLayout from '@/Layouts/AdminLayout';
 import BlueButton from '@/components/BlueButton';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
+import AdminLayout from '@/Layouts/AdminLayout';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 export default function Form(props) {
     const keyElements = 'rooms';
@@ -16,9 +18,22 @@ export default function Form(props) {
     const nameTable = props.locale==='en' ? `${keyElements}`.charAt(0).toUpperCase() + `${keyElements}`.slice(1) : nameTableES;
     const newElementLang = props.locale==='en' ? props.lang.newElem : generoES==='femenino' ? props.lang.newElem.slice(0,-1)+"a" : props.lang.newElem;
 
-    if (props.auth.user.role !== 'Admin') {
+    const user = usePage().props.auth.user;
+
+    const Layout = (() => {
+            // Determine which layout to use based on user role
+            if (user && user.role === 'Admin') {
+                return AdminLayout;
+            } else if (user) {
+                return AuthenticatedLayout;
+            } else {
+                return GuestLayout;
+            }
+        })();
+        
+    if (user.role !== 'Admin') {
             return (
-                <AdminLayout
+                <Layout
                     locale={props.locale} 
                     auth={props.auth} 
                     lang={props.lang}
@@ -27,11 +42,11 @@ export default function Form(props) {
                         <h1>Access Denied</h1>
                         <p>You do not have permission to view this page.</p>
                     </div>
-                </AdminLayout>
+                </Layout>
             );
-        } else if (props.auth.user.role === 'Admin') {
+    } else if (user.role === 'Admin') {
             return (
-                <AdminLayout
+                <Layout
                     locale={props.locale} 
                     auth={props.auth} 
                     lang={props.lang}
@@ -47,7 +62,7 @@ export default function Form(props) {
                             </main>
                         </div>
                     </div>
-                </AdminLayout>
+                </Layout>
             );
     }
 }

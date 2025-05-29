@@ -132,9 +132,7 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $request->validate([
-            'user_id' => 'required|integer',
             'name' => 'nullable|string|max:100',
             'surname' => 'nullable|string|max:100',
             'country' => 'nullable|string|max:100',
@@ -142,20 +140,36 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        $validation = Profile::where('user_id', $request->user_id);
-        if ($validation->exists() && $validation->id != $id) {
-            return redirect()->back()
-                ->withErrors(['profile' => 'Ya existe una relación con esta User ID.'])
-                ->withInput();
+        
+        $profile = Profile::findOrFail($id);
+
+        if($request->user_id){
+            $validation = Profile::where('user_id', $request->user_id);
+            if ($validation->exists() && $validation->id != $id) {
+                return redirect()->back()
+                    ->withErrors(['profile' => 'Ya existe una relación con esta User ID.'])
+                    ->withInput();
+            }
+            
+            $profile->user_id = $request->user_id;
+        }
+        
+        if($request->name){
+            $profile->name = $request->name;
+        }
+        if($request->name){
+            $profile->surname = $request->surname;
+        }
+        if($request->name){
+            $profile->country = $request->country;
+        }
+        if($request->name){
+            $profile->city = $request->city;
+        }
+        if($request->name){
+            $profile->phone = $request->phone;
         }
 
-        $profile = Profile::findOrFail($id);
-        $profile->user_id = $request->user_id;
-        $profile->name = $request->name;
-        $profile->surname = $request->surname;
-        $profile->country = $request->country;
-        $profile->city = $request->city;
-        $profile->phone = $request->phone;
         $profile->save();
 
         return redirect()->route('profiles.index');
@@ -169,44 +183,37 @@ class ProfileController extends Controller
         return redirect()->route('profiles.index');
     }
 
-    public function myProfileShow()
+    public function myProfile()
     {
         app()->setLocale(session('locale', app()->getLocale()));
 
-        $user = Auth::user();
-        if (!$user) {
+        if (!Auth::user()) {
             abort(403, 'Unauthorized');
         }
-        $profile = $user->profile ?? Profile::where('user_id', $user->id)->firstOrFail();
-        return Inertia::render('MyProfile/Show', [
-            'lang' => function () {
-                return Lang::get('general');
-            },
-            'auth' => [
-                'user' => Auth::user(),
-            ],
-            'appName' => config('app.name'),
-            'locale' => session('locale', app()->getLocale()),
-            'profile' => $profile
-        ]);
-    }
-    public function myProfileEdit()
-    {
-        $user = Auth::user();
-        if (!$user) {
-            abort(403, 'Unauthorized');
+
+        $profile = Profile::where('user_id', Auth::user()->id)->first();
+
+        // Si no existe, lo creamos vacío
+        if (!$profile) {
+            $profile = new Profile();
+            $profile->user_id = Auth::user()->id;
+            $profile->name = '';
+            $profile->surname = '';
+            $profile->country = '';
+            $profile->city = '';
+            $profile->phone = '';
+            $profile->save();
         }
-        $profile = $user->profile ?? Profile::where('user_id', $user->id)->firstOrFail();
-        return Inertia::render('MyProfile/Form', [
-            'lang' => function () {
-                return Lang::get('general');
-            },
-            'auth' => [
-                'user' => Auth::user(),
+
+        return Inertia::render('Profile/MyProfile', [
+         'profile' => $profile,
+         'dataControl' => [
+                ['key' => 'name', 'field' => $profile->name, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'surname', 'field' => $profile->surname, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'country', 'field' => $profile->country, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'city', 'field' => $profile->city, 'type' => 'text', 'posibilities' => ''],
+                ['key' => 'phone', 'field' => $profile->phone, 'type' => 'text', 'posibilities' => ''],
             ],
-            'appName' => config('app.name'),
-            'locale' => session('locale', app()->getLocale()),
-            'profile' => $profile
         ]);
     }
 }

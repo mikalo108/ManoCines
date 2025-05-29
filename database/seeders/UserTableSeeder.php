@@ -12,7 +12,7 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name' => 'Admin User',
+                'name' => 'Admin',
                 'email' => 'admin@manocines.com',
                 'password' => Hash::make('admin'),
                 'role' => 'Admin',
@@ -20,7 +20,7 @@ class UserTableSeeder extends Seeder
                 'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Regular User',
+                'name' => 'user_32_32',
                 'email' => 'user@manocines.com',
                 'password' => Hash::make('password'),
                 'role' => 'Client',
@@ -28,7 +28,7 @@ class UserTableSeeder extends Seeder
                 'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Regular User',
+                'name' => 'miguel_951',
                 'email' => 'miguel@manocines.com',
                 'password' => Hash::make('miguel'),
                 'role' => 'Client',

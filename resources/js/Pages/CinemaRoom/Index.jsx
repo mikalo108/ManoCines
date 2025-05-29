@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import AdminLayout from '@/Layouts/AdminLayout';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router } from '@inertiajs/react';
 import TableIndex from '@/components/TableIndex';
 import FilterForm from '@/components/FilterForm';
@@ -22,10 +24,21 @@ export default function Index(props) {
             // Reset to page 1 when filters change
             router.get(route('cinema-rooms.index'), { page: 1, ...newFilters }, { preserveState: true, replace: true });
         };
+    
+    const Layout = (() => {
+            // Determine which layout to use based on user role
+            if (user && user.role === 'Admin') {
+                return AdminLayout;
+            } else if (user) {
+                return AuthenticatedLayout;
+            } else {
+                return GuestLayout;
+            }
+        })();
 
     if (props.auth.user.role !== 'Admin') {
         return (
-            <AdminLayout
+            <Layout
                 locale={props.locale} 
                 auth={props.auth} 
                 lang={props.lang}
@@ -34,7 +47,7 @@ export default function Index(props) {
                     <h1>Access Denied</h1>
                     <p>You do not have permission to view this page.</p>
                 </div>
-            </AdminLayout>
+            </Layout>
         );
     } else if (props.auth.user.role === 'Admin') {
         return (

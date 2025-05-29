@@ -93,9 +93,6 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         return redirect()->route('home');
     })->name('logout');
-    Route::get('/myProfile', [ProfileController::class, 'myProfileShow'])->name('myProfile.show');
-    Route::get('/myProfile', [ProfileController::class, 'myProfileEdit'])->name('myProfile.edit');
-    Route::put('/myProfile', [ProfileController::class, 'update'])->name('myProfile.update');
 
     // Chairs
     Route::get('chairs', [ChairController::class, 'index'])->name('chairs.index');
@@ -204,6 +201,7 @@ Route::middleware('auth')->group(function () {
     Route::put('profiles/update/{profile}', [ProfileController::class, 'update'])->name('profiles.update');
     Route::get('profiles/{profile}', [ProfileController::class, 'show'])->name('profiles.show');
     Route::get('profiles/delete/{profile}', [ProfileController::class, 'destroy'])->name('profiles.destroy');
+    Route::get('/myProfile', [ProfileController::class, 'myProfile'])->name('profile.myProfile');
 
     // Rooms
     Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');

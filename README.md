@@ -157,6 +157,26 @@ VITE_APP_NAME="${APP_NAME}"
 
 ---
 
+## 🙍‍♂️ Como entrar como administrador
+
+```env
+  Usuario: admin@manocines.com
+  Contraseña: admin
+```
+
+---
+
+## Como usar la aplicación
+
+```env
+  Como usuario invitado no podrás mas que ver el escaparate de las películas.
+  Para ver las películas debes registrarte o iniciar sesión.
+  Un usuario administrador podrá únicamente acceder al panel de control para modificar la base de datos.
+  Un usuario registrado podrá iniciar un proceso de compra para la compra de una entrada para ver una película, opcionalmente junto a productos de bar.
+```
+
+---
+
 </details>
 <details>
   <summary><h2>English</h2></summary>
@@ -311,6 +331,25 @@ MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 
 VITE_APP_NAME="${APP_NAME}"
+```
+---
+
+## 🙍‍♂️ Admin Panel
+
+```env
+  User: admin@manocines.com
+  Password: admin
+```
+
+---
+
+## How to use the app
+
+```env
+  As a guest user you will only be able to see the showcase of films.
+  To view the films you must register or log in.
+  An administrator user can only access the control panel to modify the database.
+  A registered user will be able to initiate a purchase process to buy a ticket to watch a film, optionally together with bar products.
 ```
 
 </details>

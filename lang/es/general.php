@@ -26,6 +26,7 @@ return [
     'clearFilterButton' => 'Limpiar',
     'filterButton' => 'Filtrar',
     'back' => 'Atrás',
+    'next' => 'Siguiente',
     'updateButton' => 'Actualizar',
     'createButton' => 'Crear',
     'newElem' => 'Nuevo',

@@ -7,6 +7,8 @@ use App\Models\Chair;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
 use App\Models\Room;
+use Illuminate\Support\Facades\Log;
+use App\Models\TemporalReserve;
 
 class ChairController extends Controller
 {
@@ -44,13 +46,100 @@ class ChairController extends Controller
 
         $chairs = Chair::where('room_id', $room_id)->orderBy('id', 'desc')->get();
 
+        // Get chairsSelected from session or empty array
+        $chairsSelectedIds = session('chairsSelected', []);
+        if (count($chairsSelectedIds) > 0) {
+            $ids = array_map(function($chair) {
+                return is_array($chair) && isset($chair['id']) ? $chair['id'] : $chair;
+            }, $chairsSelectedIds);
+            $chairsSelected = Chair::whereIn('id', $ids)->get()->toArray();
+        } else {
+            $chairsSelected = [];
+        }
+
+        // Get all chair_ids from TemporalReserve to mark as occupied
+        $reservedChairIds = TemporalReserve::pluck('chair_id')->toArray();
+
         return Inertia::render('Chair/IndexForATime', [
             'chairs' => $chairs,
+            'chairsSelected' => $chairsSelected,
+            'reservedChairIds' => $reservedChairIds,
             'cinema_id' => $cinema_id,
             'film_id' => $film_id,
             'room_id' => $room_id,
             'time_id' => $time_id,
             'langTable' => fn () => Lang::get('tableChairs'),
+        ]);
+    }
+
+    // New method to handle chair selection and update session
+    public function selectChair(Request $request, $cinema_id, $film_id, $room_id, $time_id)
+    {
+        $chairSelectedId = $request->input('chairSelected');
+        $chairsSelected = session('chairsSelected', []);
+
+        // If chairSelectedId is null or empty, it means deselect all or remove last selection
+        if (empty($chairSelectedId)) {
+            // Clear selection or handle accordingly
+            session(['chairsSelected' => []]);
+            // Optionally, remove all TemporalReserve for this user/session if needed
+            return redirect()->route('chairs.time', [
+                'cinema' => $cinema_id,
+                'film' => $film_id,
+                'room' => $room_id,
+                'time' => $time_id,
+            ]);
+        }
+
+        // Fetch the full Chair object
+        $chairSelected = Chair::find($chairSelectedId);
+        if (!$chairSelected) {
+            return back()->withErrors(['chairSelected' => 'Selected chair not found.']);
+        }
+
+        // Check if chair is already in chairsSelected by id
+        $exists = false;
+        foreach ($chairsSelected as $key => $chair) {
+            if (isset($chair['id']) && $chair['id'] == $chairSelectedId) {
+                $exists = true;
+                // Remove chair from selection
+                unset($chairsSelected[$key]);
+                session(['chairsSelected' => array_values($chairsSelected)]);
+                // Remove from TemporalReserve
+                TemporalReserve::where('chair_id', $chairSelectedId)->delete();
+                // Redirect back after deselection
+                return redirect()->route('chairs.time', [
+                    'cinema' => $cinema_id,
+                    'film' => $film_id,
+                    'room' => $room_id,
+                    'time' => $time_id,
+                ]);
+            }
+        }
+        if (!$exists) {
+            $chairsSelected[] = $chairSelected->toArray();
+            session(['chairsSelected' => $chairsSelected]);
+        }
+
+        // Check if TemporalReserve already exists for this chair
+        $existingReserve = TemporalReserve::where('chair_id', $chairSelectedId)->first();
+        if ($existingReserve) {
+            // Return with error message or handle as needed
+            return back()->withErrors(['chairSelected' => 'This chair is already reserved temporarily.']);
+        }
+
+        // Save chairSelected in TemporalReserve with reserve_time as now()
+        TemporalReserve::create([
+            'chair_id' => $chairSelectedId,
+            'reserve_time' => now(),
+        ]);
+
+        // Redirect back to the indexForATime page with parameters
+        return redirect()->route('chairs.time', [
+            'cinema' => $cinema_id,
+            'film' => $film_id,
+            'room' => $room_id,
+            'time' => $time_id,
         ]);
     }
 

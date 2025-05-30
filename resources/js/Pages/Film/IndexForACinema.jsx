@@ -38,7 +38,7 @@ export default function IndexForACinema(props) {
                             <div className="flex flex-wrap justify-center gap-8">
                                 {props.films ? (
                                     props.films.map((film) => (
-                                    <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80 cursor-pointer group" onClick={() => router.visit(route('times.films', { cinema: props.cinema.id, film: film.id }))}>
+                                    <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80 cursor-pointer group" onClick={() => router.visit(route('times.film', { cinema: props.cinema.id, film: film.id }))}>
                                         <img
                                             src={"/storage/films/"+film.image}
                                             alt={film.name}

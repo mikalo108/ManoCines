@@ -25,7 +25,7 @@ class Product extends Model
      */
     public function cinemas()
     {
-        return $this->belongsToMany(Cinema::class, 'products_cinema');
+        return $this->belongsToMany(Cinema::class, 'product_cinemas');
     }
 
     /**

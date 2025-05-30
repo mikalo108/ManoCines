@@ -96,7 +96,8 @@ Route::middleware('auth')->group(function () {
 
     // Chairs
     Route::get('chairs', [ChairController::class, 'index'])->name('chairs.index');
-    Route::get('/{cinema}/{film}/{time}/{room}/chairs', [ChairController::class, 'indexForATime'])->name('chairs.time');
+    Route::get('/{cinema}/{film}/{room}/{time}/chairs', [ChairController::class, 'indexForATime'])->name('chairs.time');
+    Route::post('/{cinema_id}/{film_id}/{time_id}/{room_id}/chairs/select', [ChairController::class, 'selectChair'])->name('chairs.select');
     Route::get('chairs/create', [ChairController::class, 'create'])->name('chairs.create');
     Route::post('chairs/store', [ChairController::class, 'store'])->name('chairs.store');
     Route::get('chairs/edit/{chair}', [ChairController::class, 'edit'])->name('chairs.edit');
@@ -178,6 +179,7 @@ Route::middleware('auth')->group(function () {
 
     // Products
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/{cinema}/{film}/{room}/{time}/products', [ProductController::class, 'indexBarProducts'])->name('products.chairs');
     Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('products/store', [ProductController::class, 'store'])->name('products.store');
     Route::get('products/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
@@ -211,7 +213,7 @@ Route::middleware('auth')->group(function () {
 
     // Times
     Route::get('times', [TimeController::class, 'index'])->name('times.index');
-    Route::get('/{cinema}/{film}/times', [TimeController::class, 'indexForAFilm'])->name('times.films');
+    Route::get('/{cinema}/{film}/times', [TimeController::class, 'indexForAFilm'])->name('times.film');
     Route::get('times/create', [TimeController::class, 'create'])->name('times.create');
     Route::post('times/store', [TimeController::class, 'store'])->name('times.store');
     Route::get('times/edit/{time}', [TimeController::class, 'edit'])->name('times.edit');

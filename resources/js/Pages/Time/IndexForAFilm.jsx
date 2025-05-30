@@ -66,7 +66,7 @@ export default function IndexForAFilm(props) {
                                         const timesForRoom = props.times.filter(time => time.room_id === room.id);
                                         return (
                                             <div key={room.id} className="mb-6">
-                                                <h2 className="font-semibold mb-2">Room {room.name || room.id}</h2>
+                                                <h2 className="font-semibold mb-2">Room {room.number}</h2>
                                                 <div className="grid grid-cols-3 gap-2">
                                                     {timesForRoom.map(time => {
                                                         const timeObj = new Date(time.time);
@@ -79,10 +79,10 @@ export default function IndexForAFilm(props) {
                                                             onClick={() =>
                                                                 router.visit(
                                                                     route('chairs.time', {
-                                                                        time: time.id,
-                                                                        room: time.room_id,
                                                                         cinema: props.cinema.id,
                                                                         film: props.film.id,
+                                                                        time: time.id,
+                                                                        room: time.room_id,
                                                                     })
                                                                 )
                                                             }

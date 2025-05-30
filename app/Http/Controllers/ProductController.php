@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
@@ -41,10 +42,36 @@ class ProductController extends Controller
         ]);
     }
 
+    public function indexBarProducts($cinema_id, $film_id, $room_id, $time_id){
+        // Get all product categories with their products filtered by cinema
+        $categories = ProductCategory::with(['products' => function($query) use ($cinema_id) {
+            $query->whereHas('cinemas', function($q) use ($cinema_id) {
+                $q->where('cinemas.id', $cinema_id);
+            });
+        }])->get();
+
+        // Transform categories to array with category name as key and products as value
+        $result = [];
+        foreach ($categories as $category) {
+            $result[] = [
+                $category->name => $category->products->toArray()
+            ];
+        }
+
+        return Inertia::render('Product/IndexBarProducts', [
+            'categories' => $result,
+            'cinema_id' => $cinema_id,
+            'film_id' => $film_id,
+            'room_id' => $room_id,
+            'time_id' => $time_id,
+            'langTable' => fn () => Lang::get('tableProducts'),
+        ]);
+    }
+
     public function create()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        $product_categories_lastID = \App\Models\ProductCategory::orderBy('id', 'desc')->first()?->id;
+        $product_categories_lastID = ProductCategory::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Product/Form', [
          'dataControl' => [
@@ -91,7 +118,7 @@ class ProductController extends Controller
     {
         app()->setLocale(session('locale', app()->getLocale()));  
         $product = Product::findOrFail($id);
-        $product_categories_lastID = \App\Models\ProductCategory::orderBy('id', 'desc')->first()?->id;
+        $product_categories_lastID = ProductCategory::orderBy('id', 'desc')->first()?->id;
 
         return Inertia::render('Product/Form', [
          'product' => $product,

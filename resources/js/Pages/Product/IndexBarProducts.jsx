@@ -46,9 +46,13 @@ export default function IndexBarProducts(props) {
             return [product, qty];
         }).filter(item => item[1] !== undefined);
 
-        // Submit form data as needed, here just logging or you can send via router.post
-        console.log(selectedArray);
-        // Example: router.post(route('your.route'), { selectedProducts: selectedArray });
+        // Send data to orders.create.client route with parameters
+        router.post(route('orders.details', {
+            cinema_id: props.cinema_id,
+            time_id: props.time_id,
+            room_id: props.room_id,
+            film_id: props.film_id,
+        }), { selectedProducts: selectedArray });
     };
 
     if (props.auth.user.role !== 'Admin') {
@@ -97,7 +101,7 @@ export default function IndexBarProducts(props) {
                                 })}
                             </div>
 
-                            <form onSubmit={handleSubmit}>
+                            <form id="productSelectionForm" onSubmit={handleSubmit}>
                                 {props.categories.map((category, idx) => {
                                     const categoryName = Object.keys(category)[0];
                                     const products = category[categoryName];
@@ -137,7 +141,7 @@ export default function IndexBarProducts(props) {
             </Layout>
         );
     } else {
-        router.get(route('product.index'));
+        router.get(route('products.index'));
         return null;
     }
 }

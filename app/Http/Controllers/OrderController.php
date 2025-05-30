@@ -35,6 +35,24 @@ class OrderController extends Controller
         ]);
     }
 
+    public function createClient(Request $request)
+    {
+        $cinema_id = $request->input('cinema_id');
+        $time_id = $request->input('time_id');
+        $room_id = $request->input('room_id');
+        $film_id = $request->input('film_id');
+        $selectedProducts = $request->input('selectedProducts');
+
+        return Inertia::render('Order/Details', [
+            'selectedProducts' => $selectedProducts,
+            'cinema_id' => $cinema_id,
+            'time_id' => $time_id,
+            'room_id' => $room_id,
+            'film_id' => $film_id,
+            'langTable' => fn () => Lang::get('tableOrders'),
+        ]);
+    }
+
     public function create()
     {
         app()->setLocale(session('locale', app()->getLocale()));          
@@ -99,4 +117,5 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index');
     }
+
 }

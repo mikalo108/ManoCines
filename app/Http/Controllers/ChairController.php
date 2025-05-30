@@ -27,17 +27,13 @@ class ChairController extends Controller
             $query->where('room_id', $request->roomId);
         }
 
-        if ($request->filled('cinemaId')) {
-            $query->where('cinema_id', $request->cinemaId);
-        }
-
         $chairList = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
 
         return Inertia::render('Chair/Index', [
             'chairs' => $chairList,
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableChairs'),
-            'fieldsCanFilter' => [['key'=>'chairId', 'field'=>$request->chairId], ['key'=>'roomId', 'field'=>$request->roomId], ['key'=>'cinemaId', 'field'=>$request->roomId]],
+            'fieldsCanFilter' => [['key'=>'chairId', 'field'=>$request->chairId], ['key'=>'roomId', 'field'=>$request->roomId], ['key'=>'cinemaId', 'field'=>$request->cinemaId]],
         ]);
     }
 

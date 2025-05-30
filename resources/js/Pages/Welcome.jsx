@@ -76,7 +76,7 @@ export default function Welcome(props) {
         }
     })();
 
-    if (user.role==="Admin") {
+    if (user && user.role==="Admin") {
         return (
             <Layout
             locale={props.locale} 

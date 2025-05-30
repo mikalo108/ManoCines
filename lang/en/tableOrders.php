@@ -16,4 +16,5 @@ return [
         'updated_at' => 'Updated At',
         'actions' => 'Actions',
     ],
+    'goToPay'=>'Pay'
 ];

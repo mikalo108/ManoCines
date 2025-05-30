@@ -32,10 +32,10 @@ export default function OrderDetails(props) {
                     <div className="relative w-full px-6 flex flex-col items-center max-w-4xl text-center">
                         <div className="flex justify-between mb-4 w-full">
                             <BlueButton link={"products.chairs"} params={[
-                                { key: 'cinema', value: props.cinema_id },
-                                { key: 'film', value: props.film_id },
-                                { key: 'room', value: props.room_id },
-                                { key: 'time', value: props.time_id }
+                                { key: 'cinema', value: props.cinema?.id },
+                                { key: 'film', value: props.film?.id },
+                                { key: 'room', value: props.room?.id },
+                                { key: 'time', value: props.time?.id }
                             ]}>{props.lang.back}</BlueButton>
                         </div>
                         <h1 className="text-black dark:text-white mt-8 font-bold" style={{ fontWeight: 'bolder', width: '100%', textAlign: 'center' }}>
@@ -47,7 +47,7 @@ export default function OrderDetails(props) {
 
                         <div className="w-full">
                             <h3 className="font-semibold mb-4">Cinema:</h3>
-                            <p className="mb-6">{props.cinema_id}</p> {/* You can replace with cinema name if available */}
+                            <p className="mb-6">{props.cinema?.name || ''}</p>
 
                             <h3 className="font-semibold mb-4">Selected Products:</h3>
                             <ul className="mb-6 list-none p-0">
@@ -59,6 +59,7 @@ export default function OrderDetails(props) {
                                                 <div className="font-semibold">{product.name}</div>
                                                 <div>{product.description}</div>
                                                 <div>Quantity: {quantity}</div>
+                                                <div>Subtotal: {(product.price * quantity).toFixed(2)}€</div>
                                             </div>
                                         </li>
                                     ))
@@ -70,15 +71,47 @@ export default function OrderDetails(props) {
                             <h3 className="font-semibold mb-4">Selected Chairs (Tickets):</h3>
                             <ul className="list-none p-0">
                                 {chairsSelected && chairsSelected.length > 0 ? (
-                                    chairsSelected.map((chair, index) => (
-                                        <li key={index}>
-                                            Row {chair.row} - Column {chair.column}
-                                        </li>
-                                    ))
+                                    <li className="mb-4 border rounded p-4 flex flex-col items-center gap-4">
+                                        <img src={`/storage/films/${props.film.image}`} alt={props.film.name} className="w-20 h-20 object-cover" />
+                                        <div>
+                                            <div className="font-semibold">{props.film.name}</div>
+                                            <div>x{chairsSelected.length}</div>
+                                            <div>Subtotal: {Array.isArray(chairsSelected) && chairsSelected.length > 0 && typeof chairsSelected.reduce === 'function' ? chairsSelected.reduce((acc, chair) => acc + (parseFloat(chair.price) || 0), 0).toFixed(2) : '0.00'}€</div>
+                                        </div>
+                                    </li>
                                 ) : (
-                                    <p>No chairs selected</p>
+                                    <p>{props.lang.noChairsSelected}</p>
                                 )}
-                            </ul>
+                        </ul>
+                            <h3 className="font-semibold mb-4">Subtotal Products:</h3>
+                            <p className="mb-6">
+                                {props.selectedProducts && props.selectedProducts.length > 0
+                                    ? props.selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0).toFixed(2) + '€'
+                                    : '0.00€'}
+                            </p>
+                            {chairsSelected && chairsSelected.length > 0 ? (
+                            <form method="GET" action={route('orders.details')}>
+                                <input type="hidden" name="cinema_id" value={props.cinema?.id} />
+                                <input type="hidden" name="time_id" value={props.time?.id} />
+                                <input type="hidden" name="room_id" value={props.room?.id} />
+                                <input type="hidden" name="film_id" value={props.film?.id} />
+                                {props.selectedProducts && props.selectedProducts.length > 0 && props.selectedProducts.map(([product, quantity], index) => (
+                                    <input key={`product-${index}`} type="hidden" name={`selectedProducts[${index}][0][id]`} value={product.id} />
+                                ))}
+                                {props.selectedProducts && props.selectedProducts.length > 0 && props.selectedProducts.map(([product, quantity], index) => (
+                                    <input key={`quantity-${index}`} type="hidden" name={`selectedProducts[${index}][1]`} value={quantity} />
+                                ))}
+                                {props.chairsSelected && props.chairsSelected.length > 0 && props.chairsSelected.map((chair, index) => (
+                                    <input key={`chair-${index}`} type="hidden" name={`selectedChairs[${index}][id]`} value={chair.id} />
+                                ))}
+                                <button
+                                    type="submit"
+                                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer"
+                                >
+                                    {props.langTable.goToPay}
+                                </button>
+                            </form>
+                            ):(null)}
                         </div>
                     </div>
                 </div>

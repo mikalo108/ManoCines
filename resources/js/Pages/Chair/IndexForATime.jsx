@@ -101,27 +101,30 @@ export default function IndexForATime(props) {
                     <div className="relative w-full px-6 flex flex-col items-center">
                         <div className="flex justify-between mb-4" style={{width:'50%'}}>
                             <BlueButton link={"times.film"} params={[{ key: 'cinema', value: props.cinema_id }, { key: 'film', value: props.film_id }]}>{props.lang.back}</BlueButton>
-                            {props.chairsSelected && props.chairsSelected.length > 0 && (
-                                <button
-                                    onClick={() => router.get(route('products.chairs', {
-                                        cinema: props.cinema_id,
-                                        film: props.film_id,
-                                        room: props.room_id,
-                                        time: props.time_id,
-                                    }))}
-                                    style={{
-                                        backgroundColor: '#007bff',
-                                        color: 'white',
-                                        border: 'none',
-                                        padding: '10px 20px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        fontSize: '16px',
-                                    }}
-                                    >
-                                    {props.langTable.proceedToProducts}
-                                </button>
-                            )}
+                                {props.chairsSelected && props.chairsSelected.length > 0 && (
+                                <>
+                                    <button
+                                        onClick={() => router.get(route('products.chairs', {
+                                            cinema: props.cinema_id,
+                                            film: props.film_id,
+                                            room: props.room_id,
+                                            time: props.time_id,
+                                        }))}
+                                        style={{
+                                            backgroundColor: '#007bff',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '10px 20px',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '16px',
+                                        }}
+                                        >
+                                        {props.langTable.proceedToProducts}
+                                    </button>
+                                </>
+                             )}
+
                         </div>
                         <h1 className='text-black dark:text-white mt-8 font-bold' style={{fontWeight:'bolder', width:'100%', textAlign: 'center'}}>{props.langTable.titleClient}</h1>
                         <h2 className='mb-8' style={{textAlign: 'center'}}>{props.langTable.subtitleClient}</h2>
@@ -139,6 +142,10 @@ export default function IndexForATime(props) {
                                 <div className="flex items-center gap-2 cursor-default select-none">
                                     <ChairIcon occupied={false} selected={false} />
                                     <span>{props.langTable.available}</span>
+                                </div>
+                                <div className="flex items-center gap-2 cursor-default select-none">
+                                    <img src="/storage/general/trash-solid.svg" alt="Trash icon" className="w-5 h-5" />
+                                    <span>{props.langTable.clearAllChairs}</span>
                                 </div>
                             </div>
                             <div className="border rounded p-4 overflow-auto" style={{ maxWidth: '600px', maxHeight: '600px' }}>
@@ -180,16 +187,52 @@ export default function IndexForATime(props) {
                                 <div className="mt-2 text-center font-bold">Screen</div>
                             </div>
                             <div className="w-64 border rounded p-4 overflow-auto">
-                                <h2 className="font-semibold mb-2">Selected Chairs:</h2>
-                                {props.chairsSelected && props.chairsSelected.length > 0 ? (
-                                    <ul className="list-disc list-inside">
-                                        {props.chairsSelected.map((chair, index) => (
-                                            <li key={chair.id ?? index}>{props.langTable.columns.row} {chair.row} - {props.langTable.columns.column} {chair.column}</li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>{props.langTable.noChairsSelected}</p>
-                                )}
+                                <div className='flex flex-column gap-8 mb-8'>
+                                    <h2 className="font-semibold mb-2">Selected Chairs</h2>
+                                    <img
+                                        src="/storage/general/trash-solid.svg"
+                                        alt="Remove all"
+                                        className="cursor-pointer w-4 h-4"
+                                        onClick={() => {
+                                            const formData = new FormData();
+                                            formData.append('chairSelected', ''); // empty to clear all
+                                            router.post(route('chairs.select', {
+                                                cinema_id: props.cinema_id,
+                                                time_id: props.time_id,
+                                                room_id: props.room_id,
+                                                film_id: props.film_id,
+                                            }), formData);
+                                        }}
+                                    />
+                                </div>
+                                
+                            {props.chairsSelected && props.chairsSelected.length > 0 ? (
+                                <ul className="list-disc list-inside">
+                                    {props.chairsSelected.map((chair, index) => (
+                                        <li key={chair.id ?? index} className="flex items-center justify-between">
+                                            <span>{props.langTable.columns.row} {chair.row} - {props.langTable.columns.column} {chair.column}</span>
+                                            <img
+                                                src="/storage/general/trash-solid.svg"
+                                                alt="Remove"
+                                                className="cursor-pointer w-4 h-4"
+                                                onClick={() => {
+                                                    // Call API to deselect chair
+                                                    const formData = new FormData();
+                                                    formData.append('chairSelected', chair.id);
+                                                    router.post(route('chairs.select', {
+                                                        cinema_id: props.cinema_id,
+                                                        time_id: props.time_id,
+                                                        room_id: props.room_id,
+                                                        film_id: props.film_id,
+                                                    }), formData);
+                                                }}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>{props.langTable.noChairsSelected}</p>
+                            )}
                             </div>
                         </div>
                     </div>

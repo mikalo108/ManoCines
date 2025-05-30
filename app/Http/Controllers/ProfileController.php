@@ -169,6 +169,37 @@ class ProfileController extends Controller
         return redirect()->route('profiles.index');
     }
 
+    public function updateMyProfile(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'nullable|string|max:100',
+            'surname' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'city' => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        
+        $profile = Profile::findOrFail($id);
+
+        if($request->user_id){
+            $validation = Profile::where('user_id', $request->user_id);
+            if ($validation->exists() && $validation->id != $id) {
+                return redirect()->back()
+                    ->withErrors(['profile' => 'Ya existe una relación con esta User ID.'])
+                    ->withInput();
+            }
+            
+            $profile->user_id = $request->user_id;
+        }
+        
+        
+
+        $profile->save();
+
+        return redirect()->route('dashboard');
+    }
+
     public function destroy($id)
     {
         $profile = Profile::findOrFail($id);

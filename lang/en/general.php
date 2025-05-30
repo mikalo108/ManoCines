@@ -33,4 +33,5 @@ return [
     'editElem' => 'Edit',
     'noChange' => '(You can\'t change this)',
     'passwordsDoNotMatch' => 'Passwords do not match',
+    'noChairsSelected' => 'No chairs selected',
 ];

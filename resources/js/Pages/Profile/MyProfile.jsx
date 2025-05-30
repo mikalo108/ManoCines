@@ -2,7 +2,7 @@ import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import React from 'react';
-import FormGenerate from '@/components/FormGenerate';
+import FormMyProfileGenerate from '@/components/FormMyProfileGenerate';
 import BlueButton from '@/components/BlueButton';
 import { Head, usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
@@ -67,7 +67,7 @@ export default function MyProfile(props) {
                                 )}
                                 
                                 
-                                <FormGenerate element={props[keyElement] ? props[keyElement] : null} dataControl={props.dataControl} keyElements={keyElements} lang={props.lang} />
+                                <FormMyProfileGenerate element={props[keyElement] ? props[keyElement] : null} dataControl={props.dataControl} keyElements={keyElements} lang={props.lang} />
                                 <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                                     <DeleteUserForm className="max-w-xl" />
                                 </div>

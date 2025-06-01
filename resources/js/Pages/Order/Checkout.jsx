@@ -5,7 +5,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, usePage, router } from '@inertiajs/react';
 import BlueButton from '@/components/BlueButton';
 
-export default function OrderCheckout(props) {
+export default function Checkout(props) {
     const user = usePage().props.auth.user;
 
     const Layout = (() => {
@@ -25,7 +25,7 @@ export default function OrderCheckout(props) {
         }
         return (
             <Layout
-                currentPage={"orderCheckout"}
+                currentPage={"Checkout"}
                 locale={props.locale}
                 auth={props.auth}
                 lang={props.lang}

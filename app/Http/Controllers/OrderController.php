@@ -62,13 +62,6 @@ class OrderController extends Controller
 
     public function createByClient(Request $request)
     {
-        $request->validate([
-            'cinema_id' => 'required|integer|exists:cinemas,id',
-            'time_id' => 'required|integer|exists:times,id',
-            'room_id' => 'required|integer|exists:rooms,id',
-            'film_id' => 'required|integer|exists:films,id',
-            'selectedProducts' => 'required|array',
-        ]);
 
         $user = $request->user();
 
@@ -124,8 +117,12 @@ class OrderController extends Controller
         // Clear chairsSelected session variable after order creation
         $request->session()->forget('chairsSelected');
 
-        // Redirect to checkout page with order id as query parameter
-        return redirect()->route('orders.checkout', ['order' => $order->id]);
+        return Inertia::render('Order/Checkout', [
+            'order' => $order,
+            'selectedProducts' => $request->selectedProducts,
+            'chairsSelected' => $chairsSelected,
+            'langTable' => fn () => Lang::get('tableOrders'),
+        ]);
     }
 
     public function create()

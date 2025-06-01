@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('order/details', [OrderController::class, 'createClient'])->name('orders.details');
-    Route::get('order/checkout', [OrderController::class, 'createByClient'])->name('orders.createByClient');
+    Route::post('order/checkout', [OrderController::class, 'createByClient'])->name('orders.createByClient');
     Route::post('orders/store', [OrderController::class, 'store'])->name('orders.store');
     Route::get('orders/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
     Route::put('orders/update/{order}', [OrderController::class, 'update'])->name('orders.update');

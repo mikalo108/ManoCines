@@ -90,7 +90,7 @@ export default function OrderDetails(props) {
                                     : '0.00€'}
                             </p>
                             {chairsSelected && chairsSelected.length > 0 ? (
-                            <form method="GET" action={route('orders.details')}>
+                            <form method="POST" action={route('orders.createByClient')}>
                                 <input type="hidden" name="cinema_id" value={props.cinema?.id} />
                                 <input type="hidden" name="time_id" value={props.time?.id} />
                                 <input type="hidden" name="room_id" value={props.room?.id} />

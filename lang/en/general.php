@@ -39,4 +39,5 @@ return [
     'film' => 'Film',
     'products' => 'Products',
     'selectDay' => 'When?',
+    'taxIncluded' => 'Tax included (21%)',
 ];

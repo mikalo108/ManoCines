@@ -4,7 +4,7 @@ import { left } from '@popperjs/core';
 
 export default function CartDropdown({ auth }) {
     const [isOpen, setIsOpen] = useState(false);
-    const { chairsSelected, langTable, film_id, room_id, time_id, lang, allFilms, allRooms, allTimes} = usePage().props;
+    const { chairsSelected, selectedProducts, langTableChair, film_id, room_id, time_id, lang, allFilms, allRooms, allTimes} = usePage().props;
     const film = allFilms.find(f => f.id == film_id);
     const room = allRooms.find(r => r.id == room_id);
     const time = allTimes.find(t => t.id == time_id);
@@ -43,7 +43,7 @@ export default function CartDropdown({ auth }) {
                             {chairsSelected && chairsSelected.length > 0 ? (
                                 <ul className='relative left-6' style={{ listStyleType: 'none', paddingInline: '10%'}}>
                                     <li style={{ paddingBottom:'10px', marginTop:'15px', borderBottom: '1px solid #ccc', width:'80%' }} className='mb-2'>
-                                        <strong className='relative right-4'>{chairsSelected && chairsSelected.length > 0 ? (<span>{chairsSelected.length}</span>) : (0)}x</strong>
+                                        <strong className='text-xl relative right-4'>{chairsSelected && chairsSelected.length > 0 ? (<span>{chairsSelected.length}</span>) : (0)}x</strong>
                                         <span className='text-xl font-medium text-gray-600'>
                                             {lang.room} {room ? room.number : ''} - {film ? film.name : ''} 
                                         </span> 
@@ -53,22 +53,38 @@ export default function CartDropdown({ auth }) {
                                         <ul className="list-disc list-inside">
                                             {chairsSelected.map((chair, index) => (
                                                 <li key={chair.id ?? index} className="flex items-center justify-between">
-                                                    <span>    - {langTable.columns.row} {chair.row} - {langTable.columns.column} {chair.column}</span> | <strong>{chair.price}€</strong>
+                                                    <span>    - {langTableChair.columns.row} {chair.row} - {langTableChair.columns.column} {chair.column}</span> | <strong>{chair.price}€</strong>
                                                 </li>
                                             ))}
                                         </ul>
                                     </li>
                                     <li style={{ paddingBottom:'10px', marginTop:'15px', borderBottom: '1px solid #ccc', width:'80%' }}>
-                                        <strong className='relative right-4'>{chairsSelected && chairsSelected.length > 0 ? (<span>{chairsSelected.length}</span>) : (0)}x</strong>
-                                        <span  className='text-xl font-medium text-gray-600'>{lang.products}: </span>    
+                                        <strong className='text-xl relative right-4'>{selectedProducts && selectedProducts.length > 0 ? (<span>{}</span>) : (0)}x</strong>
+                                        <span  className='text-xl font-medium text-gray-600'>{lang.products}: </span> 
+                                        <ul className="list-disc list-inside">
+                                            {selectedProducts.map(([product, quantity], index) => (
+                                                <li key={product.id ?? index} className="flex items-center justify-between">
+                                                    <span> <strong className='text-sm relative right-3'><span>{quantity}x</span></strong>{product.name}</span> | <strong>{product.price}€</strong>
+                                                </li>
+                                            ))}
+                                        </ul>   
                                     </li>
-                                    <li style={{ paddingBottom:'10px', marginTop:'15px', width:'80%' }}> 
-                                        <span className='text-2xl font-semibold text-gray-700'>Total:</span>
-                                        <span className='text-2xl font-bold text-gray-900 relative left-2'>
-                                            {chairsSelected.reduce((total, chair) => total + parseFloat(chair.price),
-                                                chairsSelected.reduce((total, chair) => total + parseFloat(chair.price), 0) * 0.10
-                                            ).toFixed(2)}€
-                                        </span>
+                                    <li style={{ paddingBottom:'10px', marginTop:'15px', width:'80%' }} className='mt-2 flex flex-col items-start justify-start'> 
+                                        <div className='text-2xl font-semibold text-gray-600'>
+                                            <span>Subtotal:</span>
+                                            <span className='text-2xl font-bold text-gray-600 relative left-2'>
+                                                {((chairsSelected && chairsSelected.length > 0 && typeof chairsSelected.reduce === 'function' ? chairsSelected.reduce((acc, chair) => acc + (parseFloat(chair.price) || 0), 0) : 0) + (selectedProducts && selectedProducts.length > 0 ? selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0) : 0)).toFixed(2)}€
+                                            </span>
+                                        </div>
+                                        <div>
+                                            {lang.taxIncluded}
+                                        </div>
+                                        <div className='text-2xl font-bold text-gray-900 relative' style={{ border: '1px solid #2d2d2dff', marginTop: '10px', paddingTop: '10px', paddingBlock: '10px', paddingLeft: '20px', paddingRight: '20px', borderRadius: '5px' }}>
+                                            <span>Total:</span>
+                                            <span className='text-2xl font-bold text-gray-900 relative left-2'>
+                                                {((((chairsSelected && chairsSelected.length > 0 && typeof chairsSelected.reduce === 'function' ? chairsSelected.reduce((acc, chair) => acc + (parseFloat(chair.price) || 0), 0) : 0) + (selectedProducts && selectedProducts.length > 0 ? selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0) : 0))) * 1.21).toFixed(2)}€
+                                            </span>
+                                        </div>
                                     </li>
                                 </ul>
                             ) : (

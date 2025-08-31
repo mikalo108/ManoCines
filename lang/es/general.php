@@ -39,4 +39,5 @@ return [
     'film' => 'Película',
     'products' => 'Productos',
     'selectDay' => '¿Cúando?',
+    'taxIncluded' => 'IVA incluido (21%)',
 ];

@@ -28,8 +28,8 @@ export default function OrderDetails(props) {
                 lang={props.lang}
             >
                 <Head title={"Order Details"} />
-                <div className="relative flex min-h-screen flex-col selection:bg-[#FF2D20] selection:text-white">
-                    <div className="relative w-full px-6 flex flex-col items-center max-w-4xl text-center">
+                <div className="relative flex min-h-screen items-center flex-col selection:bg-[#FF2D20] selection:text-white">
+                    <div className="relative w-full px-6 flex flex-col items-center justify-center max-w-4xl text-center">
                         <div className="flex justify-between mb-4 w-full">
                             <BlueButton link={"products.chairs"} params={[
                                 { key: 'cinema', value: props.cinema?.id },

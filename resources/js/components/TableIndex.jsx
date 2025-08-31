@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@inertiajs/react';
 import ActionButtons from '@/components/ActionButtons';
 
-export default function TableIndex({ columnsTable, items, keyTable, pagination, onPageChange }) {
+export default function TableIndex({ columnsTable, items, keyTable, pagination, onPageChange, props }) {
     const columnsTableArray = Object.entries(columnsTable);
 
 if (!columnsTableArray || !Array.isArray(columnsTableArray)) {
@@ -22,7 +22,8 @@ const goToPage = (page) => {
     }
 };
 
-return (
+if (props.auth.user.role === 'Admin') {
+    return (
     <>
         <hr className='bg-grey-800 mb-4 py-4' />
         <Link
@@ -116,4 +117,60 @@ return (
         </div>
     </>
 )
+} else if (props.auth.user.role !== 'Admin') {
+        return (
+            <>
+                <div
+                    className="flex flex-wrap justify-center gap-8"
+                >
+                    {items.map((film) => (
+                        <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80">
+                            <img
+                                src={"/storage/films/"+film.image}
+                                alt={film.name}
+                                className="w-60 h-96 object-cover rounded-xl shadow-md mb-4"
+                            />
+                            <h2 className="text-2xl font-bold text-center mb-2">{film.name}</h2>
+                            {film.overview && (
+                                <h3 className="text-lg text-gray-600 text-center mb-2">{film.overview}</h3>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="flex justify-center mt-12 w-full">
+                    <nav className="inline-flex -space-x-px overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" style={{ maxWidth: '100%', whiteSpace: 'nowrap' }}>
+                        <button
+                            className="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Anterior"
+                            onClick={() => goToPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            &lt;
+                        </button>
+                        {[...Array(totalPages)].map((_, idx) => (
+                            <button
+                                key={idx + 1}
+                                className={`px-3 py-2 leading-tight border border-gray-300 ${
+                                    currentPage === idx + 1
+                                        ? "text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
+                                        : "text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
+                                }`}
+                                onClick={() => goToPage(idx + 1)}
+                            >
+                                {idx + 1}
+                            </button>
+                        ))}
+                        <button
+                            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Siguiente"
+                            onClick={() => goToPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            &gt;
+                        </button>
+                    </nav>
+                </div>
+            </>
+        )
+    }
 }

@@ -39,6 +39,7 @@ Route::get('/locale/{locale}', function ($locale, Request $request) {
 })->middleware('web')->where('locale', '[a-zA-Z]{2}')->name('locale.switch');
 
 Route::get('/', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'), 
             'canRegister' => Route::has('register'),
@@ -58,6 +59,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/login', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
@@ -72,6 +74,7 @@ Route::get('/login', function () {
 })->middleware('guest')->name('login');
 
 Route::get('/register', function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
@@ -86,6 +89,7 @@ Route::get('/register', function () {
 })->middleware('guest')->name('register');
 
 Route::middleware('auth')->group(function () {
+    app()->setLocale(session('locale', app()->getLocale()));
     Route::get('/logout', function () {
         Auth::logout();
         return redirect()->route('home');

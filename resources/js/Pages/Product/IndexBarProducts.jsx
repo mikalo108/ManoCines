@@ -46,13 +46,10 @@ export default function IndexBarProducts(props) {
             return [product, qty];
         }).filter(item => item[1] !== undefined);
 
-        // Send data to orders.create.client route with parameters
-        router.post(route('orders.details', {
-            cinema_id: props.cinema_id,
-            time_id: props.time_id,
-            room_id: props.room_id,
-            film_id: props.film_id,
-        }), { selectedProducts: selectedArray });
+        // Send data to orders.details route with parameters
+        router.post(route('orders.details'), {
+            selectedProducts: selectedArray,
+        });
     };
 
     if (props.auth.user.role !== 'Admin') {

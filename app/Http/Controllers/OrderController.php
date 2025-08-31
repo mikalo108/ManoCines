@@ -42,12 +42,22 @@ class OrderController extends Controller
 
     public function createClient(Request $request)
     {
-        $cinema = Cinema::find($request->input('cinema_id'));
-        $time = Time::find($request->input('time_id'));
-        $room = Room::find($request->input('room_id'));
-        $film = Film::find($request->input('film_id'));
-        $selectedProducts = $request->input('selectedProducts');
+        app()->setLocale(session('locale', app()->getLocale()));  
+        $cinema_id = $request->session()->get('cinema_id');
+        $film_id = $request->session()->get('film_id');
+        $room_id = $request->session()->get('room_id');
+        $time_id = $request->session()->get('time_id');
+        $cinema = Cinema::find($cinema_id);
+        $time = Time::find($time_id);
+        $room = Room::find($room_id);
+        $film = Film::find($film_id);
+        
+        // Get chairs and products selected from session
         $chairsSelected = $request->session()->get('chairsSelected', []);
+        $selectedProducts = $request->input('selectedProducts');
+        
+        // Put products selected to session
+        session($selectedProducts);
 
         return Inertia::render('Order/Details', [
             'selectedProducts' => $selectedProducts,
@@ -55,14 +65,20 @@ class OrderController extends Controller
             'time' => $time,
             'room' => $room,
             'film' => $film,
+            'film_id' => $film_id,
+            'cinema_id' => $cinema_id,
+            'room_id' => $room_id,
+            'time_id' => $time_id,
             'chairsSelected' => $chairsSelected,
             'langTable' => fn () => Lang::get('tableOrders'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
         ]);
     }
 
     public function createByClient(Request $request)
     {
-
+        app()->setLocale(session('locale', app()->getLocale()));  
         $user = $request->user();
 
         // Create new order
@@ -89,8 +105,9 @@ class OrderController extends Controller
             $subtotal += $product['price'] * $quantity;
         }
 
-        // Get chairs selected from session
+        // Get chairs and products selected from session
         $chairsSelected = $request->session()->get('chairsSelected', []);
+        $selectedProducts = $request->session()->get('$selectedProducts', []);
 
         // Create order tickets
         foreach ($chairsSelected as $chair) {
@@ -115,13 +132,15 @@ class OrderController extends Controller
         $order->save();
 
         // Clear chairsSelected session variable after order creation
-        $request->session()->forget('chairsSelected');
+        $request->session()->forget(['chairsSelected', 'cinema_id', 'film_id', 'room_id', 'time_id']);
 
         return Inertia::render('Order/Checkout', [
             'order' => $order,
-            'selectedProducts' => $request->selectedProducts,
+            'selectedProducts' => $selectedProducts,
             'chairsSelected' => $chairsSelected,
             'langTable' => fn () => Lang::get('tableOrders'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
         ]);
     }
 

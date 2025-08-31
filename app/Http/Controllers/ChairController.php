@@ -56,15 +56,21 @@ class ChairController extends Controller
         // Get all chair_ids from TemporalReserve to mark as occupied
         $reservedChairIds = TemporalReserve::pluck('chair_id')->toArray();
 
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+
         return Inertia::render('Chair/IndexForATime', [
             'chairs' => $chairs,
             'chairsSelected' => $chairsSelected,
             'reservedChairIds' => $reservedChairIds,
+            'selectedProducts' => $selectedProducts,
             'cinema_id' => $cinema_id,
             'film_id' => $film_id,
             'room_id' => $room_id,
             'time_id' => $time_id,
             'langTable' => fn () => Lang::get('tableChairs'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
         ]);
     }
 

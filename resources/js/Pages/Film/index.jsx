@@ -10,32 +10,33 @@ import BlueButton from '@/components/BlueButton';
 export default function Index(props) {
     const keyFilms = "films";
     const user = usePage().props.auth.user;
+    props = usePage().props;
 
     // State to hold current filters
         const [filters, setFilters] = useState({});
     
-        // Handle page change with current filters
-        const handlePageChange = (page) => {
-            router.get(route('films.index'), { page, ...filters }, { preserveState: true, replace: true });
-        };
-    
-        // Handle filter submission
-        const handleFilter = (newFilters) => {
-            setFilters(newFilters);
-            // Reset to page 1 when filters change
-            router.get(route('films.index'), { page: 1, ...newFilters }, { preserveState: true, replace: true });
-        };
+    // Handle page change with current filters
+    const handlePageChange = (page) => {
+        router.get(route('films.index'), { page, ...filters }, { preserveState: true, replace: true });
+    };
 
-        const Layout = (() => {
-                        // Determine which layout to use based on user role
-                        if (user && user.role === 'Admin') {
-                            return AdminLayout;
-                        } else if (user) {
-                            return AuthenticatedLayout;
-                        } else {
-                            return GuestLayout;
-                        }
-                    })();
+    // Handle filter submission
+    const handleFilter = (newFilters) => {
+        setFilters(newFilters);
+        // Reset to page 1 when filters change
+        router.get(route('films.index'), { page: 1, ...newFilters }, { preserveState: true, replace: true });
+    };
+
+    const Layout = (() => {
+                    // Determine which layout to use based on user role
+                    if (user && user.role === 'Admin') {
+                        return AdminLayout;
+                    } else if (user) {
+                        return AuthenticatedLayout;
+                    } else {
+                        return GuestLayout;
+                    }
+                })();
 
     if (props.auth.user.role !== 'Admin') {
         return (
@@ -53,19 +54,14 @@ export default function Index(props) {
                             <h1 className='flex justify-center text-black dark:text-white mt-8' style={{fontWeight:'bolder', width:'100%'}}>{props.langTable.titleClient}</h1>
                             <h3 className='flex justify-center mb-12'>{props.langTable.onlyReadFilms}</h3>
                             <div className="flex flex-wrap justify-center gap-8">
-                                {props.films.data.map((film) => (
-                                    <div key={film.id} className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center w-80">
-                                        <img
-                                            src={"/storage/films/"+film.image}
-                                            alt={film.name}
-                                            className="w-60 h-96 object-cover rounded-xl shadow-md mb-4"
-                                        />
-                                        <h2 className="text-2xl font-bold text-center mb-2">{film.name}</h2>
-                                        {film.overview && (
-                                            <h3 className="text-lg text-gray-600 text-center mb-2">{film.overview}</h3>
-                                        )}
-                                    </div>
-                                ))}
+                                <TableIndex
+                                    columnsTable={props.langTable.columns}
+                                    items={props.films.data}
+                                    keyTable={keyFilms}
+                                    pagination={props.films}
+                                    onPageChange={handlePageChange}
+                                    props={props}
+                                />
                             </div>
                         </main>
                     </div>

@@ -24,4 +24,5 @@ return [
         'actions' => 'Acciones',
     ],
     'infoYouCanDo' => 'Puedes clickar una butaca disponible para seleccionarla. Si la vuelves a clickar una vez seleccionada, la deseleccionaras.',
+    'clearAllChairs' => 'Deseleccionar todas las butacas',
 ];

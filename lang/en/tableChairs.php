@@ -24,4 +24,5 @@ return [
         'actions' => 'Actions',
     ],
     'infoYouCanDo' => 'You can click on an available seat to select it. If you click on it again once selected, it will be deselected.',
+    'clearAllChairs' => 'Clear all selected chairs',
 ];

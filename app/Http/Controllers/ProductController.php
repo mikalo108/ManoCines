@@ -42,7 +42,11 @@ class ProductController extends Controller
         ]);
     }
 
-    public function indexBarProducts($cinema_id, $film_id, $room_id, $time_id){
+    public function indexBarProducts($cinema_id, $film_id, $room_id, $time_id, Request $r){
+        app()->setLocale(session('locale', app()->getLocale()));
+
+        $chairsSelected = $r->chairsSelected;
+
         // Get all product categories with their products filtered by cinema
         $categories = ProductCategory::with(['products' => function($query) use ($cinema_id) {
             $query->whereHas('cinemas', function($q) use ($cinema_id) {
@@ -64,6 +68,7 @@ class ProductController extends Controller
             'film_id' => $film_id,
             'room_id' => $room_id,
             'time_id' => $time_id,
+            'chairsSelected' => $chairsSelected,
             'langTable' => fn () => Lang::get('tableProducts'),
         ]);
     }

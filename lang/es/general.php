@@ -34,4 +34,9 @@ return [
     'noChange' => '(No puedes cambiar este campo)',
     'passwordsDoNotMatch' => 'Las contraseñas no coinciden',
     'noChairsSelected' => 'No has seleccionado ninguna silla',
+    'emptyCart' => 'Tu carrito está vacío',
+    'room' => 'Sala',
+    'film' => 'Película',
+    'products' => 'Productos',
+    'selectDay' => '¿Cúando?',
 ];

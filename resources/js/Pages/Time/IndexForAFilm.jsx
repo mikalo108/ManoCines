@@ -100,7 +100,7 @@ export default function IndexForAFilm(props) {
                                 )}
                             </div>
                             <div className="w-64">
-                                <label htmlFor="timeDate" className="block mb-2 font-semibold">Select Day</label>
+                                <label htmlFor="timeDate" className="block mb-2 font-semibold">{props.lang.selectDay}</label>
                                 <input
                                     type="date"
                                     id="timeDate"

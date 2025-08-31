@@ -34,4 +34,9 @@ return [
     'noChange' => '(You can\'t change this)',
     'passwordsDoNotMatch' => 'Passwords do not match',
     'noChairsSelected' => 'No chairs selected',
+    'emptyCart' => 'Your cart is empty',
+    'room' => 'Room',
+    'film' => 'Film',
+    'products' => 'Products',
+    'selectDay' => 'When?',
 ];

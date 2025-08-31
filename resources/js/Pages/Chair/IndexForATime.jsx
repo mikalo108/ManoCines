@@ -129,24 +129,32 @@ export default function IndexForATime(props) {
                         <h1 className='text-black dark:text-white mt-8 font-bold' style={{fontWeight:'bolder', width:'100%', textAlign: 'center'}}>{props.langTable.titleClient}</h1>
                         <h2 className='mb-8' style={{textAlign: 'center'}}>{props.langTable.subtitleClient}</h2>
                         <h3 className='mb-12' style={{textAlign: 'center'}}>{props.langTable.infoYouCanDo}</h3>
-                        <div className="flex gap-8 mt-6 justify-center">
-                            <div className="flex flex-col gap-4 mr-4">
-                                <div className="flex items-center gap-2 cursor-default select-none">
-                                    <ChairIcon occupied={true} selected={false} />
-                                    <span>{props.langTable.occupied}</span>
-                                </div>
-                                <div className="flex items-center gap-2 cursor-default select-none">
-                                    <ChairIcon occupied={false} selected={true} />
-                                    <span>{props.langTable.selected}</span>
-                                </div>
-                                <div className="flex items-center gap-2 cursor-default select-none">
-                                    <ChairIcon occupied={false} selected={false} />
-                                    <span>{props.langTable.available}</span>
-                                </div>
-                                <div className="flex items-center gap-2 cursor-default select-none">
-                                    <img src="/storage/general/trash-solid.svg" alt="Trash icon" className="w-5 h-5" />
-                                    <span>{props.langTable.clearAllChairs}</span>
-                                </div>
+                        <div className="flex flex-col xl:flex-row items-start gap-8 mt-6 mb-12 max-xl:items-center">
+                            <div style={{display:'grid', gridTemplateRows:'3', gridTemplateColumns:'2'}} className="gap-2">
+                                    <div style={{gridColumn:'1', gridRow:'1'}}>
+                                        <ChairIcon occupied={true} selected={false} />
+                                    </div>
+                                    <div style={{gridColumn:'2', gridRow:'1'}}>
+                                        {props.langTable.occupied}
+                                    </div>
+                                    <div style={{gridColumn:'1', gridRow:'2'}}>
+                                        <ChairIcon occupied={false} selected={true} />
+                                    </div>
+                                    <div style={{gridColumn:'2', gridRow:'2'}}>
+                                        {props.langTable.selected}
+                                    </div>
+                                    <div style={{gridColumn:'1', gridRow:'3'}}>
+                                        <ChairIcon occupied={false} selected={false} />
+                                    </div>
+                                    <div style={{gridColumn:'2', gridRow:'3'}}>
+                                        {props.langTable.available}
+                                    </div>
+                                    <div style={{gridColumn:'1', gridRow:'4', alignContent:'center', justifyContent:'center', display:'flex', paddingTop:'4px', cursor:'pointer'}}>
+                                        <img src="/storage/general/trash-solid.svg" alt="Trash icon" className="w-5 h-5" />
+                                    </div>
+                                    <div style={{gridColumn:'2', gridRow:'4'}}>
+                                        {props.langTable.clearAllChairs}
+                                    </div>
                             </div>
                             <div className="border rounded p-4 overflow-auto" style={{ maxWidth: '600px', maxHeight: '600px' }}>
                                 <table className="border-collapse border border-gray-300 w-full text-center">
@@ -218,7 +226,7 @@ export default function IndexForATime(props) {
                                                 onClick={() => {
                                                     // Call API to deselect chair
                                                     const formData = new FormData();
-                                                    formData.append('chairSelected', chair.id);
+                                                    formData.append('chairsSelected', chair.id);
                                                     router.post(route('chairs.select', {
                                                         cinema_id: props.cinema_id,
                                                         time_id: props.time_id,

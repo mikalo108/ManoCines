@@ -87,7 +87,7 @@ export default function Index(props) {
                             ))}
                         </select>
                     </form>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-sm:justify-items-center mb-16">
                         {props.cinemas.data.map((cinema) => (
                             <div
                                 key={cinema.id}

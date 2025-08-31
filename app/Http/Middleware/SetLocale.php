@@ -4,8 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Lang;
 
 class SetLocale
 {
@@ -18,12 +16,7 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
-       $locale = $request->session()->get('locale') ?? $request->cookie('locale');
-        if ($locale) {
-            App::setLocale($locale);
-            Lang::setLocale($locale);
-        }
-
+        app()->setLocale(session('locale', app()->getLocale()));
         return $next($request);
     }
 }

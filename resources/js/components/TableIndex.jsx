@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import ActionButtons from '@/components/ActionButtons';
 
-export default function TableIndex({ columnsTable, items, keyTable, pagination, onPageChange, props }) {
+export default function TableIndex({ columnsTable, items, keyTable, pagination, onPageChange, }) {
     const columnsTableArray = Object.entries(columnsTable);
+    const props = usePage().props;
 
 if (!columnsTableArray || !Array.isArray(columnsTableArray)) {
     return <div>No column headers provided</div>;

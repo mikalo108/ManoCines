@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Schedule $schedule)
     {
-        //$schedule->command(UpdateTemporalReserves::handle());
+        $schedule->command(UpdateTemporalReserves::handle());
         
         $films = Film::orderBy('id', 'desc')->get();
         $rooms = Room::orderBy('id', 'desc')->get();
@@ -58,6 +58,5 @@ class AppServiceProvider extends ServiceProvider
             'langTableChair' => fn () => Lang::get('tableChairs'),
             'locale' => fn () => session('locale', config('app.locale')),
         ]);
-        
     }
 }

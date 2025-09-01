@@ -23,9 +23,12 @@ class UpdateTemporalReserves extends Command
             if ($reserveTime) {
                 $reserveTime_d = Carbon::parse($reserveTime);
                 $diffInSeconds = $reserveTime_d->diffInSeconds($now, false);
-                // If diffInSeconds is negative, time is in the future, so countdown is positive
-                $countdown = $diffInSeconds > 0 ? 0 : abs($diffInSeconds);
-                if($countdown == 0) {
+
+                // 10 minutes countdown
+                $countdown =  60*10;
+
+                // If diffInSeconds is greater than countdown, delete the reserve
+                if($diffInSeconds > $countdown) {
                     $reserve->delete();
                 }
             }

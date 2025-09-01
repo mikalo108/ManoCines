@@ -7,7 +7,20 @@ import BlueButton from '@/components/BlueButton';
 
 export default function OrderDetails(props) {
     const user = usePage().props.auth.user;
-    const chairsSelected = usePage().props.chairsSelected || [];
+    const { chairsSelected, selectedProducts, lang} = usePage().props;
+    const subtotal = ((chairsSelected && chairsSelected.length > 0 && typeof chairsSelected.reduce === 'function' ? chairsSelected.reduce((acc, chair) => acc + (parseFloat(chair.price) || 0), 0) : 0) + (selectedProducts && selectedProducts.length > 0 ? selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0) : 0)).toFixed(2);
+    const total = ((((chairsSelected && chairsSelected.length > 0 && typeof chairsSelected.reduce === 'function' ? chairsSelected.reduce((acc, chair) => acc + (parseFloat(chair.price) || 0), 0) : 0) + (selectedProducts && selectedProducts.length > 0 ? selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0) : 0))) * 1.21).toFixed(2);
+
+
+    const handleSubmit = (e) => {
+            e.preventDefault();
+    
+            // Send to orders.createByClient route
+            router.post(route('orders.createByClient'), {
+                subtotal: subtotal,
+                total: total,
+            });
+        };
 
     const Layout = (() => {
         if (user && user.role === 'Admin') {
@@ -46,29 +59,29 @@ export default function OrderDetails(props) {
                         </h2>
 
                         <div className="w-full">
-                            <h3 className="font-semibold mb-4">Cinema:</h3>
+                            <h3 className="font-semibold mb-4">{lang.cinema}:</h3>
                             <p className="mb-6">{props.cinema?.name || ''}</p>
 
-                            <h3 className="font-semibold mb-4">Selected Products:</h3>
-                            <ul className="mb-6 list-none p-0">
+                            <h3 className="font-semibold mb-4">{lang.selectedProductsText}</h3>
+                            <ul className="mb-6 border rounded list-none p-0">
                                 {props.selectedProducts && props.selectedProducts.length > 0 ? (
                                     props.selectedProducts.map(([product, quantity], index) => (
-                                        <li key={index} className="mb-4 border rounded p-4 flex flex-col items-center gap-4">
+                                        <li key={index} className="mb-4 p-4 flex flex-col items-center gap-4">
                                             <img src={`/storage/products/${product.image}`} alt={product.name} className="w-20 h-20 object-cover" />
                                             <div>
                                                 <div className="font-semibold">{product.name}</div>
                                                 <div>{product.description}</div>
-                                                <div>Quantity: {quantity}</div>
+                                                <div>{props.lang.quantity}: {quantity}</div>
                                                 <div>Subtotal: {(product.price * quantity).toFixed(2)}€</div>
                                             </div>
                                         </li>
                                     ))
                                 ) : (
-                                    <p>No products selected</p>
+                                    <p>{lang.noProductsSelected}</p>
                                 )}
                             </ul>
 
-                            <h3 className="font-semibold mb-4">Selected Chairs (Tickets):</h3>
+                            <h3 className="font-semibold mb-4">{props.lang.selectedChairsTickets}</h3>
                             <ul className="list-none p-0">
                                 {chairsSelected && chairsSelected.length > 0 ? (
                                     <li className="mb-4 border rounded p-4 flex flex-col items-center gap-4">
@@ -83,34 +96,30 @@ export default function OrderDetails(props) {
                                     <p>{props.lang.noChairsSelected}</p>
                                 )}
                         </ul>
-                            <h3 className="font-semibold mb-4">Subtotal Products:</h3>
-                            <p className="mb-6">
-                                {props.selectedProducts && props.selectedProducts.length > 0
-                                    ? props.selectedProducts.reduce((acc, [product, quantity]) => acc + product.price * quantity, 0).toFixed(2) + '€'
-                                    : '0.00€'}
-                            </p>
+                        <div style={{ paddingBlock:'50px', marginTop:'15px', width:'100%' }} className='mt-2 flex flex-col items-center justify-center'> 
+                            <div className='text-2xl font-semibold text-gray-600'>
+                                <span>Subtotal:</span>
+                                <span className='text-2xl font-bold text-gray-600 relative left-2'>
+                                    {subtotal}€
+                                </span>
+                            </div>
+                            <div>
+                                {lang.taxIncluded}
+                            </div>
+                            <div className='text-2xl font-bold text-gray-900 relative' style={{ border: '1px solid #2d2d2dff', marginTop: '10px', paddingTop: '10px', paddingBlock: '10px', paddingLeft: '20px', paddingRight: '20px', borderRadius: '5px' }}>
+                                <span>Total:</span>
+                                <span className='text-2xl font-bold text-gray-900 relative left-2'>{total}€</span>
+                            </div>
+                        </div>
                             {chairsSelected && chairsSelected.length > 0 ? (
-                            <form method="POST" action={route('orders.createByClient')}>
-                                <input type="hidden" name="cinema_id" value={props.cinema?.id} />
-                                <input type="hidden" name="time_id" value={props.time?.id} />
-                                <input type="hidden" name="room_id" value={props.room?.id} />
-                                <input type="hidden" name="film_id" value={props.film?.id} />
-                                {props.selectedProducts && props.selectedProducts.length > 0 && props.selectedProducts.map(([product, quantity], index) => (
-                                    <input key={`product-${index}`} type="hidden" name={`selectedProducts[${index}][0][id]`} value={product.id} />
-                                ))}
-                                {props.selectedProducts && props.selectedProducts.length > 0 && props.selectedProducts.map(([product, quantity], index) => (
-                                    <input key={`quantity-${index}`} type="hidden" name={`selectedProducts[${index}][1]`} value={quantity} />
-                                ))}
-                                {props.chairsSelected && props.chairsSelected.length > 0 && props.chairsSelected.map((chair, index) => (
-                                    <input key={`chair-${index}`} type="hidden" name={`selectedChairs[${index}][id]`} value={chair.id} />
-                                ))}
-                                <button
-                                    type="submit"
-                                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer"
-                                >
-                                    {props.langTable.goToPay}
-                                </button>
-                            </form>
+                                <form id='payForm' onSubmit={handleSubmit}>
+                                    <button
+                                        type="submit"
+                                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer text-xl font-semibold mb-4"
+                                    >
+                                        {props.langTable.goToPay}
+                                    </button>
+                                </form>
                             ):(null)}
                         </div>
                     </div>

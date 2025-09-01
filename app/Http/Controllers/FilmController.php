@@ -25,9 +25,19 @@ class FilmController extends Controller
         }
 
         $films = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
+
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+        // Get chairs and products selected from session if any
+        $chairsSelected = session()->get('chairsSelected', []);
+
         return Inertia::render('Film/Index', [
             'films' => $films,
             'langTable' => fn () => Lang::get('tableFilms'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
+            'selectedProducts' => $selectedProducts,
+            'chairsSelected' => $chairsSelected,
             'fieldsCanFilter' => [
                 ['key' => 'filmId', 'field' => $request->filmId],
                 ['key' => 'filmName', 'field' => $request->filmName],
@@ -43,9 +53,18 @@ class FilmController extends Controller
             $query->where('cinemas.id', $cinema_id);
         })->orderBy('id', 'desc')->get();
 
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+        // Get chairs and products selected from session if any
+        $chairsSelected = session()->get('chairsSelected', []);
+
         return Inertia::render('Film/IndexForACinema', [
             'films' => $films,
             'cinema' => $cinema,
+            'selectedProducts' => $selectedProducts,
+            'chairsSelected' => $chairsSelected,
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
             'langTable' => fn () => Lang::get('tableFilms'),
         ]);
     }

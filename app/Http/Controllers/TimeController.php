@@ -80,9 +80,16 @@ class TimeController extends Controller
             $times->where('time', 'like',  $request->timeDate . '%');
         }
 
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+        // Get chairs and products selected from session if any
+        $chairsSelected = session()->get('chairsSelected', []);
+
         return Inertia::render('Time/IndexForAFilm', [
             'langTable' => Lang::get('tableTimes'),
             'timeDate' => $request->timeDate,
+            'selectedProducts' => $selectedProducts,
+            'chairsSelected' => $chairsSelected,
             'film' => $film,
             'cinema' => $cinema,
             'rooms' => $rooms,

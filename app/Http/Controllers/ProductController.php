@@ -44,18 +44,16 @@ class ProductController extends Controller
 
     public function indexBarProducts($cinema_id, $film_id, $room_id, $time_id, Request $r){
         app()->setLocale(session('locale', app()->getLocale()));
-        session([
-            'cinema_id' => $cinema_id,
-            'film_id' => $film_id,
-            'room_id' => $room_id,
-            'time_id' => $time_id,
-        ]);
+        session()->put('cinema_id', $cinema_id);
+        session()->put('film_id', $film_id);
+        session()->put('room_id', $room_id);
+        session()->put('time_id', $time_id);
 
         // Get chairs selected from session
         $chairsSelected = $r->session()->get('chairsSelected', []);
 
         // Get products selected from session if any
-        $selectedProducts = $r->session()->get('selectedProducts', []);
+        $selectedProducts = session()->get('selectedProducts', []);
 
         // Get all product categories with their products filtered by cinema
         $categories = ProductCategory::with(['products' => function($query) use ($cinema_id) {

@@ -32,12 +32,21 @@ class CinemaController extends Controller
 
         $cinemas = $query->orderBy('id', 'desc')->paginate(self::PAGINATE_SIZE);
         $citiesAvailable = City::orderBy('name')->pluck('name')->toArray();
+
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+        // Get chairs and products selected from session if any
+        $chairsSelected = session()->get('chairsSelected', []);
         
         return Inertia::render('Cinema/Index', [
             'citiesAvailable' => $citiesAvailable,
             'cinemas' => $cinemas,
+            'selectedProducts' => $selectedProducts,
+            'chairsSelected' => $chairsSelected,
             'filters' => $request->all('search', 'trashed'),
             'langTable' => fn () => Lang::get('tableCinemas'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
             'fieldsCanFilter' => [
                 ['key' => 'cinemaId', 'field' => $request->cinemaId],
                 ['key' => 'cinemaCityId', 'field' => $request->cinemaCityId],

@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Room;
 use App\Models\Time;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
 
@@ -57,7 +58,7 @@ class OrderController extends Controller
         $selectedProducts = $request->input('selectedProducts');
         
         // Put products selected to session
-        session($selectedProducts);
+        session()->put('selectedProducts',$selectedProducts);
 
         return Inertia::render('Order/Details', [
             'selectedProducts' => $selectedProducts,
@@ -84,15 +85,18 @@ class OrderController extends Controller
         // Create new order
         $order = new Order();
         $order->user_id = $user ? $user->id : null; // or assign a default user if needed
-        $order->total = 0;
-        $order->subtotal = 0;
+        $order->total = $request->input('total', 0);
+        $order->subtotal = $request->input('subtotal', 0);
         $order->save();
 
-        $total = 0;
-        $subtotal = 0;
+        // Get chairs and products selected from session
+        $chairsSelected = $request->session()->get('chairsSelected', []);
+        $selectedProducts = $request->session()->get('selectedProducts', []);
+
+        //
 
         // Create order products
-        foreach ($request->input('selectedProducts') as $item) {
+        foreach ($selectedProducts as $item) {
             $product = $item[0];
             $quantity = $item[1];
 
@@ -101,20 +105,14 @@ class OrderController extends Controller
             $orderProduct->product_id = $product['id'];
             $orderProduct->quantity = $quantity;
             $orderProduct->save();
-
-            $subtotal += $product['price'] * $quantity;
         }
-
-        // Get chairs and products selected from session
-        $chairsSelected = $request->session()->get('chairsSelected', []);
-        $selectedProducts = $request->session()->get('$selectedProducts', []);
 
         // Create order tickets
         foreach ($chairsSelected as $chair) {
             $orderTicket = new \App\Models\OrderTicket();
             $orderTicket->order_id = $order->id;
             $orderTicket->chair_id = $chair['id'];
-            $orderTicket->time_id = $request->input('time_id');
+            $orderTicket->time_id = session('time_id');
             $orderTicket->save();
 
             // Update chair state to "Occupied"
@@ -123,21 +121,39 @@ class OrderController extends Controller
                 $chairModel->state = 'Occupied';
                 $chairModel->save();
             }
-
-            $subtotal += $chair['price'];
         }
 
-        $order->subtotal = $subtotal;
-        $order->total = $subtotal*1.21;
-        $order->save();
+        $order->syncChanges();
 
         // Clear chairsSelected session variable after order creation
-        $request->session()->forget(['chairsSelected', 'cinema_id', 'film_id', 'room_id', 'time_id']);
+        session()->forget(['chairsSelected', 'selectedProducts', 'cinema_id', 'film_id', 'room_id', 'time_id']);
 
         return Inertia::render('Order/Checkout', [
             'order' => $order,
             'selectedProducts' => $selectedProducts,
             'chairsSelected' => $chairsSelected,
+            'langTable' => fn () => Lang::get('tableOrders'),
+            'langTableChair' => fn () => Lang::get('tableChairs'),
+            'lang' => fn () => Lang::get('general'),
+        ]);
+    }
+
+    public function myOrders()
+    {
+        app()->setLocale(session('locale', app()->getLocale()));  
+        
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $orders = Order::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->paginate(self::PAGINATE_SIZE);
+
+        return Inertia::render('Order/MyOrders', [
+            'orders' => $orders,
+            'user' => $user,
             'langTable' => fn () => Lang::get('tableOrders'),
             'langTableChair' => fn () => Lang::get('tableChairs'),
             'lang' => fn () => Lang::get('general'),

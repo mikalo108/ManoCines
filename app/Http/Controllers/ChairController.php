@@ -42,6 +42,11 @@ class ChairController extends Controller
 
         $chairs = Chair::where('room_id', $room_id)->orderBy('id', 'desc')->get();
 
+        session()->put('cinema_id', $cinema_id);
+        session()->put('film_id', $film_id);
+        session()->put('room_id', $room_id);
+        session()->put('time_id', $time_id);
+
         // Get chairsSelected from session or empty array
         $chairsSelectedIds = session('chairsSelected', []);
         if (count($chairsSelectedIds) > 0) {
@@ -57,7 +62,7 @@ class ChairController extends Controller
         $reservedChairIds = TemporalReserve::pluck('chair_id')->toArray();
 
         // Get products selected from session if any
-        $selectedProducts = session()->get('selectedProducts', []);
+        $selectedProducts = session()->get('selectedProducts', []);   
 
         return Inertia::render('Chair/IndexForATime', [
             'chairs' => $chairs,

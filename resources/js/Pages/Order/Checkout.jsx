@@ -31,13 +31,14 @@ export default function Checkout(props) {
                 lang={props.lang}
             >
                 <Head title={"Checkout"} />
-                <div className="relative flex min-h-screen flex-col selection:bg-[#FF2D20] selection:text-white">
+                <div className="relative flex min-h-screen flex-col selection:bg-[#FF2D20] selection:text-white items-center">
                     <div className="relative w-full px-6 flex flex-col items-center max-w-4xl text-center">
                         <h1 className="text-green-600 text-3xl font-bold mb-6">Compra realizada con éxito</h1>
-                        <p className="mb-4">Número de pedido: <strong>{props.order.id}</strong></p>
-                        <p className="mb-4">Total pagado: <strong>{(props.order.total * 1.21).toFixed(2)}€</strong></p>
-                        <p className="mb-8">Gracias por su compra. Su pedido ha sido procesado correctamente.</p>
-                        <BlueButton link="home">{props.lang.back}</BlueButton>
+                        <p className="mb-4">{props.lang.numberOrder} <strong>{props.order.id}</strong></p>
+                        <p className="mb-4">{props.lang.subtotalPaid} <strong>{(props.order.subtotal)}€</strong></p>
+                        <p className="mb-4">{props.lang.totalPaid} <strong>{(props.order.total)}€</strong></p>
+                        <p className="mb-8">{props.lang.congrats}</p>
+                        <BlueButton link="home">{props.lang.backToHome}</BlueButton>
                     </div>
                 </div>
             </Layout>

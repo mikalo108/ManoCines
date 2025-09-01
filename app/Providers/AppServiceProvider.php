@@ -38,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
         $films = Film::orderBy('id', 'desc')->get();
         $rooms = Room::orderBy('id', 'desc')->get();
         $times = Time::orderBy('id', 'desc')->get();
+
+        // Get products selected from session if any
+        $selectedProducts = session()->get('selectedProducts', []);
+        // Get chairs and products selected from session if any
+        $chairsSelected = session()->get('chairsSelected', []);
         
         app()->setLocale(session('locale', app()->getLocale()));  
         // Share the same data with Inertia views
@@ -45,9 +50,12 @@ class AppServiceProvider extends ServiceProvider
             'allFilms' => $films,
             'allRooms' => $rooms,
             'allTimes' => $times,
+            'selectedProducts' => $selectedProducts,
+            'chairsSelected' => $chairsSelected,
             'appName' => config('app.name'),
             'auth' => fn () => ['user' => Auth::user()],
-            'lang' => fn () => Lang::get('general'),
+            'lang' => fn () => Lang::get('general'),            
+            'langTableChair' => fn () => Lang::get('tableChairs'),
             'locale' => fn () => session('locale', config('app.locale')),
         ]);
         

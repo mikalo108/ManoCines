@@ -98,6 +98,18 @@ export default function UserDropdown({ lang, auth }) {
                                 {lang.myProfile}
                             </Link>
                             <Link
+                                href={route('orders.myOrders')}
+                                method="get"
+                                as="button"
+                                className="text-gray-700 block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 flex justify-right"
+                                role="menuitem"
+                                tabIndex="-1"
+                                id="menu-item-1"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {lang.myOrders}
+                            </Link>
+                            <Link
                                 href={route('logout')}
                                 method="post"
                                 as="button"

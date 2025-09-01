@@ -105,6 +105,8 @@ Para ejecutar la aplicación, debes usar ejecutar los siguientes comandos y acce
 ```bash
 php artisan serve
 ```
+*Nota: Si el comando para Laravel falla comentar todo el método boot() de /app/Providers/AppServiceProvider.php*
+
 
 - Comando para Vite en desarrollo
 ```bash
@@ -288,6 +290,8 @@ php artisan serve
 ```bash
 npm run dev
 ```
+*Note: If the Laravel command fails, comment out the entire boot() method in /app/Providers/AppServiceProvider.php*
+
 
 - Web URL
 ```

@@ -143,9 +143,6 @@ class OrderController extends Controller
         app()->setLocale(session('locale', app()->getLocale()));  
         
         $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('login');
-        }
 
         $orders = Order::where('user_id', $user->id)
             ->orderBy('id', 'desc')

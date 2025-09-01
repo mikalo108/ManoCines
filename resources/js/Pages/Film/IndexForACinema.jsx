@@ -3,10 +3,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 import BlueButton from '@/components/BlueButton';
 
 export default function IndexForACinema(props) {
     const user = usePage().props.auth.user;
+
+    useEffect(() => {
+        if (!!user || user?.role === 'Admin') {
+            router.get(route('orders.index'));
+        }
+    }, [user]);
 
         const Layout = (() => {
             // Determine which layout to use based on user role

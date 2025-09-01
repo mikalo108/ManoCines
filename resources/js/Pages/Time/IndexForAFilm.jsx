@@ -4,6 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router, usePage } from '@inertiajs/react';
 import BlueButton from '@/components/BlueButton';
+import { useEffect } from 'react';
 
 export default function IndexForAFilm(props) {
     const user = usePage().props.auth.user;
@@ -16,6 +17,12 @@ export default function IndexForAFilm(props) {
             return tomorrow.toISOString().split('T')[0];
         }
     });
+
+    useEffect(() => {
+        if (!!user || user?.role === 'Admin') {
+            router.get(route('orders.index'));
+        }
+    }, [user]);
 
     const Layout = (() => {
         if (user && user.role === 'Admin') {

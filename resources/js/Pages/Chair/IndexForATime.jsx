@@ -4,11 +4,18 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router, usePage } from '@inertiajs/react';
 import BlueButton from '@/components/BlueButton';
+import { useEffect } from 'react';
 import ChairIcon from '@/components/ChairIcon';
 
 export default function IndexForATime(props) {
     const user = usePage().props.auth.user;
     const [selectedChair, setSelectedChair] = useState(null);
+
+    useEffect(() => {
+            if (!!user || user?.role === 'Admin') {
+                router.get(route('orders.index'));
+            }
+        }, [user]);
 
     const Layout = (() => {
         if (user && user.role === 'Admin') {

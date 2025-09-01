@@ -141,21 +141,31 @@ class OrderController extends Controller
     public function myOrders()
     {
         app()->setLocale(session('locale', app()->getLocale()));  
-        
-        $user = Auth::user();
 
-        $orders = Order::where('user_id', $user->id)
-            ->orderBy('id', 'desc')
-            ->paginate(self::PAGINATE_SIZE);
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $orders = Order::with([
+            'tickets.time.room',
+            'tickets.time.film',
+            'tickets.chair',
+            'products.product'
+        ])
+        ->where('user_id', $user->id)
+        ->orderBy('id', 'desc')
+        ->paginate(self::PAGINATE_SIZE);
 
         return Inertia::render('Order/MyOrders', [
-            'orders' => $orders,
-            'user' => $user,
+            'ordersUser' => $orders,
             'langTable' => fn () => Lang::get('tableOrders'),
             'langTableChair' => fn () => Lang::get('tableChairs'),
             'lang' => fn () => Lang::get('general'),
         ]);
     }
+
+
 
     public function create()
     {

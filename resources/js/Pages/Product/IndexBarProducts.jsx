@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import AdminLayout from '@/Layouts/AdminLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, router, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 import BlueButton from '@/components/BlueButton';
 
 export default function IndexBarProducts(props) {
@@ -10,6 +11,12 @@ export default function IndexBarProducts(props) {
     const [selectedCategory, setSelectedCategory] = useState(props.categories.length > 0 ? Object.keys(props.categories[0])[0] : '');
     const [selectedProducts, setSelectedProducts] = useState({}); // productId => quantity
     const [expandedProductIds, setExpandedProductIds] = useState(new Set());
+
+    useEffect(() => {
+        if (!!user || user?.role === 'Admin') {
+            router.get(route('orders.index'));
+        }
+    }, [user]);
 
     const Layout = (() => {
         if (user && user.role === 'Admin') {

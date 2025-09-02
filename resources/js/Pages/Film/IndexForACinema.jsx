@@ -10,7 +10,7 @@ export default function IndexForACinema(props) {
     const user = usePage().props.auth.user;
 
     useEffect(() => {
-        if (!!user || user?.role === 'Admin') {
+        if (!user || user?.role === 'Admin') {
             router.get(route('orders.index'));
         }
     }, [user]);

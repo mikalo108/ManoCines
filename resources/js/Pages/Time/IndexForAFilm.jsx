@@ -19,7 +19,7 @@ export default function IndexForAFilm(props) {
     });
 
     useEffect(() => {
-        if (!!user || user?.role === 'Admin') {
+        if (!user || user?.role === 'Admin') {
             router.get(route('orders.index'));
         }
     }, [user]);

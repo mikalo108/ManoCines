@@ -12,7 +12,7 @@ export default function IndexForATime(props) {
     const [selectedChair, setSelectedChair] = useState(null);
 
     useEffect(() => {
-            if (!!user || user?.role === 'Admin') {
+            if (!user || user?.role === 'Admin') {
                 router.get(route('orders.index'));
             }
         }, [user]);

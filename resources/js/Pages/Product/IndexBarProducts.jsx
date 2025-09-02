@@ -13,7 +13,7 @@ export default function IndexBarProducts(props) {
     const [expandedProductIds, setExpandedProductIds] = useState(new Set());
 
     useEffect(() => {
-        if (!!user || user?.role === 'Admin') {
+        if (!user || user?.role === 'Admin') {
             router.get(route('orders.index'));
         }
     }, [user]);

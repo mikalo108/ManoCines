@@ -64,4 +64,6 @@ return [
     'noProducts' => 'No hay productos comprados',
     'status' => 'Estado',
     'each' => 'la unidad',
+    'selectedChairs' => 'Butacas Seleccionadas',
+    'screen' => 'Pantalla',
 ];

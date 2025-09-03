@@ -58,7 +58,7 @@ export default function MyOrders(props) {
                                     {lang.date}: {new Date(order.created_at).toLocaleDateString(locale)}
                                 </p>
                                 <p className="text-gray-700 dark:text-gray-300">
-                                    {lang.total}: ${order.total}
+                                    {lang.total}: {order.total}€
                                 </p>
 
                                 <div className="mt-4 text-left">

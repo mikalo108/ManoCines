@@ -64,4 +64,6 @@ return [
     'noProducts' => 'No products purchased',
     'status' => 'Status',
     'each' => 'each',
+    'selectedChairs' => 'Selected Chairs',
+    'screen' => 'Screen',
 ];

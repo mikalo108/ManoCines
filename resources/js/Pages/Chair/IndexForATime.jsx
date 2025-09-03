@@ -199,11 +199,11 @@ export default function IndexForATime(props) {
                                         ))}
                                     </tbody>
                                 </table>
-                                <div className="mt-2 text-center font-bold">Screen</div>
+                                <div className="mt-2 text-center font-bold">{props.lang.screen}</div>
                             </div>
                             <div className="w-64 border rounded p-4 overflow-auto">
                                 <div className='flex flex-column gap-8 mb-8'>
-                                    <h2 className="font-semibold mb-2">Selected Chairs</h2>
+                                    <h2 className="font-semibold mb-2">{props.lang.selectedChairs}</h2>
                                     <img
                                         src="/storage/general/trash-solid.svg"
                                         alt="Remove all"
